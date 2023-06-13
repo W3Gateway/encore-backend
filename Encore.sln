@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{F16CF548-FD9D-4DE9-A896-F6401AF9B533}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tools", ".tools", "{FA326EFA-0D0B-4D48-A311-77A50ABDD2FE}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitignore = .gitignore
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encore.API", "src\Encore.API\Encore.API.csproj", "{121BADE1-7764-48DC-A57F-6F61D74C043C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{121BADE1-7764-48DC-A57F-6F61D74C043C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{121BADE1-7764-48DC-A57F-6F61D74C043C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{121BADE1-7764-48DC-A57F-6F61D74C043C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{121BADE1-7764-48DC-A57F-6F61D74C043C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0730A080-AFF2-49E4-A23E-C13B4A8A381B}
+	EndGlobalSection
+EndGlobal
