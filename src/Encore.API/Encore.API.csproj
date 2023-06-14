@@ -18,4 +18,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Encore.Application\Encore.Application.csproj" />
+  </ItemGroup>
+
 </Project>
