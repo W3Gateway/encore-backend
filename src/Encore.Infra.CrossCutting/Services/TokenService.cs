@@ -19,29 +19,34 @@ namespace Encore.Infra.CrossCutting.Services
 
         public string GenerateJwtToken(User user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            
-            var secretKey = _configuration["JwtApp:SecretKey"];
-            if (string.IsNullOrEmpty(secretKey))
-                throw new InvalidOperationException("JWT secret key is missing or invalid.");
-
-            var key = Encoding.ASCII.GetBytes(secretKey);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Subject = new ClaimsIdentity(new[]
+                var tokenHandler = new JwtSecurityTokenHandler();
+
+                var key = Encoding.ASCII.GetBytes(_configuration["JwtApp:SecretKey"]);
+
+                var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    new Claim(ClaimTypes.Name, user.Email),
+                    Subject = new ClaimsIdentity(new[]
+                    {
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
-                Issuer = _configuration["JwtApp:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
-                Expires = DateTime.UtcNow.AddHours(Convert.ToInt32(_configuration["JwtApp:ExpirationMinutes"])),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                    Issuer = _configuration["JwtApp:Issuer"],
+                    Audience = _configuration["Jwt:Audience"],
+                    Expires = DateTime.UtcNow.AddHours(Convert.ToInt32(_configuration["JwtApp:ExpirationMinutes"])),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Erro ao gerar Token.", ex); ;
+            }
+            
         }
     }
 }
