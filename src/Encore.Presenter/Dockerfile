@@ -8,9 +8,17 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Encore.Presenter/Encore.Presenter.csproj", "src/Encore.Presenter/"]
+COPY ["src/Encore.Application/Encore.Application.csproj", "src/Encore.Application/"]
+COPY ["src/Encore.Domain/Encore.Domain.csproj", "src/Encore.Domain/"]
+COPY ["src/Encore.Domain.Core/Encore.Domain.Core.csproj", "src/Encore.Domain.Core/"]
+COPY ["src/Encore.Infra.CrossCutting/Encore.Infra.CrossCutting.csproj", "src/Encore.Infra.CrossCutting/"]
+COPY ["src/Encore.Infra.Data/Encore.Infra.Data.csproj", "src/Encore.Infra.Data/"]
+COPY ["src/Encore.Presenter/Encore.Presenter.csproj", "src/Encore.Presenter/"]
+
+
 RUN dotnet restore "src/Encore.Presenter/Encore.Presenter.csproj"
 COPY . .
-WORKDIR "/src/src/Encore.Presenter"
+WORKDIR "/src/Encore.Presenter"
 RUN dotnet build "Encore.Presenter.csproj" -c Release -o /app/build
 
 FROM build AS publish
