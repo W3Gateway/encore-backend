@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tools", ".tools", "{FA326E
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore
 		.gitignore = .gitignore
-		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encore.Application", "src\Encore.Application\Encore.Application.csproj", "{5A5B30A3-5A0E-46B8-B52C-B106CD4D2B48}"
@@ -25,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encore.Domain.Core", "src\E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encore.Presenter", "src\Encore.Presenter\Encore.Presenter.csproj", "{54965532-1179-48F9-96A5-8377D120CA57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encore.Infra.CrossCutting", "src\Encore.Infra.CrossCutting\Encore.Infra.CrossCutting.csproj", "{83870BB2-6810-4346-81F2-ADC3EFBD4EDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Encore.Infra.CrossCutting", "src\Encore.Infra.CrossCutting\Encore.Infra.CrossCutting.csproj", "{83870BB2-6810-4346-81F2-ADC3EFBD4EDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,22 +1,10 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+FROM mcr.microsoft.com/mssql/server:2019-latest
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=sua_senha_forte
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["src/Encore.API/Encore.API.csproj", "src/Encore.API/"]
-RUN dotnet restore "src/Encore.API/Encore.API.csproj"
-COPY . .
-WORKDIR "/src/Encore.API"
-RUN dotnet build "Encore.API.csproj" -c Release -o /app/build
+COPY create_user.sql /docker-entrypoint-initdb.d/
 
-FROM build AS publish
-RUN dotnet publish "Encore.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+EXPOSE 1433
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Encore.API.dll"]
+CMD ["/opt/mssql/bin/sqlservr"]

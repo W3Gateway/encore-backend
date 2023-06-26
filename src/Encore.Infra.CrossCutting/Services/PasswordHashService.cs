@@ -18,8 +18,7 @@ namespace Encore.Infra.CrossCutting.Services
 
         public bool VerifyPassword(string enteredPassword, string storedPasswordHash)
         {
-            // Implemente a lógica para verificar se a senha inserida corresponde ao hash armazenado
-            // Retorne true se a senha estiver correta, caso contrário, retorne false
+            return false;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Encore.Infra.Data.Mapping
         {
             builder.ToTable(typeof(TEntity).Name);
             builder.HasKey(t => t.Id);
+            builder.Ignore(c => c.CascadeMode);
             builder.Ignore(c => c.ClassLevelCascadeMode);
             builder.Ignore(c => c.RuleLevelCascadeMode);
 

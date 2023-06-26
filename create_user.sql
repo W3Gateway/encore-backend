@@ -1,0 +1,17 @@
+USE master;
+GO
+
+CREATE DATABASE encore;
+GO
+
+USE encore;
+GO
+
+CREATE LOGIN encore WITH PASSWORD = '12345';
+GO
+
+CREATE USER encore FOR LOGIN encore;
+GO
+
+ALTER SERVER ROLE sysadmin ADD MEMBER encore;
+GO
