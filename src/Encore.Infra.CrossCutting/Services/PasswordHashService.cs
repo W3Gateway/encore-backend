@@ -18,7 +18,13 @@ namespace Encore.Infra.CrossCutting.Services
 
         public bool VerifyPassword(string enteredPassword, string storedPasswordHash)
         {
-            return false;
+            using (var sha256 = SHA256.Create())
+            {
+                var enteredPasswordHashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(enteredPassword));
+                var enteredPasswordHash = BitConverter.ToString(enteredPasswordHashedBytes).Replace("-", "").ToLower();
+
+                return enteredPasswordHash == storedPasswordHash;
+            }
         }
     }
 }

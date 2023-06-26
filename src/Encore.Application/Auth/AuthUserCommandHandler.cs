@@ -3,6 +3,7 @@ using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Auth
 {
@@ -25,9 +26,7 @@ namespace Encore.Application.Auth
         {
             try
             {
-                var user = _userRepository.Include()
-                                                .Where(c => c.Email == request.Email)
-                                                .FirstOrDefault();
+                var user = _userRepository.Include().Where(c => c.Email == request.Email).FirstOrDefaultAsync();
                 if (user is null || !_passwordHashService.VerifyPassword(request.Password, user.PasswordHash))
                 {
                     AddError("Email ou senha invalidos");
