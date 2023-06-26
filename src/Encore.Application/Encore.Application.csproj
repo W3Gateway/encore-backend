@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Encore.Domain\Encore.Domain.csproj" />
+    <ProjectReference Include="..\Encore.Infra.CrossCutting\Encore.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\Encore.Infra.Data\Encore.Infra.Data.csproj" />
   </ItemGroup>
 

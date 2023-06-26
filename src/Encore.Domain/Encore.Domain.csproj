@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\InfraService\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
