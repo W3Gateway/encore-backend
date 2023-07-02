@@ -26,7 +26,7 @@ namespace Encore.Application.Auth
         {
             try
             {
-                var user = _userRepository.Include().Where(c => c.Email == request.Email).FirstOrDefaultAsync();
+                var user = _userRepository.Include().Where(c => c.Email == request.Email).FirstOrDefaultAsync().Result;
                 if (user is null || !_passwordHashService.VerifyPassword(request.Password, user.PasswordHash))
                 {
                     AddError("Email ou senha invalidos");
