@@ -1,5 +1,7 @@
 using Encore.Presenter.Configurations;
 
+var MyAllowSpecificOrigins = "CorsPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -21,13 +23,24 @@ builder.Services.AddMediatRApi();
 builder.Services.AddDatabase();
 builder.Services.AddDIConfiguration();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI().UseCors(MyAllowSpecificOrigins);
 }
 
 if (!app.Environment.IsDevelopment())
@@ -37,7 +50,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-app.UseCors();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
