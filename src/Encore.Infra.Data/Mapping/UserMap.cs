@@ -20,9 +20,6 @@ namespace Encore.Infra.Data.Mapping
                 .HasColumnType("nvarchar(256)")
                 .IsRequired();
 
-            builder.Property(c => c.Role)
-                .HasColumnType("varchar(20)")
-                .IsRequired();
         }
     }
 }

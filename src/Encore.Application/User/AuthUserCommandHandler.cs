@@ -5,7 +5,7 @@ using Encore.Domain.Interfaces.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Encore.Application.Auth
+namespace Encore.Application.User
 {
     public class AuthUserCommandHandler : CommandHandler, IRequestHandler<AuthUserCommand, Response<AuthUserResponse>>
     {
@@ -39,7 +39,7 @@ namespace Encore.Application.Auth
             }
             catch (Exception ex)
             {
-                AddError("Erro ao realizar autenticação");
+                AddError("Erro ao realizar autenticação: " + ex.Message);
                 return Fail<AuthUserResponse>(ValidationResult);
             }
         }

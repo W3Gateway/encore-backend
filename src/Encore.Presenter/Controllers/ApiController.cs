@@ -1,4 +1,4 @@
-﻿using Encore.Application.Auth;
+﻿using Encore.Application.User;
 using Encore.Domain.Core.Responses;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
