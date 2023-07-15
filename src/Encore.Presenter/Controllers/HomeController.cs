@@ -1,4 +1,4 @@
-using Encore.Application.User;
+﻿using Encore.Application.User;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,19 +6,19 @@ namespace Encore.Presenter.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ApiController
+    public class HomeController : ApiController
     {
         private readonly IMediator _mediator;
 
-        public AuthController (IMediator mediator) => _mediator = mediator;
+        public HomeController(IMediator mediator) => _mediator = mediator;
 
-        [HttpPost("authenticate")]
-        public async Task<ActionResult> AuthenticateUser([FromBody] AuthUserCommand command)
+        [HttpPost("create")]
+        public async Task<ActionResult> Create([FromBody] AuthUserCommand command)
         {
             var response = await _mediator.Send(command);
             if (response is null)
                 return Unauthorized(command);
-            
+
             return CustomResponse(response);
         }
     }

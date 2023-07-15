@@ -1,6 +1,4 @@
-﻿using Encore.Application.User;
-using Encore.Domain.Core.Responses;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Encore.Presenter.Controllers
@@ -20,29 +18,25 @@ namespace Encore.Presenter.Controllers
             return Ok();
         }
 
-        protected ActionResult CustomResponse(Response<AuthUserResponse> response)
+        protected ActionResult CustomResponse(object result = default)
         {
-            if (!response.IsValid)
+            if (IsOperationValid())
+                return Ok($"\"{result}\"");
+
+            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
             {
-                AddError(response.ValidationResult);
-                return Unauthorized(new ValidationProblemDetails(new Dictionary<string, string[]>
-                {
-                    { "Messages", _errors.ToArray() }
-                }));
-            }
-            
-            return Ok(response.Data);
+                { "Messages", _errors.ToArray() }
+            }));
         }
 
-        protected bool IsOperationValid()
-        {
-            return !_errors.Any();
-        }
+        protected bool IsOperationValid() => !_errors.Any();
 
-        protected void AddError(ValidationResult validationResult)
+        protected ActionResult AddError(ValidationResult validationResult)
         {
             foreach (var error in validationResult.Errors)
                 _errors.Add(error.ErrorMessage);
+
+            return CustomResponse();
         }
 
         protected void ClearErrors()

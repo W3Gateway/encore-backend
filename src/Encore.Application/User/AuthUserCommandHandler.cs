@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.User
 {
-    public class AuthUserCommandHandler : CommandHandler, IRequestHandler<AuthUserCommand, Response<AuthUserResponse>>
+    public class AuthUserCommandHandler : CommandHandler, IRequestHandler<AuthUserCommand, Response<AuthUserResponse>?>
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHashService _passwordHashService;
@@ -22,16 +22,13 @@ namespace Encore.Application.User
             _tokenService = tokenService;
         }
 
-        public async Task<Response<AuthUserResponse>> Handle(AuthUserCommand request, CancellationToken cancellationToken)
+        public async Task<Response<AuthUserResponse>?> Handle(AuthUserCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var user = await _userRepository.Include().Where(c => c.Email == request.Email).FirstOrDefaultAsync();
                 if (user is null || !_passwordHashService.VerifyPassword(request.Password, user.PasswordHash))
-                {
-                    AddError("Email ou senha invalidos");
-                    return Fail<AuthUserResponse>(ValidationResult);
-                }
+                    return null;
 
                 var token = _tokenService.GenerateJwtToken(user);
 
