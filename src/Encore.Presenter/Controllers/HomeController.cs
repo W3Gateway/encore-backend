@@ -1,4 +1,4 @@
-﻿using Encore.Application.User;
+﻿using Encore.Application.Home;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +13,9 @@ namespace Encore.Presenter.Controllers
         public HomeController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost("create")]
-        public async Task<ActionResult> Create([FromBody] AuthUserCommand command)
+        public async Task<ActionResult> Create([FromBody] CreateHomeCommand command)
         {
             var response = await _mediator.Send(command);
-            if (response is null)
-                return Unauthorized(command);
-
             return CustomResponse(response);
         }
     }
