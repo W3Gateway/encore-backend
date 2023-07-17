@@ -6,16 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Home
 {
-    public class CreateHomeCommandHandler : CommandHandler, IRequestHandler<CreateHomeCommand, Response<CreateHomeResponse>?>
+    public class CreateHomeCommandHandler : CommandHandler, IRequestHandler<CreateHomeCommand, Response<CreateHomeResponse>>
     {
         private readonly IPersonRepository _personRepository;
+        private readonly IHomeRepository _homeRepository;
 
-        public CreateHomeCommandHandler(IPersonRepository personRepository)
+        public CreateHomeCommandHandler(IPersonRepository personRepository, IHomeRepository homeRepository)
         {
             _personRepository = personRepository;
+            _homeRepository = homeRepository;
         }
 
-        public async Task<Response<CreateHomeResponse>?> Handle(CreateHomeCommand request, CancellationToken cancellationToken)
+        public async Task<Response<CreateHomeResponse>> Handle(CreateHomeCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -28,7 +30,9 @@ namespace Encore.Application.Home
 
                 var home = new Domain.Models.Home(request.MicroregionId, request.Adderess, request.ContactNumber, request.FamilyRecord, person.Id, request.HouseholdIncome, request.NumberMembers);
 
-                return new CreateHomeResponse(home.TypeProperty, home.Adderess, home.ContactNumber, home.FamilyRecord, home.HouseholdIncome, home.NumberMembers, home.Person, home.Microregion);
+                var entity = await _homeRepository.CreateAsync(home);
+
+                return new CreateHomeResponse(entity.TypeProperty, entity.Adderess, entity.ContactNumber, entity.FamilyRecord, entity.HouseholdIncome, entity.NumberMembers, entity.Person, entity.Microregion);
             }
             catch (Exception ex)
             {
