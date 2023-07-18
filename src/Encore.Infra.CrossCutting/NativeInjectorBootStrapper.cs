@@ -19,6 +19,7 @@ namespace Encore.Infra.CrossCutting
         {
             services.AddScoped<IPasswordHashService, PasswordHashService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped(typeof(IEntityToDtoMapper<,>), typeof(EntityToDtoMapper<,>));
         }
 
         private static void RegisterData(IServiceCollection services)
@@ -28,6 +29,8 @@ namespace Encore.Infra.CrossCutting
             services.AddScoped<IQuestionAnswerRepository, QuestionAnswerRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IChecklistQuestionRepository, ChecklistQuestionRepository>();
+            services.AddScoped<IHomeRepository, HomeRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
         }
     }
 }

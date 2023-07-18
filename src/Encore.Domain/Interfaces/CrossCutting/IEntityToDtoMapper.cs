@@ -1,7 +1,9 @@
 ﻿namespace Encore.Domain.Interfaces.CrossCutting
 {
-    public interface IEntityToDtoMapper<TSource, TDestination>
+    public interface IEntityToDtoMapper<TEntity, TDTO>
     {
-        TDestination Map<TSource, TDestination>(TSource source);
+        TDTO Map(TEntity entity);
+
+        List<TDTO> MapList(List<TEntity> entities);
     }
 }

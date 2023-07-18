@@ -3,7 +3,7 @@ using Encore.Domain.Core.Responses;
 
 namespace Encore.Application.Auth
 {
-    public class QuestionCommand : Command<Response<QuestionResponse>>
+    public class QuestionListCommand : Command<Response<QuestionListResponse>>
     {
     }
 }

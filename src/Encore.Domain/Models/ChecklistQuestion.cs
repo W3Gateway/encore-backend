@@ -6,12 +6,7 @@ namespace Encore.Domain.Models
     {
         public string? Name { get; set; }
         public Question Question { get; set; }
-        public int QuestionId { get; set; }
-
-        public ChecklistQuestion(Question Question)
-        {
-            this.Question = Question;
-        }
+        public Guid QuestionId { get; set; }
     }
 
 }

@@ -12,12 +12,11 @@ namespace Encore.Presenter.Controllers
 
         public QuestionController (IMediator mediator) => _mediator = mediator;
 
-        [HttpGet("/")]
-        public async Task<ActionResult> GetQuestions([FromBody] QuestionCommand command)
+        [HttpGet("get")]
+        public async Task<ActionResult> GetQuestions()
         {
-            var response = await _mediator.Send(command);            
+            var response = await _mediator.Send(new QuestionListCommand());
             return CustomResponse(response);
         }
-
     }
 }

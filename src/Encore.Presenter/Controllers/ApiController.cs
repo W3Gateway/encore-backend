@@ -21,7 +21,7 @@ namespace Encore.Presenter.Controllers
         protected ActionResult CustomResponse(object result = default)
         {
             if (IsOperationValid())
-                return Ok($"\"{result}\"");
+                return Ok(result);
 
             return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
             {

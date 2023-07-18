@@ -10,6 +10,13 @@ namespace Encore.Domain.Models
         public bool Mandatory { get; set; }
         public DbSet<ChecklistQuestion>? ChecklistQuestions { get; set; }
         public DbSet<QuestionAnswer>? QuestionAnswers { get; set; }
+
+        public Question(string name, int responseType, bool mandatory)
+        {
+            Name = name;
+            ResponseType = responseType;
+            Mandatory = mandatory;
+        }
     }
 
 }
