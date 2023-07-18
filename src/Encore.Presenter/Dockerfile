@@ -3,6 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
 ENV ASPNETCORE_URLS=http://+:8000;http://+:80;
 ENV ASPNETCORE_ENVIRONMENT=Development
@@ -17,6 +18,7 @@ COPY ["src/Encore.Infra.CrossCutting/Encore.Infra.CrossCutting.csproj", "src/Enc
 COPY ["src/Encore.Infra.Data/Encore.Infra.Data.csproj", "src/Encore.Infra.Data/"]
 RUN dotnet restore "src/Encore.Presenter/Encore.Presenter.csproj"
 COPY . .
+
 WORKDIR "/src/src/Encore.Presenter"
 RUN dotnet build "Encore.Presenter.csproj" -c Release -o /app/build
 
