@@ -25,6 +25,9 @@ namespace Encore.Infra.CrossCutting
         {
             // Infra - Data
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IQuestionAnswerRepository, QuestionAnswerRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IChecklistQuestionRepository, ChecklistQuestionRepository>();
         }
     }
 }

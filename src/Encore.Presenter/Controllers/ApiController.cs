@@ -20,7 +20,7 @@ namespace Encore.Presenter.Controllers
             return Ok();
         }
 
-        protected ActionResult CustomResponse(Response<AuthUserResponse> response)
+        protected ActionResult CustomResponse(Response<QuestionResponse> response)
         {
             if (!response.IsValid)
             {
