@@ -1,4 +1,4 @@
-using Encore.Application.Auth;
+using Encore.Application.User;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +12,14 @@ namespace Encore.Presenter.Controllers
 
         public AuthController (IMediator mediator) => _mediator = mediator;
 
-        [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] QuestionCommand command)
+        [HttpPost("authenticate")]
+        public async Task<ActionResult> AuthenticateUser([FromBody] AuthUserCommand command)
         {
-            var response = await _mediator.Send(command);            
+            var response = await _mediator.Send(command);
+            if (response is null)
+                return Unauthorized(command);
+            
             return CustomResponse(response);
         }
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 
-namespace Encore.Application.Auth
+namespace Encore.Application.User
 {
     public class AuthUserCommand : Command<Response<AuthUserResponse>>
     {

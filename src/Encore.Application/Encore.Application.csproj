@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Encore.Infra.Data\Encore.Infra.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Home\" />
+  </ItemGroup>
+
 </Project>

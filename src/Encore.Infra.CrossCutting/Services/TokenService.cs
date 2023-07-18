@@ -31,7 +31,6 @@ namespace Encore.Infra.CrossCutting.Services
                     {
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                     Issuer = _configuration["JwtApp:Issuer"],
                     Audience = _configuration["Jwt:Audience"],
