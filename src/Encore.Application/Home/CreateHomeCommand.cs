@@ -7,7 +7,7 @@ namespace Encore.Application.Home
     public class CreateHomeCommand : Command<Response<CreateHomeResponse>>
     {
         public Guid MicroregionId { get; set; }
-        public Adderess Adderess { get; set; }
+        public Address Adderess { get; set; }
         public string ContactNumber { get; set; }
         public string? MedicalRecordNumber { get; set; }
         public string ResponsibleDocument { get; set; }

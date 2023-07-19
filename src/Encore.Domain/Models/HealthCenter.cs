@@ -7,8 +7,14 @@ namespace Encore.Domain.Models
     {
         public string Name { get; set; }
         public string Cnes { get; set; }
-        public Adderess Adderess { get; set; }
+        public Address Address { get; set; }
         public Guid AccountableId { get; set; }
+
+        #region Mapping
+        public List<Agent> Agents { get; set; }
+        public User Accountable { get; set; }
+        public List<Microregion> Microregions { get; set; }
+        #endregion
     }
 
 }

@@ -7,7 +7,7 @@ namespace Encore.Application.Home
     public class CreateHomeResponse : Response<CreateHomeResponse> 
     {
         public string TypeProperty { get; set; }
-        public Adderess Adderess { get; set; }
+        public Address Adderess { get; set; }
         public string ContactNumber { get; set; }
         public string? MedicalRecordNumber { get; set; }
         public decimal HouseholdIncome { get; set; }
@@ -15,7 +15,7 @@ namespace Encore.Application.Home
         public PersonResponse Responsible { get; set; }
         public MicroregionResponse Microregion { get; set; }
 
-        public CreateHomeResponse(string typeProperty, Adderess adderess, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers, Person person, Microregion microregion)
+        public CreateHomeResponse(string typeProperty, Address adderess, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers, Person person, Microregion microregion)
         {
             TypeProperty = typeProperty;
             Adderess = adderess;
