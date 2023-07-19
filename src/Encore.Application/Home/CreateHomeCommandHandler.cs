@@ -28,11 +28,11 @@ namespace Encore.Application.Home
                     return Fail<CreateHomeResponse>(ValidationResult);
                 }
 
-                var home = new Domain.Models.Home(request.MicroregionId, request.Adderess, request.ContactNumber, request.FamilyRecord, person.Id, request.HouseholdIncome, request.NumberMembers);
+                var home = new Domain.Models.Home(request.MicroregionId, request.Adderess, request.ContactNumber, request.MedicalRecordNumber, person.Id, request.HouseholdIncome, request.NumberMembers);
 
                 var entity = await _homeRepository.CreateAsync(home);
 
-                return new CreateHomeResponse(entity.TypeProperty, entity.Adderess, entity.ContactNumber, entity.FamilyRecord, entity.HouseholdIncome, entity.NumberMembers, entity.Person, entity.Microregion);
+                return new CreateHomeResponse(entity.TypeProperty, entity.Adderess, entity.ContactNumber, entity.MedicalRecordNumber, entity.HouseholdIncome, entity.NumberMembers, entity.Person, entity.Microregion);
             }
             catch (Exception ex)
             {
