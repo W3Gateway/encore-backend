@@ -6,7 +6,7 @@ namespace Encore.Domain.Models
     public class Home : Entity<Home>
     {
         public string TypeProperty { get; private set; }
-        public Adderess Adderess { get; private set; }
+        public Address Address { get; private set; }
         public string ContactNumber { get; private set; }
         public string? MedicalRecordNumber { get; private set; }
         public decimal HouseholdIncome { get; private set; }
@@ -14,15 +14,16 @@ namespace Encore.Domain.Models
         public Guid ResponsiblePersonId { get; private set; }
         public Guid MicroregionId { get; private set; }
 
+        #region Mapping
         public Person Person { get; set; }
         public Microregion Microregion { get; set; }
+        #endregion
 
-
-        public Home(Guid microregionId, Adderess adderess, string contactNumber, string? medicalRecordNumber, Guid responsiblePersonId, decimal householdIncome, int numberMembers)
+        public Home(Guid microregionId, /*Address address,*/ string contactNumber, string? medicalRecordNumber, Guid responsiblePersonId, decimal householdIncome, int numberMembers)
         {
             TypeProperty = "Domiciliar";
             MicroregionId = microregionId;
-            Adderess = adderess;
+            //Address = address;
             ContactNumber = contactNumber;
             MedicalRecordNumber = medicalRecordNumber;
             ResponsiblePersonId = responsiblePersonId;

@@ -13,11 +13,16 @@ namespace Encore.Domain.Models
         public string Document { get; set; }
         public string Email { get; set; }
         public string? ContactNumber { get; set; }
-        public long SocialIdentification { get; set; }
-        public long? NationalHealthRegister { get; set; }
+        public string SocialIdentification { get; set; }
+        public string? NationalHealthRegister { get; set; }
         public string FatherName { get; set; }
         public string MotherName { get; set; }
         public Guid MicroregionId { get; set; }
+
+        #region Mapping
+        public Microregion Microregion { get; set; }
+        public Home Home { get; set; }
+        #endregion
 
     }
 

@@ -1,0 +1,68 @@
+﻿using Encore.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Encore.Infra.Data.Mapping
+{
+    internal class PersonMap : EntityTypeConfiguration<Person>
+    {
+        protected override void Configure(EntityTypeBuilder<Person> builder)
+        {
+            builder.Property(h => h.Name)
+                .HasColumnType("varchar(100)")
+                .IsRequired();
+
+            builder.Property(h => h.SocialName)
+                .HasColumnType("varchar(100)")
+                .IsRequired();
+
+            builder.Property(h => h.Nationality)
+                .HasColumnType("varchar(20)")
+                .IsRequired();
+
+            builder.Property(h => h.Sex)
+                .HasColumnType("varchar(20)")
+                .IsRequired();
+
+            builder.Property(h => h.SkinColor)
+                .HasColumnType("varchar(20)")
+                .IsRequired();
+
+            builder.Property(h => h.Document)
+                .HasColumnType("varchar(14)")
+                .IsRequired();
+
+            builder.Property(h => h.Email)
+                .HasColumnType("varchar(15)")
+                .IsRequired();
+
+            builder.Property(h => h.ContactNumber)
+                .HasColumnType("varchar(20)")
+                .IsRequired();
+
+            builder.Property(h => h.SocialIdentification)
+                .HasColumnType("varchar(20)")
+                .IsRequired();
+
+            builder.Property(h => h.NationalHealthRegister)
+                .HasColumnType("varchar(20)")
+                .IsRequired();
+
+            builder.Property(h => h.FatherName)
+                .HasColumnType("varchar(100)")
+                .IsRequired();
+
+            builder.Property(h => h.MotherName)
+                .HasColumnType("varchar(100)")
+                .IsRequired();
+
+            builder.Property(h => h.BirthDate)
+                .HasColumnType("Date")
+                .IsRequired();
+
+            builder.HasOne(a => a.Microregion)
+                .WithMany(u => u.Persons)
+                .HasForeignKey(a => a.MicroregionId);
+        }
+    }
+}

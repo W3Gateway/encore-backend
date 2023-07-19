@@ -19,11 +19,7 @@ namespace Encore.Application.Auth
 
         public async Task<List<QuestionResponse>> Handle(QuestionListQuery request, CancellationToken cancellationToken)
         {
-            //var questions = await _questionRepository.GetAsync();
-            var questions = new List<Question>();
-            questions.Add(new Question("1", 1, false));
-            questions.Add(new Question("2", 2, false));
-            questions.Add(new Question("3", 3, true));
+            var questions = await _questionRepository.GetAsync();
 
             if (questions is null)
             {

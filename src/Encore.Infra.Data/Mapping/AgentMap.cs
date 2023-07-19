@@ -8,18 +8,23 @@ namespace Encore.Infra.Data.Mapping
     {
         protected override void Configure(EntityTypeBuilder<Agent> builder)
         {
-            //    builder.Property(v => v.Name)
-            //        .HasColumnType("varchar(200)")
-            //        .IsRequired();
+            builder.HasOne(a => a.User)
+                .WithMany(u => u.Agents)
+                .HasForeignKey(a => a.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //    builder.Property(c => c.Email)
-            //        .HasColumnType("varchar(50)")
-            //        .IsRequired();
+            builder.HasOne(a => a.HealthCenter)
+                .WithMany(u => u.Agents)
+                .HasForeignKey(a => a.HealthCenterId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //    builder.Property(c => c.PasswordHash)
-            //        .HasColumnType("nvarchar(256)")
-            //        .IsRequired();
-
+            builder.HasOne(a => a.Microregion)
+                .WithMany(u => u.Agents)
+                .HasForeignKey(a => a.MicroregionId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

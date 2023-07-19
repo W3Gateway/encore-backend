@@ -6,6 +6,11 @@ namespace Encore.Domain.Models
     {
         public Guid UserId { get; set; }
         public Guid PermissionId { get; set; }
+
+        #region Mapping
+        public User User { get; set; }
+        public Permission Permission { get; set; }
+        #endregion
     }
 
 }
