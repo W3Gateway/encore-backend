@@ -8,13 +8,13 @@ namespace Encore.Infra.Data.Mapping
     {
         protected override void Configure(EntityTypeBuilder<ChecklistQuestion> builder)
         {
-            builder.Property(v => v.Name)
-                .HasColumnType("varchar(200)")
-                .IsRequired();
+            //builder.Property(v => v.Name)
+            //    .HasColumnType("varchar(200)")
+            //    .IsRequired();
 
-            builder.HasOne(p => p.Question)
-                .WithMany(p => p.ChecklistQuestions)
-                .HasForeignKey(fk => fk.QuestionId);
+            //builder.HasOne(p => p.Question)
+            //    .WithMany(p => p.ChecklistQuestions)
+            //    .HasForeignKey(fk => fk.QuestionId);
         }
     }
 }

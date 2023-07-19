@@ -15,7 +15,7 @@ namespace Encore.Presenter.Controllers
         [HttpGet("get")]
         public async Task<ActionResult> GetQuestions()
         {
-            var response = await _mediator.Send(new QuestionListCommand());
+            var response = await _mediator.Send(new QuestionListQuery());
             return CustomResponse(response);
         }
     }

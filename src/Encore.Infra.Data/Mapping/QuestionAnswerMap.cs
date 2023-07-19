@@ -8,12 +8,12 @@ namespace Encore.Infra.Data.Mapping
     {
         protected override void Configure(EntityTypeBuilder<QuestionAnswer> builder)
         {
-            builder.Property(p => p.Response)
-                .HasColumnType("varchar(200)");
+            //builder.Property(p => p.Response)
+            //    .HasColumnType("varchar(200)");
 
-            builder.HasOne(p => p.Question)
-                .WithMany(p => p.QuestionAnswers)
-                .HasForeignKey(fk => fk.QuestionId);
+            //builder.HasOne(p => p.Question)
+            //    .WithMany(p => p.QuestionAnswers)
+            //    .HasForeignKey(fk => fk.QuestionId);
         }
     }
 }
