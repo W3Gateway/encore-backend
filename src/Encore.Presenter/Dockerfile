@@ -7,6 +7,7 @@ EXPOSE 443
 
 ENV ASPNETCORE_URLS=http://+:8000;http://+:80;
 ENV ASPNETCORE_ENVIRONMENT=Development
+ENV DOTNET_RUNNING_IN_CONTAINER=true
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
