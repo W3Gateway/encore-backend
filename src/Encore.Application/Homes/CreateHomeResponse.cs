@@ -1,8 +1,10 @@
-﻿using Encore.Domain.Core.Responses;
+﻿using Encore.Application.Microregions;
+using Encore.Application.Persons;
+using Encore.Domain.Core.Responses;
 using Encore.Domain.Models;
 using Encore.Domain.ValueObjects;
 
-namespace Encore.Application.Home
+namespace Encore.Application.Homes
 {
     public class CreateHomeResponse : Response<CreateHomeResponse> 
     {
@@ -15,10 +17,10 @@ namespace Encore.Application.Home
         public PersonResponse Responsible { get; set; }
         public MicroregionResponse Microregion { get; set; }
 
-        public CreateHomeResponse(string typeProperty, Address adderess, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers, Person person, Microregion microregion)
+        public CreateHomeResponse(string typeProperty, /*Address adderess,*/ string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers, Person person, Microregion microregion)
         {
             TypeProperty = typeProperty;
-            Adderess = adderess;
+            //Adderess = adderess;
             ContactNumber = contactNumber;
             MedicalRecordNumber = medicalRecordNumber;
             HouseholdIncome = householdIncome;

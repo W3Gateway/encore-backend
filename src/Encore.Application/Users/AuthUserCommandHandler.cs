@@ -1,4 +1,5 @@
-﻿using Encore.Domain.Core.Messaging;
+﻿using Encore.Domain.Core.Data;
+using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
@@ -15,7 +16,8 @@ namespace Encore.Application.User
         
         public AuthUserCommandHandler(IUserRepository userRepository,
                                       IPasswordHashService passwordHashService,
-                                      ITokenService tokenService) 
+                                      ITokenService tokenService,
+                                      IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _userRepository = userRepository;
             _passwordHashService = passwordHashService;

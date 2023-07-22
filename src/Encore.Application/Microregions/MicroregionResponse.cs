@@ -1,4 +1,4 @@
-﻿namespace Encore.Application.Home
+﻿namespace Encore.Application.Microregions
 {
     public class MicroregionResponse
     {

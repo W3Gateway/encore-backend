@@ -1,6 +1,6 @@
-﻿namespace Encore.Application.Home
+﻿namespace Encore.Application.Persons
 {
-    public class PersonResponse 
+    public class PersonResponse
     {
         public string Name { get; set; }
         public string SocialName { get; set; }

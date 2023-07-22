@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Encore.Application.Auth
 {
-    public class QuestionListQueryHandler : IRequestHandler<QuestionListQuery, List<QuestionResponse>>
+    public class QuestionListQueryHandler : IRequestHandler<QuestionListQuery, List<QuestionResponse>?>
     {
         private readonly IQuestionRepository _questionRepository;
 
@@ -17,14 +17,12 @@ namespace Encore.Application.Auth
             _mapper = mapper;
         }
 
-        public async Task<List<QuestionResponse>> Handle(QuestionListQuery request, CancellationToken cancellationToken)
+        public async Task<List<QuestionResponse>?> Handle(QuestionListQuery request, CancellationToken cancellationToken)
         {
             var questions = await _questionRepository.GetAsync();
 
             if (questions is null)
-            {
                 return null;
-            }
 
             var dtoList = _mapper.MapList(questions);
 
