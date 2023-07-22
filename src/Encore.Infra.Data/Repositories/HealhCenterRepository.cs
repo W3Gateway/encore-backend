@@ -1,0 +1,14 @@
+﻿using Encore.Domain.Interfaces.Data;
+using Encore.Domain.Models;
+using Encore.Infra.Data.Context;
+
+namespace Encore.Infra.Data.Repositories
+{
+    public class HealhCenterRepository : Repository<HealthCenter>, IHealthCenterRepository
+    {
+        public HealhCenterRepository(ApplicationContext context)
+            : base(context)
+        {
+        }
+    }
+}
