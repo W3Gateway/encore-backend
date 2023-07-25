@@ -4,6 +4,7 @@ using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,7 +39,7 @@ namespace Encore.Application.Users
 
                 var token = _tokenService.GenerateJwtToken(user);
 
-                return new AuthUserResponse(token, user.Id);
+                return Success(new AuthUserResponse(token, user.Id), new ValidationResult()) ;
             }
             catch (Exception ex)
             {
