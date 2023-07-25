@@ -15,7 +15,7 @@ namespace Encore.Domain.Models
         public string Email { get; private set; }
         public string? ContactNumber { get; private set; }
         public string SocialIdentification { get; private set; }
-        public string? NationalHealthRegister { get; private set; }
+        public string DocumentType { get; private set; }
         public string FatherName { get; private set; }
         public string MotherName { get; private set; }
         public bool IsHeadFamily { get; private set; }
@@ -39,7 +39,7 @@ namespace Encore.Domain.Models
             Email = email;
             ContactNumber = contactNumber;
             SocialIdentification = socialIdentification;
-            NationalHealthRegister = nationalHealthRegister;
+            DocumentType = nationalHealthRegister;
             FatherName = fatherName;
             MotherName = motherName;
             IsHeadFamily = isHeadFamily;

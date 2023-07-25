@@ -32,6 +32,10 @@ namespace Encore.Infra.Data.Mapping
                 .HasColumnType("varchar(14)")
                 .IsRequired();
 
+            builder.Property(h => h.DocumentType)
+                .HasColumnType("varchar(50)")
+                .IsRequired();
+           
             builder.Property(h => h.Email)
                 .HasColumnType("varchar(15)")
                 .IsRequired();
@@ -41,10 +45,6 @@ namespace Encore.Infra.Data.Mapping
                 .IsRequired();
 
             builder.Property(h => h.SocialIdentification)
-                .HasColumnType("varchar(20)")
-                .IsRequired();
-
-            builder.Property(h => h.NationalHealthRegister)
                 .HasColumnType("varchar(20)")
                 .IsRequired();
 

@@ -13,10 +13,10 @@ namespace Encore.Application.Persons.Commands
         public string Sex { get; set; }
         public string SkinColor { get; set; }
         public string Document { get; set; }
+        public string DocumentType { get; set; }
         public string Email { get; set; }
         public string? ContactNumber { get; set; }
         public string SocialIdentification { get; set; }
-        public string? NationalHealthRegister { get; set; }
         public string FatherName { get; set; }
         public string MotherName { get; set; }
         public bool IsHeadFamily { get; set; }

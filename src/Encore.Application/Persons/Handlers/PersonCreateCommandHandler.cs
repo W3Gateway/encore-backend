@@ -58,7 +58,7 @@ namespace Encore.Application.Persons.Handlers
                                         request.Email,
                                         request.ContactNumber,
                                         request.SocialIdentification,
-                                        request.NationalHealthRegister,
+                                        request.DocumentType,
                                         request.FatherName,
                                         request.MotherName,
                                         request.IsHeadFamily,
