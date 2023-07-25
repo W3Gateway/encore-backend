@@ -19,7 +19,7 @@ namespace Encore.Infra.Data.Mapping
             builder.OwnsOne(h => h.Address, a =>
             {
                 a.Property(x => x.Number)
-                    .HasColumnType("numeric(4,3)")
+                    .HasColumnType("int")
                     .HasColumnName("Number")
                     .IsRequired();
 
