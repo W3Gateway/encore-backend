@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Encore.Application.Homes.Queries;
 using Encore.Application.Homes.Responses;
-using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
-using Encore.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity;

@@ -10,6 +10,8 @@ namespace Encore.Application.Questions
             CreateMap<QuestionListQuery, Question>();
 
             CreateMap<Question, QuestionResponse>();
+
+            CreateMap<OtherQuestion, OtherQuestionResponse>();
         }
     }
 }
