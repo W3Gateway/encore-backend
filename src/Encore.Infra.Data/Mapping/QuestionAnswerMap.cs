@@ -14,6 +14,10 @@ namespace Encore.Infra.Data.Mapping
             builder.HasOne(p => p.Question)
                 .WithMany(p => p.QuestionAnswers)
                 .HasForeignKey(fk => fk.QuestionId);
+
+            builder.HasOne(p => p.Visit)
+                .WithMany(p => p.Answers)
+                .HasForeignKey(fk => fk.VisitId);
         }
     }
 }

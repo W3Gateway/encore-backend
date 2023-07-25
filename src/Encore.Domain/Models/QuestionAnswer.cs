@@ -8,7 +8,6 @@ namespace Encore.Domain.Models
         public Guid QuestionId { get; set; }
         public string? Response { get; set; }
         public Guid VisitId { get; set; }
-
         public Visit Visit { get; set; }
     }
 
