@@ -6,10 +6,14 @@ namespace Encore.Domain.Models
     {
         public Guid AgentId { get; set; }
         public Guid PersonId { get; set; }
+        public Guid HomeId { get; set; }
+        public Guid MicroregionId { get; set; }
 
         #region Mapping
         public Person Person { get; set; }
         public Agent Agent { get; set; }
+        public Home Home { get; set; }
+        public Microregion Microregion { get; set; }
         public List<QuestionAnswer> Answers { get; set; }
         #endregion
     }

@@ -19,6 +19,18 @@ namespace Encore.Infra.Data.Mapping
                 .HasForeignKey(a => a.PersonId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(a => a.Home)
+                .WithMany(u => u.Visits)
+                .HasForeignKey(a => a.HomeId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(a => a.Microregion)
+                .WithMany(u => u.Visits)
+                .HasForeignKey(a => a.MicroregionId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Encore.Domain.Models
         public List<Agent> Agents { get; set; }
         public List<Person> Persons { get; set; }
         public List<Home> Homes { get; set; }
+        public List<Visit> Visits { get; set; }
         #endregion
 
     }
