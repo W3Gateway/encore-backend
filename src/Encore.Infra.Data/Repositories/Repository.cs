@@ -1,4 +1,4 @@
-﻿using Encore.Domain.Core.Intefaces;
+﻿using Encore.Domain.Core.Data;
 using Encore.Domain.Core.Models;
 using Encore.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +18,15 @@ namespace Encore.Infra.Data.Repositories
             DbSet = Context.Set<TEntity>();
         }
 
+        IUnitOfWork IRepository<TEntity>.UnitOfWork => Context;
+
         public async ValueTask<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) => 
             await Include().SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
 
-        public async ValueTask<List<TEntity>> GetAsync(CancellationToken cancellationToken = default) => 
+        public async ValueTask<IEnumerable<TEntity>> GetAsync(CancellationToken cancellationToken = default) => 
             await Include().ToListAsync(cancellationToken);
 
-        public async ValueTask<List<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) => 
+        public async ValueTask<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) => 
             await Include().Where(predicate).ToListAsync(cancellationToken);
 
         public ValueTask<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)

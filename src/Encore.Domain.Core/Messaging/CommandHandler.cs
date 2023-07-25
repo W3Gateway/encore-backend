@@ -1,4 +1,5 @@
-﻿using Encore.Domain.Core.Models;
+﻿using Encore.Domain.Core.Data;
+using Encore.Domain.Core.Models;
 using Encore.Domain.Core.Responses;
 using FluentValidation.Results;
 
@@ -6,12 +7,40 @@ namespace Encore.Domain.Core.Messaging
 {
     public abstract class CommandHandler
     {
+        private readonly IUnitOfWork _uow;
+
         protected bool _executeTransaction = true;
         protected ValidationResult ValidationResult { get; } = new ValidationResult();
 
-        protected CommandHandler()
+        protected CommandHandler(IUnitOfWork unitOfWork) => _uow = unitOfWork;
+
+        protected Task<int> SaveAsync(CancellationToken cancellationToken = default) =>
+            _uow.SaveAsync(cancellationToken);
+
+        protected async Task<ValidationResult> CommitAsync(string message, CancellationToken cancellationToken = default)
         {
+            if (_uow.HasChanges() && (await _uow.SaveAsync(cancellationToken) <= 0))
+                AddError(message);
+
+            return ValidationResult;
         }
+
+        protected async Task<ValidationResult> CommitAsync(CancellationToken cancellationToken = default)
+        {
+            return await CommitAsync("Ocorreu um erro ao salvar os dados!", cancellationToken);
+        }
+
+        protected async Task<ValidationResult> RollbackAsync(CancellationToken cancellationToken = default)
+        {
+            await _uow.RollbackTransactionAsync(cancellationToken);
+            return ValidationResult;
+        }
+
+        protected bool HasChanges()
+        {
+            return _uow.HasChanges();
+        }
+
 
         protected async Task<bool> IsValidAsync<TParameter>(TParameter target) where TParameter : Entity<TParameter>
         {
@@ -31,6 +60,8 @@ namespace Encore.Domain.Core.Messaging
         }
 
         protected void AddError(string mensagem) => ValidationResult.Errors.Add(new ValidationFailure(string.Empty, mensagem));
+
+        protected void AddError(List<ValidationFailure> errors) => ValidationResult.Errors.AddRange(errors);
 
         protected static TEntity Remover<TEntity>(TEntity entity)
             where TEntity : Entity<TEntity>
@@ -55,5 +86,7 @@ namespace Encore.Domain.Core.Messaging
                 return x;
             }).ToList();
         }
+
+
     }
 }

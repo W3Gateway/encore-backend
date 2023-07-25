@@ -1,4 +1,5 @@
 ﻿using Encore.Domain.Core.Models;
+using Encore.Domain.Homes;
 
 namespace Encore.Domain.Models
 {
@@ -14,7 +15,7 @@ namespace Encore.Domain.Models
         public Agent Agent { get; set; }
         public Home Home { get; set; }
         public Microregion Microregion { get; set; }
-        public List<QuestionAnswer> Answers { get; set; }
+        public IEnumerable<QuestionAnswer> Answers { get; set; }
         #endregion
     }
 

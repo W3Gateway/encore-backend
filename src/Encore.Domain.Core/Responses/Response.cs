@@ -6,11 +6,11 @@ namespace Encore.Domain.Core.Responses
     {
         public TData? Data { get; protected set; }
 
-        public ValidationResult? ValidationResult { get; protected set; }
+        public ValidationResult ValidationResult { get; protected set; }
 
         public bool IsValid => ValidationResult.IsValid;
 
-        public static Response<TData> Success(TData data, ValidationResult validationResult = default)
+        public static Response<TData> Success(TData data, ValidationResult? validationResult = default)
         {
             return new Response<TData>
             {
@@ -19,7 +19,7 @@ namespace Encore.Domain.Core.Responses
             };
         }
 
-        public static Response<TData> Fail(ValidationResult validationResult = default)
+        public static Response<TData> Fail(ValidationResult? validationResult = default)
         {
             return new Response<TData> { ValidationResult = validationResult ?? new ValidationResult() };
         }

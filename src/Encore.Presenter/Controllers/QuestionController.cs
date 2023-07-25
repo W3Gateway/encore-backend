@@ -1,4 +1,4 @@
-using Encore.Application.Auth;
+using Encore.Application.Questions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +12,12 @@ namespace Encore.Presenter.Controllers
 
         public QuestionController (IMediator mediator) => _mediator = mediator;
 
-        [HttpGet("get")]
-        public async Task<ActionResult> GetQuestions()
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Get([FromQuery] QuestionListQuery query)
         {
-            var response = await _mediator.Send(new QuestionListQuery());
+            var response = await _mediator.Send(query);
             return CustomResponse(response);
         }
     }

@@ -12,7 +12,7 @@ namespace Encore.Domain.Models
         public User User { get; set; }
         public HealthCenter HealthCenter { get; set; }
         public Microregion Microregion { get; set; }
-        public List<Visit> Visits { get; set; }
+        public IEnumerable<Visit> Visits { get; set; }
         #endregion
     }
 

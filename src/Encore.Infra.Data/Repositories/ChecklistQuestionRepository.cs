@@ -4,7 +4,7 @@ using Encore.Infra.Data.Context;
 
 namespace Encore.Infra.Data.Repositories
 {
-    public class ChecklistQuestionRepository : Repository<ChecklistQuestion>, IChecklistQuestionRepository
+    public class ChecklistQuestionRepository : Repository<OtherQuestion>, IChecklistQuestionRepository
     {
         public ChecklistQuestionRepository(ApplicationContext context)
             : base(context)

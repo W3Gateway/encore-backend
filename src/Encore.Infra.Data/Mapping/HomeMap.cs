@@ -1,4 +1,4 @@
-﻿using Encore.Domain.Models;
+﻿using Encore.Domain.Homes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -71,11 +71,6 @@ namespace Encore.Infra.Data.Mapping
             builder.Property(h => h.NumberMembers)
                 .HasColumnType("numeric(3)")
                 .IsRequired();
-
-            builder.HasOne(h => h.Person)
-                .WithOne(p => p.Home)
-                .HasForeignKey<Home>(h => h.ResponsiblePersonId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(h => h.Microregion)
                 .WithMany(p => p.Homes)

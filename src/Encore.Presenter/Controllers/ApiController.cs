@@ -1,5 +1,8 @@
-﻿using FluentValidation.Results;
+﻿using Encore.Domain.Core.Responses;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Encore.Presenter.Controllers
 {
@@ -9,7 +12,7 @@ namespace Encore.Presenter.Controllers
     public abstract class ApiController : ControllerBase
     {
         private readonly List<string> _errors = new();
-        protected readonly string _verbs = "GET,OPTIONS,POST,PUT,DELETE";
+        protected readonly string _verbs = "GET,OPTIONS,POST,PATCH,PUT,DELETE";
 
         [HttpOptions]
         public IActionResult Options()
@@ -18,15 +21,46 @@ namespace Encore.Presenter.Controllers
             return Ok();
         }
 
-        protected ActionResult CustomResponse(object result = default)
+        protected ActionResult CustomResponse(object? result = default)
         {
             if (IsOperationValid())
+            {
+                if (HttpContext.Request.Method == "DELETE")
+                    return NoContent();
+
                 return Ok(result);
+            }
 
             return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
             {
                 { "Messages", _errors.ToArray() }
             }));
+        }
+
+        protected ActionResult CustomResponse(ModelStateDictionary modelState)
+        {
+            var errors = modelState.Values.SelectMany(e => e.Errors);
+            foreach (var error in errors)
+                AddError(error.ErrorMessage);
+
+            return CustomResponse();
+        }
+
+        protected ActionResult CustomResponse(ValidationResult validationResult)
+        {
+            foreach (var error in validationResult.Errors)
+                AddError(error.ErrorMessage);
+
+            return CustomResponse();
+        }
+
+        protected ActionResult CustomResponse<TResponse>(Response<TResponse> response)
+        {
+            if(response.ValidationResult.Errors.IsNullOrEmpty())
+                foreach (var error in response.ValidationResult.Errors)
+                    AddError(error.ErrorMessage);
+
+            return CustomResponse(response.Data);
         }
 
         protected bool IsOperationValid() => !_errors.Any();
@@ -39,10 +73,9 @@ namespace Encore.Presenter.Controllers
             return CustomResponse();
         }
 
-        protected void ClearErrors()
-        {
-            _errors.Clear();
-        }
+        protected void AddError(string erro) => _errors.Add(erro);
+
+        protected void ClearErrors() => _errors.Clear();
 
     }
 }

@@ -1,9 +1,9 @@
-﻿using Encore.Domain.Core.Intefaces;
+﻿using Encore.Domain.Core.Data;
 using Encore.Domain.Models;
 
 namespace Encore.Domain.Interfaces.Data
 {
-    public interface IChecklistQuestionRepository : IRepository<ChecklistQuestion>
+    public interface IChecklistQuestionRepository : IRepository<OtherQuestion>
     {
     }
 }

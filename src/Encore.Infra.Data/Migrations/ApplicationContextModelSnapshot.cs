@@ -17,10 +17,52 @@ namespace Encore.Infra.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Encore.Domain.Homes.Home", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasColumnType("varchar(15)");
+
+                    b.Property<decimal>("HouseholdIncome")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("MedicalRecordNumber")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid>("MicroregionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("NumberMembers")
+                        .HasColumnType("numeric(3)");
+
+                    b.Property<string>("TypeProperty")
+                        .IsRequired()
+                        .HasColumnType("varchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MicroregionId");
+
+                    b.ToTable("Home", (string)null);
+                });
 
             modelBuilder.Entity("Encore.Domain.Models.Agent", b =>
                 {
@@ -57,35 +99,6 @@ namespace Encore.Infra.Data.Migrations
                     b.ToTable("Agent", (string)null);
                 });
 
-            modelBuilder.Entity("Encore.Domain.Models.ChecklistQuestion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("ChecklistQuestion", (string)null);
-                });
-
             modelBuilder.Entity("Encore.Domain.Models.HealthCenter", b =>
                 {
                     b.Property<Guid>("Id")
@@ -120,54 +133,6 @@ namespace Encore.Infra.Data.Migrations
                     b.ToTable("HealthCenter", (string)null);
                 });
 
-            modelBuilder.Entity("Encore.Domain.Models.Home", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ContactNumber")
-                        .IsRequired()
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<decimal>("HouseholdIncome")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("MedicalRecordNumber")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<Guid>("MicroregionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("NumberMembers")
-                        .HasColumnType("numeric(3)");
-
-                    b.Property<Guid>("ResponsiblePersonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("TypeProperty")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MicroregionId");
-
-                    b.HasIndex("ResponsiblePersonId")
-                        .IsUnique();
-
-                    b.ToTable("Home", (string)null);
-                });
-
             modelBuilder.Entity("Encore.Domain.Models.Microregion", b =>
                 {
                     b.Property<Guid>("Id")
@@ -195,6 +160,35 @@ namespace Encore.Infra.Data.Migrations
                     b.HasIndex("HealthCenterId");
 
                     b.ToTable("Microregion", (string)null);
+                });
+
+            modelBuilder.Entity("Encore.Domain.Models.OtherQuestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("OtherQuestion", (string)null);
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.Permission", b =>
@@ -252,6 +246,12 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
+                    b.Property<Guid>("HomeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsHeadFamily")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("MicroregionId")
                         .HasColumnType("uniqueidentifier");
 
@@ -291,6 +291,8 @@ namespace Encore.Infra.Data.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HomeId");
 
                     b.HasIndex("MicroregionId");
 
@@ -348,9 +350,14 @@ namespace Encore.Infra.Data.Migrations
                     b.Property<string>("Response")
                         .HasColumnType("varchar(200)");
 
+                    b.Property<Guid>("VisitId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("VisitId");
 
                     b.ToTable("QuestionAnswer", (string)null);
                 });
@@ -423,6 +430,110 @@ namespace Encore.Infra.Data.Migrations
                     b.ToTable("UserPermission", (string)null);
                 });
 
+            modelBuilder.Entity("Encore.Domain.Models.Visit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("AgentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("HomeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MicroregionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgentId");
+
+                    b.HasIndex("HomeId");
+
+                    b.HasIndex("MicroregionId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("Visit", (string)null);
+                });
+
+            modelBuilder.Entity("Encore.Domain.Homes.Home", b =>
+                {
+                    b.HasOne("Encore.Domain.Models.Microregion", "Microregion")
+                        .WithMany("Homes")
+                        .HasForeignKey("MicroregionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsOne("Encore.Domain.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("HomeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("varchar(50)")
+                                .HasColumnName("City");
+
+                            b1.Property<string>("Landmark")
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("Landmark");
+
+                            b1.Property<string>("Neighborhood")
+                                .IsRequired()
+                                .HasColumnType("varchar(50)")
+                                .HasColumnName("Neighborhood");
+
+                            b1.Property<decimal>("Number")
+                                .HasColumnType("numeric(4,3)")
+                                .HasColumnName("Number");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("varchar(8)")
+                                .HasColumnName("PostalCode");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .HasColumnType("varchar(50)")
+                                .HasColumnName("State");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("Street");
+
+                            b1.Property<string>("StreetComplement")
+                                .HasColumnType("varchar(20)")
+                                .HasColumnName("StreetComplement");
+
+                            b1.HasKey("HomeId");
+
+                            b1.ToTable("Home");
+
+                            b1.WithOwner()
+                                .HasForeignKey("HomeId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("Microregion");
+                });
+
             modelBuilder.Entity("Encore.Domain.Models.Agent", b =>
                 {
                     b.HasOne("Encore.Domain.Models.HealthCenter", "HealthCenter")
@@ -448,17 +559,6 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("Microregion");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Encore.Domain.Models.ChecklistQuestion", b =>
-                {
-                    b.HasOne("Encore.Domain.Models.Question", "Question")
-                        .WithMany("ChecklistQuestions")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.HealthCenter", b =>
@@ -525,78 +625,6 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Encore.Domain.Models.Home", b =>
-                {
-                    b.HasOne("Encore.Domain.Models.Microregion", "Microregion")
-                        .WithMany("Homes")
-                        .HasForeignKey("MicroregionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Encore.Domain.Models.Person", "Person")
-                        .WithOne("Home")
-                        .HasForeignKey("Encore.Domain.Models.Home", "ResponsiblePersonId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.OwnsOne("Encore.Domain.ValueObjects.Address", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("HomeId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasColumnType("varchar(50)")
-                                .HasColumnName("City");
-
-                            b1.Property<string>("Landmark")
-                                .HasColumnType("varchar(200)")
-                                .HasColumnName("Landmark");
-
-                            b1.Property<string>("Neighborhood")
-                                .IsRequired()
-                                .HasColumnType("varchar(50)")
-                                .HasColumnName("Neighborhood");
-
-                            b1.Property<decimal>("Number")
-                                .HasColumnType("numeric(4,3)")
-                                .HasColumnName("Number");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasColumnType("varchar(8)")
-                                .HasColumnName("PostalCode");
-
-                            b1.Property<string>("State")
-                                .IsRequired()
-                                .HasColumnType("varchar(50)")
-                                .HasColumnName("State");
-
-                            b1.Property<string>("Street")
-                                .IsRequired()
-                                .HasColumnType("varchar(100)")
-                                .HasColumnName("Street");
-
-                            b1.Property<string>("StreetComplement")
-                                .HasColumnType("varchar(20)")
-                                .HasColumnName("StreetComplement");
-
-                            b1.HasKey("HomeId");
-
-                            b1.ToTable("Home");
-
-                            b1.WithOwner()
-                                .HasForeignKey("HomeId");
-                        });
-
-                    b.Navigation("Address")
-                        .IsRequired();
-
-                    b.Navigation("Microregion");
-
-                    b.Navigation("Person");
-                });
-
             modelBuilder.Entity("Encore.Domain.Models.Microregion", b =>
                 {
                     b.HasOne("Encore.Domain.Models.HealthCenter", "HealthCenter")
@@ -608,13 +636,32 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("HealthCenter");
                 });
 
+            modelBuilder.Entity("Encore.Domain.Models.OtherQuestion", b =>
+                {
+                    b.HasOne("Encore.Domain.Models.Question", "Question")
+                        .WithMany("OtherQuestions")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("Encore.Domain.Models.Person", b =>
                 {
+                    b.HasOne("Encore.Domain.Homes.Home", "Home")
+                        .WithMany("Persons")
+                        .HasForeignKey("HomeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Encore.Domain.Models.Microregion", "Microregion")
                         .WithMany("Persons")
                         .HasForeignKey("MicroregionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Home");
 
                     b.Navigation("Microregion");
                 });
@@ -622,12 +669,20 @@ namespace Encore.Infra.Data.Migrations
             modelBuilder.Entity("Encore.Domain.Models.QuestionAnswer", b =>
                 {
                     b.HasOne("Encore.Domain.Models.Question", "Question")
-                        .WithMany("QuestionAnswers")
+                        .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Encore.Domain.Models.Visit", "Visit")
+                        .WithMany("Answers")
+                        .HasForeignKey("VisitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Question");
+
+                    b.Navigation("Visit");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.UserPermission", b =>
@@ -649,6 +704,53 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Encore.Domain.Models.Visit", b =>
+                {
+                    b.HasOne("Encore.Domain.Models.Agent", "Agent")
+                        .WithMany("Visits")
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Encore.Domain.Homes.Home", "Home")
+                        .WithMany("Visits")
+                        .HasForeignKey("HomeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Encore.Domain.Models.Microregion", "Microregion")
+                        .WithMany("Visits")
+                        .HasForeignKey("MicroregionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Encore.Domain.Models.Person", "Person")
+                        .WithMany("Visits")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
+
+                    b.Navigation("Home");
+
+                    b.Navigation("Microregion");
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("Encore.Domain.Homes.Home", b =>
+                {
+                    b.Navigation("Persons");
+
+                    b.Navigation("Visits");
+                });
+
+            modelBuilder.Entity("Encore.Domain.Models.Agent", b =>
+                {
+                    b.Navigation("Visits");
+                });
+
             modelBuilder.Entity("Encore.Domain.Models.HealthCenter", b =>
                 {
                     b.Navigation("Agents");
@@ -663,6 +765,8 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("Homes");
 
                     b.Navigation("Persons");
+
+                    b.Navigation("Visits");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.Permission", b =>
@@ -672,15 +776,14 @@ namespace Encore.Infra.Data.Migrations
 
             modelBuilder.Entity("Encore.Domain.Models.Person", b =>
                 {
-                    b.Navigation("Home")
-                        .IsRequired();
+                    b.Navigation("Visits");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.Question", b =>
                 {
-                    b.Navigation("ChecklistQuestions");
+                    b.Navigation("Answers");
 
-                    b.Navigation("QuestionAnswers");
+                    b.Navigation("OtherQuestions");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.User", b =>
@@ -691,6 +794,11 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("Encore.Domain.Models.Visit", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

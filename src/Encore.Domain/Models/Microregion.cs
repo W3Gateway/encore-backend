@@ -1,4 +1,5 @@
 ﻿using Encore.Domain.Core.Models;
+using Encore.Domain.Homes;
 
 namespace Encore.Domain.Models
 {
@@ -9,10 +10,10 @@ namespace Encore.Domain.Models
 
         #region Mapping
         public HealthCenter HealthCenter { get; set; }
-        public List<Agent> Agents { get; set; }
-        public List<Person> Persons { get; set; }
-        public List<Home> Homes { get; set; }
-        public List<Visit> Visits { get; set; }
+        public IEnumerable<Agent> Agents { get; set; }
+        public IEnumerable<Person> Persons { get; set; }
+        public IEnumerable<Home> Homes { get; set; }
+        public IEnumerable<Visit> Visits { get; set; }
         #endregion
 
     }

@@ -1,10 +1,15 @@
-﻿using FluentValidation.Results;
+﻿using Encore.Domain.Core.Data;
+using Encore.Domain.Enum;
+using Encore.Domain.Models;
+using Encore.Infra.Data.Seeds;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 
 namespace Encore.Infra.Data.Context
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : DbContext, IUnitOfWork
     {
         private readonly IConfiguration _configuration;
 
@@ -62,5 +67,44 @@ namespace Encore.Infra.Data.Context
             base.Dispose();
         }
         #endregion
+
+        #region IUnitOfWork
+
+        public virtual IDbContextTransaction CurrentTransaction => Database.CurrentTransaction;
+
+        public Task<int> SaveAsync(CancellationToken cancellationToken = default) =>
+            SaveChangesAsync(cancellationToken);
+
+        public bool HasChanges()
+        {
+            var hasChanges = ChangeTracker.HasChanges();
+            return hasChanges;
+        }
+        public virtual async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (Database.CurrentTransaction != null)
+                return Database.CurrentTransaction;
+
+            return await Database.BeginTransactionAsync(cancellationToken);
+        }
+
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (Database.CurrentTransaction != null)
+                await Database.CurrentTransaction.CommitAsync(cancellationToken);
+        }
+
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (Database.CurrentTransaction != null)
+                await Database.CurrentTransaction.RollbackAsync(cancellationToken);
+        }
+
+        public IExecutionStrategy CreateExecutionStrategy()
+        {
+            return Database.CreateExecutionStrategy();
+        }
+
+        #endregion IUnitOfWork
     }
 }

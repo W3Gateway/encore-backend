@@ -1,0 +1,17 @@
+﻿using AutoMapper;
+using Encore.Application.Persons.Commands;
+using Encore.Application.Persons.Responses;
+using Encore.Domain.Models;
+
+namespace Encore.Application.Persons
+{
+    public class PersonMappingProfile : Profile
+    {
+        public PersonMappingProfile()
+        {
+            CreateMap<Person, PersonResponse>();
+
+            CreateMap<PersonCreateCommand, Person>();
+        }
+    }
+}
