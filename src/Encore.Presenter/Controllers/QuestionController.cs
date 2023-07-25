@@ -15,9 +15,9 @@ namespace Encore.Presenter.Controllers
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Get([FromQuery] QuestionListQuery query)
+        public async Task<IActionResult> Get()
         {
-            var response = await _mediator.Send(query);
+            var response = await _mediator.Send(new QuestionListQuery());
             return CustomResponse(response);
         }
     }

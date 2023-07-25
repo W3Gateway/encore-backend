@@ -2,7 +2,7 @@
 
 namespace Encore.Application.Questions
 {
-    public class QuestionListQuery : Query<List<QuestionResponse>>
+    public class QuestionListQuery : Query<IEnumerable<QuestionResponse>>
     {
     }
 }

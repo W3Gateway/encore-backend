@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Encore.Domain.Interfaces.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Questions
 {
@@ -17,14 +18,14 @@ namespace Encore.Application.Questions
 
         public async Task<IEnumerable<QuestionResponse>?> Handle(QuestionListQuery request, CancellationToken cancellationToken)
         {
-            var questions = await _questionRepository.GetAsync();
+            var questions = await _questionRepository.Include(x => x.OtherQuestions).ToListAsync(cancellationToken);
 
             if (questions is null)
                 return null;
 
-            var dtoList = _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+            var response = _mapper.Map<IEnumerable<QuestionResponse>>(questions);
 
-            return dtoList;
+            return response;
         }
     }
 }
