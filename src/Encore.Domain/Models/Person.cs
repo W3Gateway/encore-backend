@@ -22,6 +22,7 @@ namespace Encore.Domain.Models
         #region Mapping
         public Microregion Microregion { get; set; }
         public Home Home { get; set; }
+        public List<Visit> Visits { get; set; }
         #endregion
 
     }

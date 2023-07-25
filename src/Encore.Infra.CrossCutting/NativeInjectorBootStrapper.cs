@@ -31,6 +31,7 @@ namespace Encore.Infra.CrossCutting
             services.AddScoped<IChecklistQuestionRepository, ChecklistQuestionRepository>();
             services.AddScoped<IHomeRepository, HomeRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IVisitRepository, VisitRepository>();
         }
     }
 }
