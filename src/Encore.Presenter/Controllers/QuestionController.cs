@@ -1,4 +1,4 @@
-using Encore.Application.Auth;
+using Encore.Application.Questions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

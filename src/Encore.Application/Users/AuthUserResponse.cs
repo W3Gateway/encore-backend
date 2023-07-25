@@ -1,6 +1,6 @@
 ﻿using Encore.Domain.Core.Responses;
 
-namespace Encore.Application.User
+namespace Encore.Application.Users
 {
     public class AuthUserResponse : Response<AuthUserResponse>
     {

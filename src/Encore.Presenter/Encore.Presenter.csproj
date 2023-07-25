@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Encore.Application\Encore.Application.csproj" />
+    <ProjectReference Include="..\Encore.Infra.CrossCutting\Encore.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\Encore.Infra.Data\Encore.Infra.Data.csproj" />
   </ItemGroup>
 

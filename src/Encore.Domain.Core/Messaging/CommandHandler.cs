@@ -61,6 +61,8 @@ namespace Encore.Domain.Core.Messaging
 
         protected void AddError(string mensagem) => ValidationResult.Errors.Add(new ValidationFailure(string.Empty, mensagem));
 
+        protected void AddError(List<ValidationFailure> errors) => ValidationResult.Errors.AddRange(errors);
+
         protected static TEntity Remover<TEntity>(TEntity entity)
             where TEntity : Entity<TEntity>
         {

@@ -1,4 +1,4 @@
-﻿using Encore.Domain.Core.Atributes;
+﻿using Encore.Domain.Core.Attributes;
 using FluentValidation.Results;
 using MediatR;
 

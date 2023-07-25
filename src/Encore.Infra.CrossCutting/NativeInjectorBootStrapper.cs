@@ -1,6 +1,9 @@
-﻿using Encore.Domain.Interfaces.CrossCutting;
+﻿using Encore.Domain.Core.Data;
+using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
+using Encore.Infra.CrossCutting.Mapper;
 using Encore.Infra.CrossCutting.Services;
+using Encore.Infra.Data.Context;
 using Encore.Infra.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,7 +22,9 @@ namespace Encore.Infra.CrossCutting
         {
             services.AddScoped<IPasswordHashService, PasswordHashService>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped(typeof(IEntityToDtoMapper<,>), typeof(EntityToDtoMapper<,>));
+            var mappers = AutoMapperConfig.Setup();
+            var temp = new List<Type>(mappers);
+            services.AddAutoMapper(temp.ToArray());
         }
 
         private static void RegisterData(IServiceCollection services)
@@ -31,6 +36,13 @@ namespace Encore.Infra.CrossCutting
             services.AddScoped<IChecklistQuestionRepository, ChecklistQuestionRepository>();
             services.AddScoped<IHomeRepository, HomeRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IMicroregionRepository, MicroregionRepository>();
+            services.AddScoped<IHealthCenterRepository, HealhCenterRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
+            services.AddScoped<IAgentRepository, AgentRepository>();
+
+            services.AddScoped<IUnitOfWork, ApplicationContext>();
         }
     }
 }

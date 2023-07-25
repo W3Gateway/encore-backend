@@ -6,14 +6,14 @@ using Encore.Domain.Interfaces.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Encore.Application.User
+namespace Encore.Application.Users
 {
     public class AuthUserCommandHandler : CommandHandler, IRequestHandler<AuthUserCommand, Response<AuthUserResponse>?>
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHashService _passwordHashService;
         private readonly ITokenService _tokenService;
-        
+
         public AuthUserCommandHandler(IUserRepository userRepository,
                                       IPasswordHashService passwordHashService,
                                       ITokenService tokenService,

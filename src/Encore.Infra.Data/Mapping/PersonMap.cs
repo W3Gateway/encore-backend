@@ -63,6 +63,10 @@ namespace Encore.Infra.Data.Mapping
             builder.HasOne(a => a.Microregion)
                 .WithMany(u => u.Persons)
                 .HasForeignKey(a => a.MicroregionId);
+
+            builder.HasOne(p => p.Home)
+                .WithMany(h => h.Persons)
+                .HasForeignKey(p => p.HomeId);
         }
     }
 }

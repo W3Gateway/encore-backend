@@ -5,6 +5,7 @@ namespace Encore.Domain.Core.Data
 {
     public interface IUnitOfWork
     {
+
         IDbContextTransaction CurrentTransaction { get; }
 
         IExecutionStrategy CreateExecutionStrategy();

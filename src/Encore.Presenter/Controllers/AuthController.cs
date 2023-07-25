@@ -1,4 +1,4 @@
-using Encore.Application.User;
+using Encore.Application.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-﻿namespace Encore.Application.Auth
+﻿namespace Encore.Application.Questions
 {
     public class QuestionResponse
     {

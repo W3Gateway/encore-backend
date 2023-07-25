@@ -1,4 +1,6 @@
 ﻿using Encore.Application.Homes;
+using Encore.Application.Homes.Commands;
+using Encore.Application.Homes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,19 +17,39 @@ namespace Encore.Presenter.Controllers
         [HttpPost("create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Create([FromBody] CreateHomeCommand command)
+        public async Task<IActionResult> Create([FromBody] HomeCreateCommand command)
         {
             var response = await _mediator.Send(command);
             return CustomResponse(response);
         }
 
-        //[HttpGet()]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //public async Task<ActionResult> Get([FromQuery] GetHomesQuery query)
-        //{
-        //    var response = await _mediator.Send(query);
-        //        return CustomResponse(response);
-        //}
+        [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Get([FromQuery] GetHomeListQuery query)
+        {
+            var response = await _mediator.Send(query);
+            return CustomResponse(response);
+        }
+
+        [HttpGet("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var response = await _mediator.Send(new GetHomeByIdQuery(id));
+            return CustomResponse(response);
+        }
+
+        [HttpPatch("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Patch([FromBody] HomeUpdateCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return CustomResponse(response);
+        }
     }
 }
