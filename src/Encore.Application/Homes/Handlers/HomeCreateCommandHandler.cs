@@ -50,7 +50,7 @@ namespace Encore.Application.Homes.Handlers
 
                 entity = await _homeRepository.CreateAsync(entity, cancellationToken);
                 await SaveAsync(cancellationToken);
-                return _mapper.Map<HomeResponse>(entity);
+                return Success(_mapper.Map<HomeResponse>(entity));
             }
             catch (Exception ex)
             {

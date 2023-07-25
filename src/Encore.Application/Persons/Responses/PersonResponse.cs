@@ -4,7 +4,7 @@ using Encore.Domain.Core.Responses;
 
 namespace Encore.Application.Persons.Responses
 {
-    public class PersonResponse : Response<PersonResponse>
+    public class PersonResponse
     {
         public string Name { get; set; }
         public string SocialName { get; set; }

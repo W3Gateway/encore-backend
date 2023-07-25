@@ -70,7 +70,7 @@ namespace Encore.Application.Persons.Handlers
 
                 var entity = await _personRepository.CreateAsync(person, cancellationToken);
                 await SaveAsync(cancellationToken);
-                return _mapper.Map<PersonResponse>(entity);
+                return Success(_mapper.Map<PersonResponse>(entity));
             }
             catch (Exception ex)
             {

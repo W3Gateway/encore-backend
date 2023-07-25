@@ -1,11 +1,10 @@
 ﻿using Encore.Application.Microregions;
 using Encore.Application.Persons.Responses;
-using Encore.Domain.Core.Responses;
 using Encore.Domain.ValueObjects;
 
 namespace Encore.Application.Homes.Responses
 {
-    public class HomeResponse : Response<HomeResponse>
+    public class HomeResponse
     {
         public string TypeProperty { get; set; }
         public Address Adderess { get; set; }
