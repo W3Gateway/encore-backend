@@ -41,7 +41,7 @@ namespace Encore.Infra.CrossCutting
             services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
             services.AddScoped<IAgentRepository, AgentRepository>();
-
+            services.AddScoped<IVisitRepository, VisitRepository>();
             services.AddScoped<IUnitOfWork, ApplicationContext>();
         }
     }

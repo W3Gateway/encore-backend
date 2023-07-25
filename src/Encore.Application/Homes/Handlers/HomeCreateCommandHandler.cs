@@ -40,7 +40,7 @@ namespace Encore.Application.Homes.Handlers
                 }
 
                 var entity = new Home(microregion.Id,
-                                    request.Adderess,
+                                    request.Address,
                                     request.ContactNumber,
                                     request.MedicalRecordNumber,
                                     request.HouseholdIncome,

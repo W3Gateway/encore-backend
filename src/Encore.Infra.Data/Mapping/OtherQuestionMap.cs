@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Encore.Infra.Data.Mapping
 {
-    internal class ChecklistQuestionMap : EntityTypeConfiguration<ChecklistQuestion>
+    internal class OtherQuestionMap : EntityTypeConfiguration<OtherQuestion>
     {
-        protected override void Configure(EntityTypeBuilder<ChecklistQuestion> builder)
+        protected override void Configure(EntityTypeBuilder<OtherQuestion> builder)
         {
             builder.Property(v => v.Name)
                 .HasColumnType("varchar(200)")
                 .IsRequired();
 
             builder.HasOne(p => p.Question)
-                .WithMany(p => p.ChecklistQuestions)
+                .WithMany(p => p.OtherQuestions)
                 .HasForeignKey(fk => fk.QuestionId);
         }
     }

@@ -13,6 +13,7 @@ namespace Encore.Domain.Models
         public IEnumerable<Agent> Agents { get; set; }
         public IEnumerable<Person> Persons { get; set; }
         public IEnumerable<Home> Homes { get; set; }
+        public IEnumerable<Visit> Visits { get; set; }
         #endregion
 
     }

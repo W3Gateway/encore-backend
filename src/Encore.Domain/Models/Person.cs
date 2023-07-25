@@ -25,6 +25,7 @@ namespace Encore.Domain.Models
         #region Mapping
         public Microregion Microregion { get; private set; }
         public Home Home { get; private set; }
+        public IEnumerable<Visit> Visits { get; set; }
         #endregion
 
         public Person(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string email, string? contactNumber, string socialIdentification, string? nationalHealthRegister, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid homeId)

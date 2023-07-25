@@ -19,6 +19,7 @@ namespace Encore.Domain.Homes
         #region Mapping
         public IEnumerable<Person> Persons { get; set; }
         public Microregion Microregion { get; set; }
+        public List<Visit> Visits { get; set; }
         #endregion
         public Home() {}
         public Home(Guid microregionId,Address address, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers) 

@@ -11,9 +11,9 @@ namespace Encore.Domain.Models
         public Guid AccountableId { get; set; }
 
         #region Mapping
-        public List<Agent> Agents { get; set; }
+        public IEnumerable<Agent> Agents { get; set; }
         public User Accountable { get; set; }
-        public List<Microregion> Microregions { get; set; }
+        public IEnumerable<Microregion> Microregions { get; set; }
         #endregion
     }
 

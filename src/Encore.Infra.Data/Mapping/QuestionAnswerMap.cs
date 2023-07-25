@@ -12,8 +12,12 @@ namespace Encore.Infra.Data.Mapping
                 .HasColumnType("varchar(200)");
 
             builder.HasOne(p => p.Question)
-                .WithMany(p => p.QuestionAnswers)
+                .WithMany(p => p.Answers)
                 .HasForeignKey(fk => fk.QuestionId);
+
+            builder.HasOne(p => p.Visit)
+                .WithMany(p => p.Answers)
+                .HasForeignKey(fk => fk.VisitId);
         }
     }
 }

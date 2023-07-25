@@ -1,4 +1,7 @@
 ﻿using Encore.Domain.Core.Data;
+using Encore.Domain.Enum;
+using Encore.Domain.Models;
+using Encore.Infra.Data.Seeds;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;

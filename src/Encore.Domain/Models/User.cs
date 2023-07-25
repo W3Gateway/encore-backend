@@ -11,9 +11,9 @@ namespace Encore.Domain.Models
         public string? Cns { get; set; }
 
         #region Mapping
-        public List<Agent> Agents { get; set; }
+        public IEnumerable<Agent> Agents { get; set; }
         public HealthCenter HealthCenter { get; set; }
-        public List<UserPermission> Permissions { get; set; }
+        public IEnumerable<UserPermission> Permissions { get; set; }
         #endregion
     }
 

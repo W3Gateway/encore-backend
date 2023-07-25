@@ -7,7 +7,7 @@ namespace Encore.Domain.Models
         public string Name { get; set; }
 
         #region Mapping
-        public List<UserPermission> Users { get; set; }
+        public IEnumerable<UserPermission> Users { get; set; }
         #endregion
     }
 

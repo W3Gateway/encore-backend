@@ -1,5 +1,4 @@
-﻿using Encore.Application.Homes;
-using Encore.Application.Homes.Commands;
+﻿using Encore.Application.Homes.Commands;
 using Encore.Application.Homes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

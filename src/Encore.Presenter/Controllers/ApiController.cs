@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Encore.Presenter.Controllers
 {
@@ -55,8 +56,9 @@ namespace Encore.Presenter.Controllers
 
         protected ActionResult CustomResponse<TResponse>(Response<TResponse> response)
         {
-            foreach (var error in response.ValidationResult.Errors)
-                AddError(error.ErrorMessage);
+            if(response.ValidationResult.Errors.IsNullOrEmpty())
+                foreach (var error in response.ValidationResult.Errors)
+                    AddError(error.ErrorMessage);
 
             return CustomResponse(response.Data);
         }

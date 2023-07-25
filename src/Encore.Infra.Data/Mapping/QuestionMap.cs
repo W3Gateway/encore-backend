@@ -1,4 +1,5 @@
-﻿using Encore.Domain.Models;
+﻿using Encore.Domain.Enum;
+using Encore.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -20,13 +21,14 @@ namespace Encore.Infra.Data.Mapping
                 .HasColumnType("bit")
                 .IsRequired();
 
-            builder.HasMany(p => p.QuestionAnswers)
+            builder.HasMany(p => p.Answers)
                 .WithOne(p => p.Question)
                 .HasForeignKey(b => b.QuestionId);
 
-            builder.HasMany(p => p.ChecklistQuestions)
+            builder.HasMany(p => p.OtherQuestions)
                 .WithOne(p => p.Question)
                 .HasForeignKey(b => b.QuestionId);
+
         }
     }
 }
