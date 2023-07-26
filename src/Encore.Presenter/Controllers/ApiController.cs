@@ -1,11 +1,13 @@
 ﻿using Encore.Domain.Core.Responses;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Encore.Presenter.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     [Consumes("application/json")]
