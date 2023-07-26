@@ -38,7 +38,10 @@ namespace Encore.Application.Persons.Handlers
 
         private static IQueryable<Person> ApplyFilter(GetPersonListQuery request, IQueryable<Person> entities)
         {
-            if(request.Search.IsNullOrEmpty()) 
+            if (!request.HomeId.Equals(Guid.Empty))
+                entities = entities.Where(p => p.HomeId.Equals(request.HomeId));
+
+            if(request.Search.IsNullOrEmpty())
                 return entities;
 
             var filter = request.Search.ToLowerTrim();
