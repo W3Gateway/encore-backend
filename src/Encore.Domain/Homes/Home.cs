@@ -25,7 +25,7 @@ namespace Encore.Domain.Homes
         public Home() {}
         public Home(Guid microregionId, Address address, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers) 
         {
-            TypeProperty = "House";
+            TypeProperty = "Casa";
             MicroregionId = microregionId;
             Address = address;
             ContactNumber = contactNumber;
