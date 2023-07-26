@@ -1,11 +1,8 @@
-﻿using Encore.Application.Homes.Responses;
-using Encore.Application.Microregions;
-using Encore.Domain.Core.Responses;
-
-namespace Encore.Application.Persons.Responses
+﻿namespace Encore.Application.Persons.Responses
 {
     public class PersonResponse
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string SocialName { get; set; }
         public DateTime BirthDate { get; set; }
@@ -22,9 +19,7 @@ namespace Encore.Application.Persons.Responses
         public Guid MicroregionId { get; set; }
         public bool IsHeadFamily { get; set; }
 
-        #region Mapping
-        public MicroregionResponse Microregion { get; set; }
-        public HomeResponse Home { get; set; }
-        #endregion
+        public PersonMicroregionResponse Microregion { get; set; }
+        public PersonHomeResponse Home { get; set; }
     }
 }

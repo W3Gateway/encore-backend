@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Encore.Application.Persons.Commands;
 using Encore.Application.Persons.Responses;
+using Encore.Domain.Homes;
 using Encore.Domain.Models;
 
 namespace Encore.Application.Persons
@@ -10,6 +11,8 @@ namespace Encore.Application.Persons
         public PersonMappingProfile()
         {
             CreateMap<Person, PersonResponse>();
+            CreateMap<Home, PersonHomeResponse>();
+            CreateMap<Microregion, PersonMicroregionResponse>();
 
             CreateMap<PersonCreateCommand, Person>();
         }

@@ -1,15 +1,14 @@
-﻿namespace Encore.Application.Persons.Responses
+﻿using Encore.Domain.ValueObjects;
+
+namespace Encore.Application.Persons.Responses
 {
     public class PersonHomeResponse
     {
-        public string Name { get; set; }
-        public string SocialName { get; set; }
-        public DateTime BirthDate { get; set; }
-        public string Document { get; set; }
-        public string DocumentType { get; set; }
-        public string Email { get; set; }
-        public string? ContactNumber { get; set; }
-        public string SocialIdentification { get; set; }
-        public bool IsHeadFamily { get; set; }
+        public string TypeProperty { get; set; }
+        public Address Address { get; set; }
+        public string ContactNumber { get; set; }
+        public string? MedicalRecordNumber { get; set; }
+        public decimal HouseholdIncome { get; set; }
+        public int NumberMembers { get; set; }
     }
 }

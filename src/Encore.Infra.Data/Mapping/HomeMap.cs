@@ -14,7 +14,7 @@ namespace Encore.Infra.Data.Mapping
             builder.OwnsOne(h => h.Address, a =>
             {
                 a.Property(x => x.Number)
-                    .HasColumnType("numeric(4,3)")
+                    .HasColumnType("int")
                     .HasColumnName("Number")
                     .IsRequired();
 
@@ -69,7 +69,7 @@ namespace Encore.Infra.Data.Mapping
                 .IsRequired();
 
             builder.Property(h => h.NumberMembers)
-                .HasColumnType("numeric(3)")
+                .HasColumnType("int")
                 .IsRequired();
 
             builder.HasOne(h => h.Microregion)

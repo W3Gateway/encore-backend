@@ -56,7 +56,7 @@ namespace Encore.Presenter.Controllers
 
         protected ActionResult CustomResponse<TResponse>(Response<TResponse> response)
         {
-            if(response.ValidationResult.Errors.IsNullOrEmpty())
+            if(!response.ValidationResult.Errors.IsNullOrEmpty())
                 foreach (var error in response.ValidationResult.Errors)
                     AddError(error.ErrorMessage);
 

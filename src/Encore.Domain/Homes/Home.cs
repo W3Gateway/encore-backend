@@ -22,7 +22,7 @@ namespace Encore.Domain.Homes
         public List<Visit> Visits { get; set; }
         #endregion
         public Home() {}
-        public Home(Guid microregionId,Address address, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers) 
+        public Home(Guid microregionId, Address address, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers) 
         {
             TypeProperty = "House";
             MicroregionId = microregionId;

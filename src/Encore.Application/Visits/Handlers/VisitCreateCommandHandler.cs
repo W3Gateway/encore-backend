@@ -1,0 +1,89 @@
+﻿using AutoMapper;
+using Encore.Application.Visits.Commands;
+using Encore.Application.Visits.Responses;
+using Encore.Domain.Core.Data;
+using Encore.Domain.Core.Messaging;
+using Encore.Domain.Core.Responses;
+using Encore.Domain.Interfaces.Data;
+using Encore.Domain.Models;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Encore.Application.Visits.Handlers
+{
+    public class VisitCreateCommandHandler : CommandHandler, IRequestHandler<VisitCreateCommand, Response<VisitResponse>>
+    {
+        private readonly IMicroregionRepository _microregionRepository;
+        private readonly IPersonRepository _personRepository;
+        private readonly IHomeRepository _homeRepository;
+        private readonly IAgentRepository _agentRepository;
+        private readonly IVisitRepository _VisitRepository;
+        private readonly IMapper _mapper;
+
+        public VisitCreateCommandHandler(IMicroregionRepository microregionRepository,
+                                        IPersonRepository personRepository,
+                                        IHomeRepository homeRepository,
+                                        IAgentRepository agentRepository,
+                                        IVisitRepository VisitRepository,
+                                        IMapper mapper,
+                                        IUnitOfWork unitOfWork) : base(unitOfWork)
+        {
+            _microregionRepository = microregionRepository;
+            _personRepository = personRepository;
+            _homeRepository = homeRepository;
+            _agentRepository = agentRepository;
+            _VisitRepository = VisitRepository;
+            _mapper = mapper;
+
+        }
+
+        public async Task<Response<VisitResponse>> Handle(VisitCreateCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var microregion = await _microregionRepository.Include().FirstOrDefaultAsync(c => c.Id == request.MicroregionId);
+                if (microregion is null)
+                {
+                    AddError("Não foi encontrada a microárea informado na base de dados");
+                    return Fail<VisitResponse>(ValidationResult);
+                }
+
+                var person = await _personRepository.Include().FirstOrDefaultAsync(c => c.Id == request.PersonId);
+                if (microregion is null)
+                {
+                    AddError("Não foi encontrada o indivíduo informado na base de dados");
+                    return Fail<VisitResponse>(ValidationResult);
+                }
+                
+                var agent = await _agentRepository.Include().FirstOrDefaultAsync(c => c.Id == request.AgentId);
+                if (microregion is null)
+                {
+                    AddError("Não foi encontrada o agente informado na base de dados");
+                    return Fail<VisitResponse>(ValidationResult);
+                }
+
+                var home = await _homeRepository.Include().FirstOrDefaultAsync(c => c.Id == request.HomeId);
+                if (microregion is null)
+                {
+                    AddError("Não foi encontrada a microárea informado na base de dados");
+                    return Fail<VisitResponse>(ValidationResult);
+                }
+
+                var answers = _mapper.Map<IEnumerable<QuestionAnswer>>(request.Answers);
+
+                var entity = new Visit(agent.Id, person.Id, home.Id, microregion.Id, answers);
+                if (!await IsValidAsync(entity))
+                    return Fail<VisitResponse>(ValidationResult);
+
+                entity = await _VisitRepository.CreateAsync(entity, cancellationToken);
+                await SaveAsync(cancellationToken);
+                return Success(_mapper.Map<VisitResponse>(entity));
+            }
+            catch (Exception ex)
+            {
+                AddError("Erro ao realizar o cadastro de domicílio: " + ex.Message);
+                return Fail<VisitResponse>(ValidationResult);
+            }
+        }
+    }
+}

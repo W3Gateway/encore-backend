@@ -7,7 +7,7 @@ namespace Encore.Application.Homes.Responses
     public class HomeResponse
     {
         public string TypeProperty { get; set; }
-        public Address Adderess { get; set; }
+        public Address Address { get; set; }
         public string ContactNumber { get; set; }
         public string? MedicalRecordNumber { get; set; }
         public decimal HouseholdIncome { get; set; }
