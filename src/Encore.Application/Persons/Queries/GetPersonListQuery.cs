@@ -3,10 +3,8 @@ using Encore.Domain.Core.Messaging;
 
 namespace Encore.Application.Persons.Queries
 {
-    public class GetPersonListQuery : Query<IEnumerable<PersonResponse>?>
+    public class GetPersonListQuery : QueryList<IEnumerable<PersonResponse>?, PersonResponse>
     {
         public Guid HomeId { get; }
-
-        public GetPersonListQuery(Guid homeId) => HomeId = homeId;
     }
 }

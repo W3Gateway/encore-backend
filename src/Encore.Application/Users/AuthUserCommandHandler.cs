@@ -35,7 +35,7 @@ namespace Encore.Application.Users
 
                 var token = _tokenService.GenerateJwtToken(user);
 
-                return Success(new AuthUserResponse(token, user.Id), new ValidationResult()) ;
+                return Success(new AuthUserResponse(user.Name, token, user.Id), new ValidationResult()) ;
             }
             catch (Exception ex)
             {

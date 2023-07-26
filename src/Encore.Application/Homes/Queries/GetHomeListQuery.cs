@@ -3,7 +3,7 @@ using Encore.Domain.Core.Messaging;
 
 namespace Encore.Application.Homes.Queries
 {
-    public class GetHomeListQuery : Query<IEnumerable<HomeResponse>>
+    public class GetHomeListQuery : QueryList<IEnumerable<HomeResponse>, HomeResponse>
     {
         public Guid MicroregionId { get; }
     }

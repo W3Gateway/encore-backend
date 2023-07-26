@@ -25,6 +25,7 @@ namespace Encore.Infra.CrossCutting
             var mappers = AutoMapperConfig.Setup();
             var temp = new List<Type>(mappers);
             services.AddAutoMapper(temp.ToArray());
+            services.AddScoped(typeof(ISearchService<>), typeof(SearchService<>));
         }
 
         private static void RegisterData(IServiceCollection services)

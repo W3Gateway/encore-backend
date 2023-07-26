@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Encore.Application.Homes.Responses;
 using Encore.Domain.Homes;
+using Encore.Domain.Models;
 
 namespace Encore.Application.Homes
 {
@@ -9,7 +10,9 @@ namespace Encore.Application.Homes
         public HomeMappingProfile()
         {
             CreateMap<Home, HomeResponse>()
-                .ForMember(dest => dest.HeadFamily, opt => opt.MapFrom(src => src.Persons));
+                .ForMember(dest => dest.HeadFamily, opt => opt.MapFrom(src => src.Persons.First(p => p.IsHeadFamily)));
+            CreateMap<Person, HomePersonResponse>();
+            CreateMap<Microregion, HomeMicroregionResponse>();
         }
     }
 }

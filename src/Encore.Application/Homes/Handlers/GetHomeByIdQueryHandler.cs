@@ -32,7 +32,7 @@ namespace Encore.Application.Homes.Handlers
 
             var headFamily = _personRepository.Include().FirstOrDefaultAsync(p => p.HomeId == entity.Id && p.IsHeadFamily);
             if (headFamily is not null)
-                result.HeadFamily = _mapper.Map<PersonHomeResponse>(headFamily);
+                result.HeadFamily = _mapper.Map<HomePersonResponse>(headFamily);
 
             return result;
         }

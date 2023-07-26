@@ -1,11 +1,9 @@
-﻿using Encore.Application.HealthCenters.Response;
-using Encore.Application.Microregions;
-
-namespace Encore.Application.Agents.Responses
+﻿namespace Encore.Application.Agents.Responses
 {
     public class AgentResponse
     {
-        public HealthCenterAgentResponse HealthCenter { get; set; }
-        public MicroregionResponse Microregion { get; set; }
+        public Guid Id { get; set; }
+        public AgentHealthCenterResponse? HealthCenter { get; set; }
+        public AgentMicroregionResponse? Microregion { get; set; }
     }
 }
