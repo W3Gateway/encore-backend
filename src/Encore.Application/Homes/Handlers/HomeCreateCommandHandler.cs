@@ -19,8 +19,7 @@ namespace Encore.Application.Homes.Handlers
 
         public HomeCreateCommandHandler(IMicroregionRepository microregionRepository,
                                         IHomeRepository homeRepository,
-                                        IMapper mapper,
-                                        IUnitOfWork unitOfWork) : base(unitOfWork)
+                                        IMapper mapper) : base(homeRepository.UnitOfWork)
         {
             _microregionRepository = microregionRepository;
             _homeRepository = homeRepository;

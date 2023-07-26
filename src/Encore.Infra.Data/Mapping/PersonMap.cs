@@ -37,7 +37,7 @@ namespace Encore.Infra.Data.Mapping
                 .IsRequired();
            
             builder.Property(h => h.Email)
-                .HasColumnType("varchar(15)")
+                .HasColumnType("varchar(50)")
                 .IsRequired();
 
             builder.Property(h => h.ContactNumber)

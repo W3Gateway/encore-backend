@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Encore.Application.Homes.Responses;
 using Encore.Application.Persons.Commands;
 using Encore.Application.Persons.Responses;
-using Encore.Domain.Core.Data;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.Data;
@@ -22,8 +20,7 @@ namespace Encore.Application.Persons.Handlers
         public PersonCreateCommandHandler(IPersonRepository personRepository,
                                         IHomeRepository homeRepository,
                                         IMicroregionRepository microregionRepository,
-                                        IMapper mapper,
-                                        IUnitOfWork unitOfWork) : base(unitOfWork)
+                                        IMapper mapper) : base(personRepository.UnitOfWork)
         {
             _personRepository = personRepository;
             _homeRepository = homeRepository;
@@ -73,7 +70,7 @@ namespace Encore.Application.Persons.Handlers
                 var result = await CommitAsync(cancellationToken);
                 if (!result.IsValid)
                     return Fail<PersonResponse>(await RollbackAsync(cancellationToken));
-                return Success(_mapper.Map<PersonResponse>(entity));
+                return Success(_mapper.Map<PersonResponse>(entity), result);
             }
             catch (Exception ex)
             {

@@ -17,22 +17,21 @@ namespace Encore.Application.Visits.Handlers
         private readonly IPersonRepository _personRepository;
         private readonly IHomeRepository _homeRepository;
         private readonly IAgentRepository _agentRepository;
-        private readonly IVisitRepository _VisitRepository;
+        private readonly IVisitRepository _visitRepository;
         private readonly IMapper _mapper;
 
         public VisitCreateCommandHandler(IMicroregionRepository microregionRepository,
                                         IPersonRepository personRepository,
                                         IHomeRepository homeRepository,
                                         IAgentRepository agentRepository,
-                                        IVisitRepository VisitRepository,
-                                        IMapper mapper,
-                                        IUnitOfWork unitOfWork) : base(unitOfWork)
+                                        IVisitRepository visitRepository,
+                                        IMapper mapper) : base(visitRepository.UnitOfWork)
         {
             _microregionRepository = microregionRepository;
             _personRepository = personRepository;
             _homeRepository = homeRepository;
             _agentRepository = agentRepository;
-            _VisitRepository = VisitRepository;
+            _visitRepository = visitRepository;
             _mapper = mapper;
 
         }
@@ -75,7 +74,7 @@ namespace Encore.Application.Visits.Handlers
                 if (!await IsValidAsync(entity))
                     return Fail<VisitResponse>(ValidationResult);
 
-                entity = await _VisitRepository.CreateAsync(entity, cancellationToken);
+                entity = await _visitRepository.CreateAsync(entity, cancellationToken);
                 await SaveAsync(cancellationToken);
                 return Success(_mapper.Map<VisitResponse>(entity));
             }

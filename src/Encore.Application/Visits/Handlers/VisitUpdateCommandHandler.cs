@@ -17,16 +17,15 @@ namespace Encore.Application.Visits.Handlers
         private readonly IAgentRepository _agentRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IHomeRepository _homeRepository;
-        private readonly IVisitRepository _VisitRepository;
+        private readonly IVisitRepository _visitRepository;
         private readonly IMapper _mapper;
 
         public VisitUpdateCommandHandler(IMicroregionRepository microregionRepository,
-                                        IVisitRepository VisitRepository,
-                                        IMapper mapper,
-                                        IUnitOfWork unitOfWork) : base(unitOfWork)
+                                        IVisitRepository visitRepository,
+                                        IMapper mapper) : base(visitRepository.UnitOfWork)
         {
             _microregionRepository = microregionRepository;
-            _VisitRepository = VisitRepository;
+            _visitRepository = visitRepository;
             _mapper = mapper;
 
         }
@@ -35,7 +34,7 @@ namespace Encore.Application.Visits.Handlers
         {
             try
             {
-                var entity = await _VisitRepository.GetByIdAsync(request.Id, cancellationToken);
+                var entity = await _visitRepository.GetByIdAsync(request.Id, cancellationToken);
                 if (entity is null)
                 {
                     AddError("Não foi encontrado o domicílio informado na base de dados");
@@ -73,7 +72,7 @@ namespace Encore.Application.Visits.Handlers
                 var answers = _mapper.Map<IEnumerable<QuestionAnswer>>(request.Answers);
 
                 entity.CopyProperties(request.AgentId, request.PersonId, request.HomeId, request.MicroregionId, answers);
-                entity = await _VisitRepository.UpdateAsync(entity, cancellationToken);
+                entity = await _visitRepository.UpdateAsync(entity, cancellationToken);
                 await SaveAsync(cancellationToken);
                 return Success(_mapper.Map<VisitResponse>(entity));
             }

@@ -1,5 +1,6 @@
 ﻿using Encore.Domain.Core.Models;
 using Encore.Domain.Homes;
+using Encore.Domain.ValueObjects;
 
 namespace Encore.Domain.Models
 {
@@ -31,6 +32,26 @@ namespace Encore.Domain.Models
         public Person() { }
 
         public Person(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid homeId)
+        {
+            Name = name;
+            SocialName = socialName;
+            BirthDate = birthDate;
+            Nationality = nationality;
+            Sex = sex;
+            SkinColor = skinColor;
+            Document = document;
+            DocumentType = documentType;
+            Email = email;
+            ContactNumber = contactNumber;
+            SocialIdentification = socialIdentification;
+            FatherName = fatherName;
+            MotherName = motherName;
+            IsHeadFamily = isHeadFamily;
+            MicroregionId = microregionId;
+            HomeId = homeId;
+        }
+
+        public void CopyProperties(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid homeId)
         {
             Name = name;
             SocialName = socialName;

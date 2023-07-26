@@ -1,4 +1,5 @@
 ﻿using Encore.Application.Persons.Commands;
+using Encore.Application.Persons.Handlers;
 using Encore.Application.Persons.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace Encore.Presenter.Controllers
             return CustomResponse(response);
         }
 
-        [HttpGet()]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Get([FromQuery] GetPersonListQuery query)
@@ -41,13 +42,13 @@ namespace Encore.Presenter.Controllers
             return CustomResponse(response);
         }
 
-        [HttpPatch("{id:Guid}")]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Patch(Guid id)
+        public async Task<IActionResult> Patch([FromBody] PersonUpdateCommand command)
         {
-            var response = await _mediator.Send(new GetPersonByIdQuery(id));
+            var response = await _mediator.Send(command);
             return CustomResponse(response);
         }
     }
