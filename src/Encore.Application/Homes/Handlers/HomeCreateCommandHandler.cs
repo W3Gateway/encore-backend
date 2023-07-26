@@ -49,7 +49,9 @@ namespace Encore.Application.Homes.Handlers
                     return Fail<HomeResponse>(ValidationResult);
 
                 entity = await _homeRepository.CreateAsync(entity, cancellationToken);
-                await SaveAsync(cancellationToken);
+                var result = await CommitAsync(cancellationToken);
+                if (!result.IsValid)
+                    return Fail<HomeResponse>(await RollbackAsync(cancellationToken));
                 return Success(_mapper.Map<HomeResponse>(entity));
             }
             catch (Exception ex)

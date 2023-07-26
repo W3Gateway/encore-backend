@@ -16,7 +16,7 @@ namespace Encore.Presenter.Controllers
         [HttpPost("create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create([FromBody] HomeCreateCommand command)
+        public async Task<ActionResult> Create([FromBody] HomeCreateCommand command)
         {
             var response = await _mediator.Send(command);
             return CustomResponse(response);
@@ -25,7 +25,7 @@ namespace Encore.Presenter.Controllers
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Get([FromQuery] GetHomeListQuery query)
+        public async Task<ActionResult> Get([FromQuery] GetHomeListQuery query)
         {
             var response = await _mediator.Send(query);
             return CustomResponse(response);

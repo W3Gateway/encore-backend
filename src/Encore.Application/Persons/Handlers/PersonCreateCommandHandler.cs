@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Encore.Application.Homes.Responses;
 using Encore.Application.Persons.Commands;
 using Encore.Application.Persons.Responses;
 using Encore.Domain.Core.Data;
@@ -69,7 +70,9 @@ namespace Encore.Application.Persons.Handlers
                     return Fail<PersonResponse>(ValidationResult);
 
                 var entity = await _personRepository.CreateAsync(person, cancellationToken);
-                await SaveAsync(cancellationToken);
+                var result = await CommitAsync(cancellationToken);
+                if (!result.IsValid)
+                    return Fail<PersonResponse>(await RollbackAsync(cancellationToken));
                 return Success(_mapper.Map<PersonResponse>(entity));
             }
             catch (Exception ex)

@@ -1,5 +1,4 @@
-﻿using Encore.Application.Homes.Responses;
-using Encore.Domain.Core.Data;
+﻿using Encore.Domain.Core.Data;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.CrossCutting;
@@ -12,18 +11,15 @@ namespace Encore.Application.Users
 {
     public class AuthUserCommandHandler : CommandHandler, IRequestHandler<AuthUserCommand, Response<AuthUserResponse>?>
     {
-        private readonly IAgentRepository _agentRepository;
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHashService _passwordHashService;
         private readonly ITokenService _tokenService;
 
-        public AuthUserCommandHandler(IAgentRepository agentRepository,
-                                    IUserRepository userRepository,
-                                    IPasswordHashService passwordHashService,
-                                    ITokenService tokenService,
-                                    IUnitOfWork unitOfWork) : base(unitOfWork)
+        public AuthUserCommandHandler(IUserRepository userRepository,
+                                      IPasswordHashService passwordHashService,
+                                      ITokenService tokenService,
+                                      IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            _agentRepository = agentRepository;
             _userRepository = userRepository;
             _passwordHashService = passwordHashService;
             _tokenService = tokenService;

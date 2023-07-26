@@ -1,11 +1,13 @@
 ﻿using Encore.Domain.Core.Responses;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Encore.Presenter.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     [Consumes("application/json")]
@@ -15,7 +17,7 @@ namespace Encore.Presenter.Controllers
         protected readonly string _verbs = "GET,OPTIONS,POST,PATCH,PUT,DELETE";
 
         [HttpOptions]
-        public IActionResult Options()
+        public ActionResult Options()
         {
             Response.Headers.Add("Allow", _verbs);
             return Ok();
