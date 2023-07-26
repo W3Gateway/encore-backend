@@ -10,7 +10,7 @@ namespace Encore.Application.Homes
         public HomeMappingProfile()
         {
             CreateMap<Home, HomeResponse>()
-                .ForMember(dest => dest.HeadFamily, opt => opt.MapFrom(src => src.Persons.First(p => p.IsHeadFamily)));
+                .ForMember(dest => dest.HeadFamily, opt => opt.MapFrom(src => src.Persons.FirstOrDefault(p => p.IsHeadFamily)));
             CreateMap<Person, HomePersonResponse>();
             CreateMap<Microregion, HomeMicroregionResponse>();
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Encore.Application.Homes.Queries;
 using Encore.Application.Homes.Responses;
+using Encore.Application.Homes.Search;
 using Encore.Domain.Homes;
 using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
@@ -32,7 +33,7 @@ namespace Encore.Application.Homes.Handlers
             var predicate = ApplyFilters(request.Search);
             var list = await entities.Include(h => h.Microregion)
                                     .Include(h => h.Persons)
-                                    .Where(c => c.MicroregionId == request.Search.Microregion.Id)
+                                    .Where(c => c.MicroregionId == request.MicroregionId)
                                     .Where(predicate)
                                     .OrderBy(h => h.Address.Number)
                                     .Skip((request.Page - 1) * request.PageSize)
@@ -45,7 +46,7 @@ namespace Encore.Application.Homes.Handlers
             return _mapper.Map<IEnumerable<HomeResponse>>(list);
         }
 
-        public Expression<Func<Home, bool>> ApplyFilters(HomeResponse filter)
+        public Expression<Func<Home, bool>> ApplyFilters(HomeSearch filter)
         {
             if (filter is null)
             {
@@ -54,21 +55,14 @@ namespace Encore.Application.Homes.Handlers
 
             Expression<Func<Home, bool>> predicate = x => true;
 
-            if (filter.HeadFamily is not null)
-            {
-                if (!filter.HeadFamily.Id.Equals(Guid.Empty))
-                    predicate = _searchService.AndAlso(predicate, x => x.Persons.Where(p => !p.Id.Equals(filter.HeadFamily.Id)).FirstOrDefault().IsNullOrEmpty());
-                if (!filter.HeadFamily.Document.IsNullOrEmpty())
-                    predicate = _searchService.AndAlso(predicate, x => x.Persons.Where(p => p.IsHeadFamily).First().Document.Equals(filter.HeadFamily.Document));
-            }
+            if (!filter.HeadFamilyDoc.IsNullOrEmpty())
+                predicate = _searchService.AndAlso(predicate, x => x.Persons.Where(p => !p.Document.Equals(filter.HeadFamilyDoc)).FirstOrDefault().IsNullOrEmpty());
 
-            if (filter.Address is not null)
-            {
-                if(!filter.Address.Neighborhood.IsNullOrEmpty())
-                    predicate = _searchService.AndAlso(predicate, x => x.Address.Neighborhood.ToLower().Trim().Contains(filter.Address.Neighborhood.ToLower().Trim()));
-                if (!filter.Address.Street.IsNullOrEmpty())
-                    predicate = _searchService.AndAlso(predicate, x => x.Address.Street.ToLower().Trim().Contains(filter.Address.Street.ToLower().Trim()));
-            }
+            if (!filter.Neighborhood.IsNullOrEmpty())
+                predicate = _searchService.AndAlso(predicate, x => x.Address.Neighborhood.ToLower().Trim().Contains(filter.Neighborhood.ToLower().Trim()));
+
+            if (!filter.Street.IsNullOrEmpty())
+                predicate = _searchService.AndAlso(predicate, x => x.Address.Street.ToLower().Trim().Contains(filter.Street.ToLower().Trim()));
 
             return predicate;
         }

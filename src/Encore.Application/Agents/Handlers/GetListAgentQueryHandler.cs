@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Encore.Domain.Interfaces.CrossCutting;
+using Encore.Application.Agents.Search;
 
 namespace Encore.Application.Agents.Handlers
 {
@@ -44,7 +45,7 @@ namespace Encore.Application.Agents.Handlers
             return _mapper.Map<IEnumerable<AgentResponse>>(list);
         }
 
-        public Expression<Func<Agent, bool>> ApplyFilters(AgentResponse filter)
+        public Expression<Func<Agent, bool>> ApplyFilters(AgentSearch? filter)
         {
             if (filter is null)
             {
@@ -55,22 +56,14 @@ namespace Encore.Application.Agents.Handlers
             Expression<Func<Agent, bool>> predicate = x => true;
 
             // Adiciona cláusulas de filtro para cada propriedade não nula do objeto Person
-            if (filter.HealthCenter is not null)
+            if (!filter.HealthCenterName.IsNullOrEmpty())
             {
-                if(!filter.HealthCenter.Id.Equals(Guid.Empty))
-                    predicate = _searchService.AndAlso(predicate, x => x.HealthCenterId.Equals(filter.HealthCenter.Id));
-                if(filter.HealthCenter.Name is not null)
-                    predicate = _searchService.AndAlso(predicate, x => x.HealthCenter.Name.ToLower().Trim().Contains(filter.HealthCenter.Name.ToLower().Trim()));
-                if(filter.HealthCenter.Cnes is not null)
-                    predicate = _searchService.AndAlso(predicate, x => x.HealthCenter.Cnes.ToLower().Trim().Contains(filter.HealthCenter.Cnes.ToLower().Trim()));
+                predicate = _searchService.AndAlso(predicate, x => x.HealthCenter.Name.ToLower().Trim().Contains(filter.HealthCenterName.ToLower().Trim()));
             }
 
-            if (filter.Microregion is not null)
+            if (!filter.MicroregionName.IsNullOrEmpty())
             {
-                if(!filter.Microregion.Id.Equals(Guid.Empty))
-                    predicate = _searchService.AndAlso(predicate, x => x.MicroregionId.Equals(filter.Microregion.Id));
-                if(filter.Microregion.Name is not null)
-                    predicate = _searchService.AndAlso(predicate, x => x.Microregion.Name.ToLower().Trim().Contains(filter.Microregion.Name.ToLower().Trim()));
+                predicate = _searchService.AndAlso(predicate, x => x.Microregion.Name.ToLower().Trim().Contains(filter.MicroregionName.ToLower().Trim()));
             }
 
             // Aplica o filtro no IQueryable e retorna o resultado

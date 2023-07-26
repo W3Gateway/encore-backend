@@ -4,13 +4,13 @@ namespace Encore.Application.Homes.Responses
 {
     public class HomePersonResponse
     {
-        public Guid Id { get; set; }
-        public string? TypeProperty { get; set; }
-        public Address? Address { get; set; }
-        public string? ContactNumber { get; set; }
-        public string? MedicalRecordNumber { get; set; }
-        public decimal HouseholdIncome { get; set; }
-        public int NumberMembers { get; set; }
-        public string? Document { get; set; }
+        public string Name { get; private set; }
+        public string SocialName { get; private set; }
+        public DateTime BirthDate { get; private set; }
+        public string Nationality { get; private set; }
+        public string Sex { get; private set; }
+        public string DocumentType { get; private set; }
+        public string Document { get; private set; }
+        public bool IsHeadFamily { get; private set; }
     }
 }

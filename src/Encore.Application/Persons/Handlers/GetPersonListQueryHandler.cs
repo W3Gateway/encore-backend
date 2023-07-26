@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Encore.Application.Persons.Queries;
 using Encore.Application.Persons.Responses;
+using Encore.Application.Persons.Search;
 using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
 using Encore.Domain.Models;
@@ -42,7 +43,7 @@ namespace Encore.Application.Persons.Handlers
             return _mapper.Map<IEnumerable<PersonResponse>>(list);
         }
 
-        public Expression<Func<Person, bool>> ApplyFilters(PersonResponse filter)
+        public Expression<Func<Person, bool>> ApplyFilters(PersonSearch filter)
         {
             if (filter is null)
             {
