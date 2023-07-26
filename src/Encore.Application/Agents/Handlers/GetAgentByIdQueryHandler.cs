@@ -20,7 +20,7 @@ namespace Encore.Application.Agents.Handlers
         }
         public async Task<AgentResponse> Handle(GetAgentByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _agentRepository.Include().Include(a => a.Microregion).ThenInclude(a => a.HealthCenter).FirstOrDefaultAsync(a => a.UserId.Equals(request.UserId));
+            var entity = await _agentRepository.Include().Include(a => a.Microregion).Include(a => a.HealthCenter).FirstOrDefaultAsync(a => a.UserId.Equals(request.UserId));
             if (entity is null)
                 return null;
 

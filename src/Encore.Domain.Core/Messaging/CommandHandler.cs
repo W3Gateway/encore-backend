@@ -41,6 +41,21 @@ namespace Encore.Domain.Core.Messaging
             return _uow.HasChanges();
         }
 
+        protected Task BeginTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (_executeTransaction)
+                _uow.BeginTransactionAsync(cancellationToken);
+
+            return Task.CompletedTask;
+        }
+
+        protected Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (_executeTransaction)
+                _uow.CommitTransactionAsync(cancellationToken);
+
+            return Task.CompletedTask;
+        }
 
         protected async Task<bool> IsValidAsync<TParameter>(TParameter target) where TParameter : Entity<TParameter>
         {

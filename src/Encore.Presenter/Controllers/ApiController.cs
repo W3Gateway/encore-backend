@@ -17,7 +17,7 @@ namespace Encore.Presenter.Controllers
         protected readonly string _verbs = "GET,OPTIONS,POST,PATCH,PUT,DELETE";
 
         [HttpOptions]
-        public IActionResult Options()
+        public ActionResult Options()
         {
             Response.Headers.Add("Allow", _verbs);
             return Ok();
