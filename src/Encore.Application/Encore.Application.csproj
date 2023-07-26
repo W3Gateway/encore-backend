@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Agents\NovaPasta\**" />
+    <EmbeddedResource Remove="Agents\NovaPasta\**" />
+    <None Remove="Agents\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="MediatR" Version="12.0.1" />
   </ItemGroup>

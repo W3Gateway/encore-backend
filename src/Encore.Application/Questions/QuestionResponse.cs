@@ -10,12 +10,13 @@ namespace Encore.Application.Questions
         public bool Mandatory { get; set; }
         public IEnumerable<OtherQuestionResponse>? OtherQuestions { get; set; }
 
-        public QuestionResponse(Guid id, string name, int responseType, bool mandatory)
+        public QuestionResponse(Guid id, string name, int responseType, bool mandatory, List<OtherQuestionResponse> otherQuestions)
         {
             Id = id;
             Name = name;
             ResponseType = responseType;
             Mandatory = mandatory;
+            OtherQuestions = otherQuestions;
         }
     }
 }

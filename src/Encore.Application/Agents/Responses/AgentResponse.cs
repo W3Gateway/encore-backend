@@ -1,17 +1,11 @@
-﻿using Encore.Domain.Core.Responses;
-using Encore.Domain.Models;
+﻿using Encore.Application.HealthCenters.Response;
+using Encore.Application.Microregions;
 
 namespace Encore.Application.Agents.Responses
 {
-    public class AgentResponse : Response<AgentResponse>
+    public class AgentResponse
     {
-        public HealthCenter HealthCenter { get; set; }
-        public Microregion Microregion { get; set; }
-
-        public AgentResponse(HealthCenter healthCenter, Microregion microregion)
-        {
-            HealthCenter = healthCenter;
-            Microregion = microregion;
-        }
+        public HealthCenterAgentResponse HealthCenter { get; set; }
+        public MicroregionResponse Microregion { get; set; }
     }
 }

@@ -2,8 +2,13 @@
 {
     public class OtherQuestionResponse
     {
-        public string? Name { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
 
-        public OtherQuestionResponse(string name) => Name = name;
+        public OtherQuestionResponse(Guid id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
     }
 }
