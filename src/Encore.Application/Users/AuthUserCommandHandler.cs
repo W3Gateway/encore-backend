@@ -1,5 +1,4 @@
-﻿using Encore.Application.Homes.Responses;
-using Encore.Domain.Core.Data;
+﻿using Encore.Domain.Core.Data;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.CrossCutting;
