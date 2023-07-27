@@ -12,7 +12,20 @@ namespace Encore.Application.Homes.Commands
         public Address Address { get; private set; }
         public string ContactNumber { get; private set; }
         public string? MedicalRecordNumber { get; private set; }
+        public string? HeadFamilyDocument { get; private set; }
         public decimal HouseholdIncome { get; private set; }
         public int NumberMembers { get; private set; }
+
+        public HomeUpdateCommand(Guid id, Guid microregionId, Address address, string contactNumber, string? medicalRecordNumber, string? headFamilyDocument, decimal householdIncome, int numberMembers)
+        {
+            Id = id;
+            MicroregionId = microregionId;
+            Address = address;
+            ContactNumber = contactNumber;
+            MedicalRecordNumber = medicalRecordNumber;
+            HeadFamilyDocument = headFamilyDocument;
+            HouseholdIncome = householdIncome;
+            NumberMembers = numberMembers;
+        }
     }
 }

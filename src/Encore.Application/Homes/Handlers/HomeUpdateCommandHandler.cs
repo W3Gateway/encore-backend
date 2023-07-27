@@ -54,7 +54,10 @@ namespace Encore.Application.Homes.Handlers
 
                 entity.CopyProperties(microregion.Id, request.Address, request.ContactNumber, request.MedicalRecordNumber, request.HouseholdIncome, request.NumberMembers);
                 entity = await _homeRepository.UpdateAsync(entity, cancellationToken);
-                await SaveAsync(cancellationToken);
+                var result = await CommitAsync(cancellationToken);
+                if (!result.IsValid)
+                    return Fail<HomeResponse>(await RollbackAsync(cancellationToken));
+
                 return Success(_mapper.Map<HomeResponse>(entity));
             }
             catch (Exception ex)
