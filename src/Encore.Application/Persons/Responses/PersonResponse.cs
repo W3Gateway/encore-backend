@@ -18,8 +18,8 @@
         public string? MotherName { get; set; }
         public Guid MicroregionId { get; set; }
         public bool IsHeadFamily { get; set; }
+        public Guid HomeId { get; set; }
 
         public PersonMicroregionResponse? Microregion { get; set; }
-        public PersonHomeResponse? Home { get; set; }
     }
 }
