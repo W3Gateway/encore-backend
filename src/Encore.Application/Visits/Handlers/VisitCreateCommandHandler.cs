@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Encore.Application.Visits.Commands;
 using Encore.Application.Visits.Responses;
-using Encore.Domain.Core.Data;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.Data;
