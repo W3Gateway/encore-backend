@@ -9,6 +9,8 @@ namespace Encore.Application.Agents
         public HealthCenterMappingProfile()
         {
             CreateMap<Agent, AgentResponse>();
+            CreateMap<HealthCenter, AgentHealthCenterResponse>();
+            CreateMap<Microregion, AgentMicroregionResponse>();
         }
     }
 }

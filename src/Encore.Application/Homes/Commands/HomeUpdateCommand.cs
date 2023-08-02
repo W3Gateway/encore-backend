@@ -9,18 +9,18 @@ namespace Encore.Application.Homes.Commands
     {
         public Guid Id { get; private set; }
         public Guid MicroregionId { get; private set; }
-        public Address Adderess { get; private set; }
+        public Address Address { get; private set; }
         public string ContactNumber { get; private set; }
         public string? MedicalRecordNumber { get; private set; }
-        public string HeadFamilyDocument { get; private set; }
+        public string? HeadFamilyDocument { get; private set; }
         public decimal HouseholdIncome { get; private set; }
         public int NumberMembers { get; private set; }
 
-        public HomeUpdateCommand(Guid id, Guid microregionId, Address adderess, string contactNumber, string? medicalRecordNumber, string headFamilyDocument, decimal householdIncome, int numberMembers)
+        public HomeUpdateCommand(Guid id, Guid microregionId, Address address, string contactNumber, string? medicalRecordNumber, string? headFamilyDocument, decimal householdIncome, int numberMembers)
         {
             Id = id;
             MicroregionId = microregionId;
-            Adderess = adderess;
+            Address = address;
             ContactNumber = contactNumber;
             MedicalRecordNumber = medicalRecordNumber;
             HeadFamilyDocument = headFamilyDocument;

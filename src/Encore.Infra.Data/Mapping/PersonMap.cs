@@ -31,6 +31,8 @@ namespace Encore.Infra.Data.Mapping
             builder.Property(h => h.Document)
                 .HasColumnType("varchar(14)")
                 .IsRequired();
+            builder.HasIndex(h => h.Document)
+                .IsUnique();
 
             builder.Property(h => h.DocumentType)
                 .HasColumnType("varchar(50)")

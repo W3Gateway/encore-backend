@@ -2,6 +2,6 @@
 {
     public class VisitResponse
     {
-        public Guid VisitId { get; set; }
+        public Guid Id { get; set; }
     }
 }

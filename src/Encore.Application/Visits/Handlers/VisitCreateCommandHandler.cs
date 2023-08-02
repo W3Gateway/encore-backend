@@ -12,24 +12,27 @@ namespace Encore.Application.Visits.Handlers
 {
     public class VisitCreateCommandHandler : CommandHandler, IRequestHandler<VisitCreateCommand, Response<VisitResponse>>
     {
+        private readonly IAgentRepository _agentRepository;
         private readonly IMicroregionRepository _microregionRepository;
         private readonly IPersonRepository _personRepository;
-        private readonly IHomeRepository _homeRepository;
-        private readonly IAgentRepository _agentRepository;
+        private readonly IQuestionAnswerRepository _questionAnswerRepository;
+        private readonly IHomeRepository _homeRepository;        
         private readonly IVisitRepository _visitRepository;
         private readonly IMapper _mapper;
 
-        public VisitCreateCommandHandler(IMicroregionRepository microregionRepository,
+        public VisitCreateCommandHandler(IAgentRepository agentRepository,
+                                        IMicroregionRepository microregionRepository,
                                         IPersonRepository personRepository,
-                                        IHomeRepository homeRepository,
-                                        IAgentRepository agentRepository,
+                                        IHomeRepository homeRepository,                                        
+                                        IQuestionAnswerRepository questionAnswerRepository,
                                         IVisitRepository visitRepository,
                                         IMapper mapper) : base(visitRepository.UnitOfWork)
         {
+            _agentRepository = agentRepository;
             _microregionRepository = microregionRepository;
             _personRepository = personRepository;
-            _homeRepository = homeRepository;
-            _agentRepository = agentRepository;
+            _questionAnswerRepository = questionAnswerRepository;
+            _homeRepository = homeRepository;            
             _visitRepository = visitRepository;
             _mapper = mapper;
 
@@ -47,21 +50,21 @@ namespace Encore.Application.Visits.Handlers
                 }
 
                 var person = await _personRepository.Include().FirstOrDefaultAsync(c => c.Id == request.PersonId);
-                if (microregion is null)
+                if (person is null)
                 {
                     AddError("Não foi encontrada o indivíduo informado na base de dados");
                     return Fail<VisitResponse>(ValidationResult);
                 }
                 
                 var agent = await _agentRepository.Include().FirstOrDefaultAsync(c => c.Id == request.AgentId);
-                if (microregion is null)
+                if (agent is null)
                 {
                     AddError("Não foi encontrada o agente informado na base de dados");
                     return Fail<VisitResponse>(ValidationResult);
                 }
 
                 var home = await _homeRepository.Include().FirstOrDefaultAsync(c => c.Id == request.HomeId);
-                if (microregion is null)
+                if (home is null)
                 {
                     AddError("Não foi encontrada a microárea informado na base de dados");
                     return Fail<VisitResponse>(ValidationResult);
@@ -73,8 +76,17 @@ namespace Encore.Application.Visits.Handlers
                 if (!await IsValidAsync(entity))
                     return Fail<VisitResponse>(ValidationResult);
 
+                var beginTransaction = BeginTransactionAsync(cancellationToken);
+
                 entity = await _visitRepository.CreateAsync(entity, cancellationToken);
-                await SaveAsync(cancellationToken);
+
+                foreach (var answer in answers)
+                {
+                    await _questionAnswerRepository.CreateAsync(answer, cancellationToken);
+                }
+
+                await CommitTransactionAsync(cancellationToken);
+                
                 return Success(_mapper.Map<VisitResponse>(entity));
             }
             catch (Exception ex)

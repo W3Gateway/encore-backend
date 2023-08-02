@@ -30,9 +30,9 @@ namespace Encore.Application.Homes.Handlers
             
             var result = _mapper.Map<HomeResponse>(entity);
 
-            var headFamily = _personRepository.Include().FirstOrDefaultAsync(p => p.HomeId == entity.Id && p.IsHeadFamily);
-            if (headFamily is not null)
-                result.HeadFamily = _mapper.Map<PersonHomeResponse>(headFamily);
+            var responsibleDocument = await _personRepository.Include().FirstOrDefaultAsync(p => p.HomeId == entity.Id && p.IsHeadFamily);
+            if (responsibleDocument is not null)
+                result.ResponsibleDocument = responsibleDocument.Document;
 
             return result;
         }

@@ -7,6 +7,7 @@ namespace Encore.Application.Visits.Commands
 {
     public class VisitUpdateCommand : Command<Response<VisitResponse>>
     {
+        public Guid Id { get; set; }
         public Guid AgentId { get; set; }
         public Guid PersonId { get; set; }
         public Guid HomeId { get; set; }

@@ -42,7 +42,7 @@ namespace Encore.Presenter.Controllers
             return CustomResponse(response);
         }
 
-        [HttpPatch]
+        [HttpPatch("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]

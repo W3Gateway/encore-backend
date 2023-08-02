@@ -10,8 +10,8 @@ namespace Encore.Application.Persons
     {
         public PersonMappingProfile()
         {
-            CreateMap<Person, PersonResponse>();
-            CreateMap<Home, PersonHomeResponse>();
+            CreateMap<Person, PersonResponse>()
+                .ForMember(dest => dest.HomeId, opt => opt.MapFrom(src => src.HomeId));
             CreateMap<Microregion, PersonMicroregionResponse>();
 
             CreateMap<PersonCreateCommand, Person>();

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Encore.Application.HealthCenters.Response;
+using Encore.Application.HealthCenters.Responses;
 using Encore.Domain.Models;
 
 namespace Encore.Application.HealthCenters
