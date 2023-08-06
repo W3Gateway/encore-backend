@@ -1,5 +1,4 @@
-﻿using Encore.Domain.Enum;
-using Encore.Domain.Models;
+﻿using Encore.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,6 +20,10 @@ namespace Encore.Infra.Data.Mapping
                 .HasColumnType("bit")
                 .IsRequired();
 
+            builder.Property(p => p.Order)
+                .HasColumnType("integer")
+                .IsRequired();
+
             builder.HasMany(p => p.Answers)
                 .WithOne(p => p.Question)
                 .HasForeignKey(b => b.QuestionId);
@@ -29,6 +32,10 @@ namespace Encore.Infra.Data.Mapping
                 .WithOne(p => p.Question)
                 .HasForeignKey(b => b.QuestionId);
 
+            builder.HasOne(p => p.Form)
+                .WithMany(p => p.Questions)
+                .HasForeignKey(q => q.FormId)
+                .IsRequired(false);
         }
     }
 }

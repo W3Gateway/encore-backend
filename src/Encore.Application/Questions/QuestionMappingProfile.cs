@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Encore.Application.Questions.Queries;
+using Encore.Application.Questions.Responses;
 using Encore.Domain.Models;
 
 namespace Encore.Application.Questions
