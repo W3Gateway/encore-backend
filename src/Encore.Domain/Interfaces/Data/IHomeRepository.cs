@@ -1,5 +1,4 @@
 ﻿using Encore.Domain.Core.Data;
-using Encore.Domain.Homes;
 using Encore.Domain.Models;
 
 namespace Encore.Domain.Interfaces.Data

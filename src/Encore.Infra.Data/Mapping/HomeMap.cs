@@ -1,4 +1,4 @@
-﻿using Encore.Domain.Homes;
+﻿using Encore.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

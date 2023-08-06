@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Encore.Application.Homes.Commands;
 using Encore.Application.Homes.Responses;
-using Encore.Domain.Homes;
 using Encore.Domain.Models;
 
 namespace Encore.Application.Homes

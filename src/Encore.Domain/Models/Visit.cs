@@ -1,5 +1,4 @@
 ﻿using Encore.Domain.Core.Models;
-using Encore.Domain.Homes;
 using FluentValidation;
 using FluentValidation.Results;
 

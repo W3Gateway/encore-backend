@@ -1,5 +1,4 @@
 ﻿using Encore.Domain.Core.Models;
-using Encore.Domain.Homes;
 using Encore.Domain.ValueObjects;
 
 namespace Encore.Domain.Models
@@ -27,6 +26,8 @@ namespace Encore.Domain.Models
         public Microregion Microregion { get; private set; }
         public Home Home { get; private set; }
         public IEnumerable<Visit> Visits { get; set; }
+        public IEnumerable<SociodemographicSituation> SociodemographicSituations { get; set; }
+        public IEnumerable<HealthCondition> HealthConditions { get; set; }
         #endregion
 
         public Person() { }

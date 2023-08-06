@@ -1,5 +1,4 @@
 ﻿using Encore.Domain.Core.Models;
-using Encore.Domain.ValueObjects;
 
 namespace Encore.Domain.Models
 {
@@ -7,12 +6,13 @@ namespace Encore.Domain.Models
     {
         public string Name { get; set; }
         public string Cnes { get; set; }
-        public Address Address { get; set; }
         public Guid AccountableId { get; set; }
+        public Guid AddressId { get; set; }
 
         #region Mapping
-        public IEnumerable<Agent> Agents { get; set; }
         public User Accountable { get; set; }
+        public Address Address { get; set; }
+        public IEnumerable<Agent> Agents { get; set; }
         public IEnumerable<Microregion> Microregions { get; set; }
         #endregion
     }

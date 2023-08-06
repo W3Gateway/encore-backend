@@ -4,8 +4,8 @@ using Encore.Application.Homes.Responses;
 using Encore.Domain.Core.Data;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
-using Encore.Domain.Homes;
 using Encore.Domain.Interfaces.Data;
+using Encore.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

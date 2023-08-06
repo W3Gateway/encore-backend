@@ -2,8 +2,8 @@
 using Encore.Application.Homes.Queries;
 using Encore.Application.Homes.Responses;
 using Encore.Domain.Core.Extensions;
-using Encore.Domain.Homes;
 using Encore.Domain.Interfaces.Data;
+using Encore.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

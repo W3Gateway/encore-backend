@@ -1,0 +1,28 @@
+﻿using Encore.Domain.Core.Models;
+
+namespace Encore.Domain.Models
+{
+    public class SociodemographicSituation : Entity<SociodemographicSituation>
+    {
+        public bool AttendSchool { get; set; }
+        public string LevelEducation { get; set; }
+        public string LaborMarketSituation { get; set; }
+        public string Occupation { get; set; }
+        public bool HasTraditionalCaregiver { get; set; }
+        public bool IsMemberCommunityGroup { get; set; }
+        public bool HasPrivateHealthPlan { get; set; }
+        public bool IsMemberTraditionalCommunity { get; set; }
+        public string TraditionalCommunity { get; set; }
+        public bool HasSexualOrientation { get; set; }
+        public string SexualOrientation { get; set; }
+        public bool HasGenderIdentity { get; set; }
+        public string GenderIdentity { get; set; }
+        public bool HasDisability { get; set; }
+        public string Disability { get; set; }
+        public Guid PersonId { get; set; }
+
+        #region Mapping 
+        public Person Person { get; set; }
+        #endregion
+    }
+}

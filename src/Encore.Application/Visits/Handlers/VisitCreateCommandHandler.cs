@@ -42,6 +42,8 @@ namespace Encore.Application.Visits.Handlers
         {
             try
             {
+                var beginTransaction = BeginTransactionAsync(cancellationToken);
+
                 var microregion = await _microregionRepository.Include().FirstOrDefaultAsync(c => c.Id == request.MicroregionId);
                 if (microregion is null)
                 {
@@ -71,22 +73,13 @@ namespace Encore.Application.Visits.Handlers
                 }
 
                 var answers = _mapper.Map<IEnumerable<QuestionAnswer>>(request.Answers);
-
                 var entity = new Visit(agent.Id, person.Id, home.Id, microregion.Id, answers);
                 if (!await IsValidAsync(entity))
                     return Fail<VisitResponse>(ValidationResult);
 
-                var beginTransaction = BeginTransactionAsync(cancellationToken);
-
                 entity = await _visitRepository.CreateAsync(entity, cancellationToken);
-
-                foreach (var answer in answers)
-                {
-                    await _questionAnswerRepository.CreateAsync(answer, cancellationToken);
-                }
-
+                answers.Select(async a => await _questionAnswerRepository.CreateAsync(a, cancellationToken));
                 await CommitTransactionAsync(cancellationToken);
-                
                 return Success(_mapper.Map<VisitResponse>(entity));
             }
             catch (Exception ex)
