@@ -1,6 +1,4 @@
-﻿using Encore.Domain.Models;
-
-namespace Encore.Application.Questions
+﻿namespace Encore.Application.Questions.Responses
 {
     public class QuestionResponse
     {

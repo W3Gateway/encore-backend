@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Encore.Application.Forms;
 using Encore.Application.Homes;
 using Encore.Application.Microregions;
 using Encore.Application.Persons;
@@ -20,6 +21,7 @@ namespace Encore.Infra.CrossCutting.Mapper
             yield return new PersonMappingProfile();
             yield return new MicroregionMappingProfile();
             yield return new QuestionMappingProfile();
+            yield return new FormMappingProfile();
         }
     }
 }

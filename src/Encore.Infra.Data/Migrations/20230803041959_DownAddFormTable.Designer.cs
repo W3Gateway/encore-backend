@@ -4,6 +4,7 @@ using Encore.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Encore.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230803041959_DownAddFormTable")]
+    partial class DownAddFormTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,10 +121,6 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Slug")
@@ -215,14 +214,9 @@ namespace Encore.Infra.Data.Migrations
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("SubQuestionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("SubQuestionId");
 
                     b.ToTable("OtherQuestion", (string)null);
                 });
@@ -350,7 +344,7 @@ namespace Encore.Infra.Data.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("FormId")
+                    b.Property<Guid>("FormId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Mandatory")
@@ -363,16 +357,8 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.Property<int?>("Order")
-                        .IsRequired()
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("ResponseType")
                         .HasColumnType("numeric(2,0)");
-
-                    b.Property<string>("SlugProperty")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -530,7 +516,7 @@ namespace Encore.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsOne("Encore.Domain.Homes.Home.Address#Encore.Domain.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("Encore.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("HomeId")
                                 .HasColumnType("uniqueidentifier");
@@ -575,7 +561,7 @@ namespace Encore.Infra.Data.Migrations
 
                             b1.HasKey("HomeId");
 
-                            b1.ToTable("Home", (string)null);
+                            b1.ToTable("Home");
 
                             b1.WithOwner()
                                 .HasForeignKey("HomeId");
@@ -622,7 +608,7 @@ namespace Encore.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Encore.Domain.Models.HealthCenter.Address#Encore.Domain.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("Encore.Domain.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("HealthCenterId")
                                 .HasColumnType("uniqueidentifier");
@@ -667,7 +653,7 @@ namespace Encore.Infra.Data.Migrations
 
                             b1.HasKey("HealthCenterId");
 
-                            b1.ToTable("HealthCenter", (string)null);
+                            b1.ToTable("HealthCenter");
 
                             b1.WithOwner()
                                 .HasForeignKey("HealthCenterId");
@@ -695,15 +681,10 @@ namespace Encore.Infra.Data.Migrations
                     b.HasOne("Encore.Domain.Models.Question", "Question")
                         .WithMany("OtherQuestions")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Encore.Domain.Models.Question", "SubQuestion")
-                        .WithMany("OtherSubQuestions")
-                        .HasForeignKey("SubQuestionId");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
-
-                    b.Navigation("SubQuestion");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.Person", b =>
@@ -729,7 +710,9 @@ namespace Encore.Infra.Data.Migrations
                 {
                     b.HasOne("Encore.Domain.Models.Form", "Form")
                         .WithMany("Questions")
-                        .HasForeignKey("FormId");
+                        .HasForeignKey("FormId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Form");
                 });
@@ -857,8 +840,6 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("OtherQuestions");
-
-                    b.Navigation("OtherSubQuestions");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.User", b =>
