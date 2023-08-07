@@ -4,7 +4,7 @@ namespace Encore.Domain.Enum
 {
     public enum EFormType
     {
-        [Description("Visit")]
+        [Description("visit")]
         Visit,
         [Description("home-home")]
         HomeHome,

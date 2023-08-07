@@ -5,6 +5,7 @@ using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.Data;
 using Encore.Domain.Models;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,30 +47,11 @@ namespace Encore.Application.Persons.Handlers
                     AddError("Não foi encontrada a microárea informada na base de dados");
                     return Fail<PersonResponse>(ValidationResult);
                 }
-                var person = new Person(request.Name,
-                                        request.SocialName,
-                                        request.BirthDate,
-                                        request.Nationality,
-                                        request.Sex,
-                                        request.SkinColor,
-                                        request.Document,
-                                        request.DocumentType,
-                                        request.Email,
-                                        request.ContactNumber,
-                                        request.SocialIdentification,
-                                        request.FatherName,
-                                        request.MotherName,
-                                        request.IsHeadFamily,
-                                        microregion.Id,
-                                        home.Id);
 
-                if (!await IsValidAsync(person))
-                    return Fail<PersonResponse>(ValidationResult);
-
-                var entity = await _personRepository.CreateAsync(person, cancellationToken);
-                var result = await CommitAsync(cancellationToken);
+                (var result, var entity) = await CreatePerson(request, cancellationToken);
                 if (!result.IsValid)
                     return Fail<PersonResponse>(await RollbackAsync(cancellationToken));
+
                 return Success(_mapper.Map<PersonResponse>(entity), result);
             }
             catch (Exception ex)
@@ -77,6 +59,17 @@ namespace Encore.Application.Persons.Handlers
                 AddError("Erro ao realizar o cadastro de Indivíduo: " + ex.Message);
                 return Fail<PersonResponse>(ValidationResult);
             }
+        }
+
+        private async Task<(ValidationResult result, Person entity)> CreatePerson(PersonCreateCommand request, CancellationToken cancellationToken)
+        {
+            var entity = _mapper.Map<Person>(request);
+
+            if (!await IsValidAsync(entity))
+                return (entity.ValidationResult, entity);
+
+            await _personRepository.CreateAsync(entity, cancellationToken);
+            return (await CommitAsync(cancellationToken), entity);
         }
     }
 }

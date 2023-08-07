@@ -26,15 +26,18 @@ namespace Encore.Infra.Data.Mapping
 
             builder.HasMany(p => p.Answers)
                 .WithOne(p => p.Question)
-                .HasForeignKey(b => b.QuestionId);
+                .HasForeignKey(b => b.QuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(p => p.OtherQuestions)
                 .WithOne(p => p.Question)
-                .HasForeignKey(b => b.QuestionId);
+                .HasForeignKey(b => b.QuestionId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(p => p.Form)
                 .WithMany(p => p.Questions)
                 .HasForeignKey(q => q.FormId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired(false);
         }
     }

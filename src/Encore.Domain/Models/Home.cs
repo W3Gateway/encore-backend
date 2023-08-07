@@ -11,21 +11,22 @@ namespace Encore.Domain.Models
         public string? MedicalRecordNumber { get; private set; }
         public decimal HouseholdIncome { get; private set; }
         public int NumberMembers { get; private set; }
-        public string LocationType { get; set; }
-        public string Situation { get; set; }
-        public string TypeAccess { get; set; }
-        public string TypeDomicile { get; set; }
-        public string PredominantMaterial { get; set; }
-        public int NumberRooms { get; set; }
-        public string WaterSupply { get; set; }
-        public string WaterConsumption { get; set; }
-        public string SanitaryDrainage { get; set; }
-        public string GarbageDestination { get; set; }
-        public bool Electricity { get; set; }
-        public string Animals { get; set; }
-        public string AmountAnimals { get; set; }
+        public string LocationType { get; private set; }
+        public string? RuralProductionArea { get; set; }
+        public string Situation { get; private set; }
+        public string TypeAccess { get; private set; }
+        public string TypeDomicile { get; private set; }
+        public string PredominantMaterial { get; private set; }
+        public int NumberRooms { get; private set; }
+        public string WaterSupply { get; private set; }
+        public string WaterConsumption { get; private set; }
+        public string SanitaryDrainage { get; private set; }
+        public string GarbageDestination { get; private set; }
+        public bool Electricity { get; private set; }
+        public string Animals { get; private set; }
+        public int AmountAnimals { get; private set; }
         public Guid MicroregionId { get; private set; }
-        public Guid AddressId { get; set; }
+        public Guid AddressId { get; private set; }
 
         #region Mapping
         public Microregion Microregion { get; set; }
@@ -46,14 +47,13 @@ namespace Encore.Domain.Models
             NumberMembers = numberMembers;
         }
 
-        public void CopyProperties(Guid microregionId, Address address, string contactNumber, string? medicalRecordNumber, decimal householdIncome, int numberMembers)
+        public void Update(Home request)
         {
-            MicroregionId = microregionId;
-            Address = address;
-            ContactNumber = contactNumber;
-            MedicalRecordNumber = medicalRecordNumber;
-            HouseholdIncome = householdIncome;
-            NumberMembers = numberMembers;
+            MicroregionId = request.MicroregionId;
+            ContactNumber = request.ContactNumber;
+            MedicalRecordNumber = request.MedicalRecordNumber;
+            HouseholdIncome = request.HouseholdIncome;
+            NumberMembers = request.NumberMembers;
         }
 
         public override async Task<bool> IsValidAsync()

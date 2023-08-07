@@ -10,5 +10,10 @@ namespace Encore.Infra.Data.Repositories
             : base(context)
         {
         }
+
+        public override IQueryable<Home> Include()
+        {
+            return Include(h => h.Address);
+        }
     }
 }

@@ -12,13 +12,13 @@ namespace Encore.Infra.Data.Mapping
                 .WithMany(u => u.Agents)
                 .HasForeignKey(a => a.UserId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(a => a.HealthCenter)
                 .WithMany(u => u.Agents)
                 .HasForeignKey(a => a.HealthCenterId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(a => a.Microregion)
                 .WithMany(u => u.Agents)

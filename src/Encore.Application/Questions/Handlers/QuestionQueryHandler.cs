@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Encore.Application.Questions.Queries;
 using Encore.Application.Questions.Responses;
-using Encore.Domain.Core.Extensions;
 using Encore.Domain.Enum;
 using Encore.Domain.Interfaces.Data;
 using MediatR;

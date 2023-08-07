@@ -1,8 +1,8 @@
-﻿using Encore.Domain.Core.Models;
+﻿using Encore.Domain.Core.Messaging;
 
-namespace Encore.Domain.Models
+namespace Encore.Application.SociodemographicSituations
 {
-    public class SociodemographicSituation : Entity<SociodemographicSituation>
+    public class SociodemographicSituationCommand : Command
     {
         public bool AttendSchool { get; set; }
         public string LevelEducation { get; set; }
@@ -19,10 +19,5 @@ namespace Encore.Domain.Models
         public string GenderIdentity { get; set; }
         public bool HasDisability { get; set; }
         public string? Disability { get; set; }
-        public Guid PersonId { get; set; }
-
-        #region Mapping 
-        public Person Person { get; set; }
-        #endregion
     }
 }

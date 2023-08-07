@@ -1,4 +1,6 @@
-﻿using Encore.Application.Persons.Responses;
+﻿using Encore.Application.HealthConditions;
+using Encore.Application.Persons.Responses;
+using Encore.Application.SociodemographicSituations;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 
@@ -22,5 +24,7 @@ namespace Encore.Application.Persons.Commands
         public bool IsHeadFamily { get; set; }
         public Guid MicroregionId { get; set; }
         public Guid HomeId { get; set; }
+        public SociodemographicSituationCommand SociodemographicSituation { get; set; }
+        public HealthConditionCommand HealthCondition { get; set; }
     }
 }

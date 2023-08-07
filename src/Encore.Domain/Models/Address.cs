@@ -32,6 +32,19 @@ namespace Encore.Domain.Models
             ValidationResult = await ValidateAsync(this);
             return ValidationResult.IsValid;
         }
+
+        public void Update(Address address)
+        {
+            PostalCode = address.PostalCode;
+            State = address.State;
+            City =  address.City;
+            Neighborhood = address.Neighborhood;
+            Street = address.Street;
+            StreetType = address.StreetType;
+            StreetComplement = address.StreetComplement;
+            Landmark = address.Landmark;
+            Number = address.Number;
+        }
     }
 
 }

@@ -1,8 +1,8 @@
-﻿using Encore.Domain.Core.Models;
+﻿using Encore.Domain.Core.Messaging;
 
-namespace Encore.Domain.Models
+namespace Encore.Application.HealthConditions
 {
-    public class HealthCondition : Entity<HealthCondition>
+    public class HealthConditionCommand : Command
     {
         public string WeightCondition { get; set; }
         public bool IsSmoker { get; set; }
@@ -27,10 +27,5 @@ namespace Encore.Domain.Models
         public string MedicinalPlants { get; set; }
         public string OtherHealthConditions { get; set; }
         public bool StreetSituation { get; set; }
-        public Guid PersonId { get; set; }
-
-        #region Mapping 
-        public Person Person { get; set; }
-        #endregion
     }
 }

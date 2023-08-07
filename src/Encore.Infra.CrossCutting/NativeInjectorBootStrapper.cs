@@ -43,6 +43,7 @@ namespace Encore.Infra.CrossCutting
             services.AddScoped<IAgentRepository, AgentRepository>();
             services.AddScoped<IVisitRepository, VisitRepository>();
             services.AddScoped<IFormRepository, FormRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IUnitOfWork, ApplicationContext>();
         }
     }

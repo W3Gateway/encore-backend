@@ -1,27 +1,26 @@
 ﻿using AutoMapper;
 using Encore.Application.Homes.Commands;
 using Encore.Application.Homes.Responses;
-using Encore.Domain.Core.Data;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.Data;
 using Encore.Domain.Models;
+using FluentValidation.Results;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Homes.Handlers
 {
     public class HomeUpdateCommandHandler : CommandHandler, IRequestHandler<HomeUpdateCommand, Response<HomeResponse>>
     {
-        private readonly IMicroregionRepository _microregionRepository;
+        private readonly IAddressRepository _addressRepository;
         private readonly IHomeRepository _homeRepository;
         private readonly IMapper _mapper;
 
-        public HomeUpdateCommandHandler(IMicroregionRepository microregionRepository,
+        public HomeUpdateCommandHandler(IAddressRepository addressRepository,
                                         IHomeRepository homeRepository,
                                         IMapper mapper) : base(homeRepository.UnitOfWork)
         {
-            _microregionRepository = microregionRepository;
+            _addressRepository = addressRepository;
             _homeRepository = homeRepository;
             _mapper = mapper;
 
@@ -31,6 +30,8 @@ namespace Encore.Application.Homes.Handlers
         {
             try
             {
+                await BeginTransactionAsync(cancellationToken);
+
                 var entity = await _homeRepository.GetByIdAsync(request.Id, cancellationToken);
                 if (entity is null)
                 {
@@ -38,26 +39,11 @@ namespace Encore.Application.Homes.Handlers
                     return Fail<HomeResponse>(ValidationResult);
                 }
 
-                var microregion = await _microregionRepository.Include().FirstOrDefaultAsync(c => c.Id == request.MicroregionId);
-                if (microregion is null)
-                {
-                    AddError("Não foi encontrada a microárea informado na base de dados");
-                    return Fail<HomeResponse>(ValidationResult);
-                }
-
-                var entityValidade = entity.ValidateRules(_mapper.Map<Home>(request));
-                if (!entityValidade.IsValid)
-                {
-                    AddError(entityValidade.Errors);
-                    return Fail<HomeResponse>(ValidationResult);
-                }
-
-                entity.CopyProperties(microregion.Id, request.Address, request.ContactNumber, request.MedicalRecordNumber, request.HouseholdIncome, request.NumberMembers);
-                entity = await _homeRepository.UpdateAsync(entity, cancellationToken);
-                var result = await CommitAsync(cancellationToken);
-                if (!result.IsValid)
+                var result = await HomeUpdate(entity, request, cancellationToken);
+                if (result.IsValid)
                     return Fail<HomeResponse>(await RollbackAsync(cancellationToken));
-
+                
+                await CommitTransactionAsync();
                 return Success(_mapper.Map<HomeResponse>(entity));
             }
             catch (Exception ex)
@@ -65,6 +51,36 @@ namespace Encore.Application.Homes.Handlers
                 AddError("Erro ao realizar o cadastro de domicílio: " + ex.Message);
                 return Fail<HomeResponse>(ValidationResult);
             }
+        }
+
+        private async Task<ValidationResult> HomeUpdate(Home entity, HomeUpdateCommand request, CancellationToken cancellationToken)
+        {
+            var result = await UpdateAddress(entity.Address, request, cancellationToken);
+            if (!result.IsValid)
+                return result;
+
+            entity.Update(_mapper.Map<Home>(request));
+            var entityValidade = entity.ValidateRules(entity);
+            if (!entityValidade.IsValid)
+            {
+                AddError(entityValidade.Errors);
+                return entityValidade;
+            }
+            entity = await _homeRepository.UpdateAsync(entity, cancellationToken);
+
+            return await CommitAsync(cancellationToken);
+        }
+
+        private async Task<ValidationResult> UpdateAddress(Address address, HomeUpdateCommand request, CancellationToken cancellationToken)
+        {
+            var addressMap = _mapper.Map<Address>(request);
+            address.Update(addressMap);
+
+            if (!await address.IsValidAsync())
+                AddError(address.ValidationResult.Errors);
+
+            await _addressRepository.UpdateAsync(address, cancellationToken);
+            return ValidationResult;
         }
     }
 }

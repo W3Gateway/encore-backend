@@ -1,5 +1,4 @@
 ﻿using Encore.Domain.Core.Models;
-using Encore.Domain.ValueObjects;
 
 namespace Encore.Domain.Models
 {

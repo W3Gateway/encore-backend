@@ -15,7 +15,8 @@ namespace Encore.Infra.Data.Mapping
 
             builder.HasOne(p => p.Question)
                 .WithMany(p => p.OtherQuestions)
-                .HasForeignKey(fk => fk.QuestionId);
+                .HasForeignKey(fk => fk.QuestionId)
+                .OnDelete(DeleteBehavior.NoAction);
             
             builder.HasOne(p => p.Question)
                 .WithMany()
