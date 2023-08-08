@@ -6,5 +6,6 @@ namespace Encore.Application.Persons.Queries
     public class GetPersonListQuery : QueryList<IEnumerable<PersonResponse>?>
     {
         public Guid HomeId { get; set; }
+        public Guid MicroregionId { get; set; }
     }
 }

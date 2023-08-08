@@ -2,7 +2,7 @@
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 
-namespace Encore.Application.Persons.Handlers
+namespace Encore.Application.Persons.Commands
 {
     public class PersonUpdateCommand : Command<Response<PersonResponse>>
     {

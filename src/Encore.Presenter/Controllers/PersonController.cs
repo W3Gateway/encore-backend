@@ -1,5 +1,4 @@
 ﻿using Encore.Application.Persons.Commands;
-using Encore.Application.Persons.Handlers;
 using Encore.Application.Persons.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -4,13 +4,11 @@ using Encore.Domain.Models;
 
 namespace Encore.Application.Agents
 {
-    public class HealthCenterMappingProfile : Profile
+    public class AgentMappingProfile : Profile
     {
-        public HealthCenterMappingProfile()
+        public AgentMappingProfile()
         {
             CreateMap<Agent, AgentResponse>();
-            CreateMap<HealthCenter, AgentHealthCenterResponse>();
-            CreateMap<Microregion, AgentMicroregionResponse>();
         }
     }
 }
