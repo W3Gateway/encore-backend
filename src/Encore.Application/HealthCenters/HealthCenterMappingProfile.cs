@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Encore.Application.Agents.Responses;
 using Encore.Application.HealthCenters.Responses;
 using Encore.Domain.Models;
 
@@ -9,6 +10,8 @@ namespace Encore.Application.HealthCenters
         public HealthCenterMappingProfile()
         {
             CreateMap<HealthCenter, HealthCenterAgentResponse>();
+            CreateMap<HealthCenter, AgentHealthCenterResponse>();
+            CreateMap<Microregion, AgentMicroregionResponse>();
         }
     }
 }

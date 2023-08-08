@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Encore.Application.Persons.Commands;
 using Encore.Application.Persons.Responses;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;

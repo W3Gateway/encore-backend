@@ -41,7 +41,10 @@ namespace Encore.Application.Persons.Handlers
             if (!request.HomeId.Equals(Guid.Empty))
                 entities = entities.Where(p => p.HomeId.Equals(request.HomeId));
 
-            if(request.Search.IsNullOrEmpty())
+            if (!request.MicroregionId.Equals(Guid.Empty))
+                entities = entities.Where(p => p.MicroregionId.Equals(request.MicroregionId));
+
+            if (request.Search.IsNullOrEmpty())
                 return entities;
 
             var filter = request.Search.ToLowerTrim();
