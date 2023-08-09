@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Encore.Application.Homes.Commands;
 using Encore.Domain.Models;
 
 namespace Encore.Application.Addresses
@@ -9,7 +8,7 @@ namespace Encore.Application.Addresses
         public AddressMappingProfile()
         {
             CreateMap<Address, AddressResponse>();
-            CreateMap<HomeCreateCommand, Address>();
+            CreateMap<AddressCommand, Address>();
         }
     }
 }

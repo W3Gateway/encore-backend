@@ -49,7 +49,6 @@ namespace Encore.Domain.Models
 
         public void Update(Home request)
         {
-            MicroregionId = request.MicroregionId;
             ContactNumber = request.ContactNumber;
             MedicalRecordNumber = request.MedicalRecordNumber;
             HouseholdIncome = request.HouseholdIncome;

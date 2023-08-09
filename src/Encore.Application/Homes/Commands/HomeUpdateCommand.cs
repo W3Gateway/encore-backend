@@ -1,4 +1,5 @@
-﻿using Encore.Application.Homes.Responses;
+﻿using Encore.Application.Addresses;
+using Encore.Application.Homes.Responses;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 
@@ -6,7 +7,7 @@ namespace Encore.Application.Homes.Commands
 {
     public class HomeUpdateCommand : Command<Response<HomeResponse>>
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         public string TypeProperty { get; set; }
         public string LocationType { get; set; }
         public string? RuralProductionArea { get; set; }
@@ -26,15 +27,7 @@ namespace Encore.Application.Homes.Commands
         public string? MedicalRecordNumber { get; set; }
         public decimal HouseholdIncome { get; set; }
         public int NumberMembers { get; set; }
-        public string PostalCode { get; set; }
-        public string State { get; set; }
-        public string City { get; set; }
-        public string Neighborhood { get; set; }
-        public string Street { get; set; }
-        public string StreetType { get; set; }
-        public string? StreetComplement { get; set; }
-        public string? Landmark { get; set; }
-        public int Number { get; set; }
+        public AddressCommand Address { get; set; }
 
         public bool ExecuteTransaction { get; set; } = true;
     }

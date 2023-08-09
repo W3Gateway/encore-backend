@@ -45,8 +45,9 @@ namespace Encore.Presenter.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Patch([FromBody] HomeUpdateCommand command)
+        public async Task<IActionResult> Patch(Guid id,[FromBody] HomeUpdateCommand command)
         {
+            command.Id = id;
             var response = await _mediator.Send(command);
             return CustomResponse(response);
         }

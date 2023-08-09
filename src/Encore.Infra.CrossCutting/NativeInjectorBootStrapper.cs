@@ -44,6 +44,8 @@ namespace Encore.Infra.CrossCutting
             services.AddScoped<IVisitRepository, VisitRepository>();
             services.AddScoped<IFormRepository, FormRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<ISociodemographicSituationRepository, SociodemographicSituationRepository>();
+            services.AddScoped<IHealthConditionRepository, HealthConditionRepository>();
             services.AddScoped<IUnitOfWork, ApplicationContext>();
         }
     }

@@ -12,7 +12,6 @@ namespace Encore.Application.Homes
             CreateMap<Home, HomeResponse>()
                 .ForMember(dest => dest.ResponsibleDocument, opt => opt.MapFrom(src => src.Persons.FirstOrDefault(p => p.IsHeadFamily).Document));
             CreateMap<Person, HomePersonResponse>();
-            CreateMap<Microregion, HomeMicroregionResponse>();
             CreateMap<HomeUpdateCommand, Home>();
             CreateMap<HomeCreateCommand, Home>();
         }
