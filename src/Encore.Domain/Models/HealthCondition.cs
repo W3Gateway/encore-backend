@@ -35,5 +35,32 @@ namespace Encore.Domain.Models
 
         public void AddPerson(Guid personId) => PersonId = personId;
 
+        public void CopyProperties(HealthCondition healthCondition)
+        {
+            WeightCondition = healthCondition.WeightCondition;
+            IsSmoker = healthCondition.IsSmoker;
+            UseAlcohol = healthCondition.UseAlcohol;
+            UsesOtherDrugs = healthCondition.UsesOtherDrugs;
+            HasHypertension = healthCondition.HasHypertension;
+            HasDiabetes = healthCondition.HasDiabetes;
+            HadStroke = healthCondition.HadStroke;
+            HadHeartAttack = healthCondition.HadHeartAttack;
+            HasHeartDisease = healthCondition.HasHeartDisease;
+            HeartDisease = healthCondition.HeartDisease;
+            HasRespiratoryDisease = healthCondition.HasRespiratoryDisease;
+            RespiratoryDisease = healthCondition.RespiratoryDisease;
+            HasLeprosy = healthCondition.HasLeprosy;
+            HadCanser = healthCondition.HadCanser;
+            ReacentlyHospitalization = healthCondition.ReacentlyHospitalization;
+            CauseHospotalization = healthCondition.CauseHospotalization;
+            DiagnoseMentalHealthProblem = healthCondition.DiagnoseMentalHealthProblem;
+            IsBedridden = healthCondition.IsBedridden;
+            IsDomiciled = healthCondition.IsDomiciled;
+            UseMedicinalPlants = healthCondition.UseMedicinalPlants;
+            MedicinalPlants = healthCondition.MedicinalPlants;
+            OtherHealthConditions = healthCondition.OtherHealthConditions;
+            StreetSituation = healthCondition.StreetSituation;
+        }
+
     }
 }

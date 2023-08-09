@@ -26,6 +26,7 @@ namespace Encore.Domain.Models
         public Person Person { get; set; }
         #endregion
 
+
         public override async Task<bool> IsValidAsync()
         {
             RuleFor(c => c.AttendSchool).NotEmpty();
@@ -35,5 +36,24 @@ namespace Encore.Domain.Models
         }
 
         public void AddPerson(Guid personId) => PersonId = personId;
+
+        public void CopyProperties(SociodemographicSituation sociodemographic)
+        {
+            AttendSchool = sociodemographic.AttendSchool;
+            LevelEducation = sociodemographic.LevelEducation;
+            LaborMarketSituation = sociodemographic.LaborMarketSituation;
+            Occupation = sociodemographic.Occupation;
+            HasTraditionalCaregiver = sociodemographic.HasTraditionalCaregiver;
+            IsMemberCommunityGroup = sociodemographic.IsMemberCommunityGroup;
+            HasPrivateHealthPlan = sociodemographic.HasPrivateHealthPlan;
+            IsMemberTraditionalCommunity = sociodemographic.IsMemberTraditionalCommunity;
+            TraditionalCommunity = sociodemographic.TraditionalCommunity;
+            HasSexualOrientation = sociodemographic.HasSexualOrientation;
+            SexualOrientation = sociodemographic.SexualOrientation;
+            HasGenderIdentity = sociodemographic.HasGenderIdentity;
+            GenderIdentity = sociodemographic.GenderIdentity;
+            HasDisability = sociodemographic.HasDisability;
+            Disability = sociodemographic.Disability;
+        }
     }
 }
