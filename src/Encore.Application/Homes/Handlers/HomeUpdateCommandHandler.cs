@@ -28,10 +28,10 @@ namespace Encore.Application.Homes.Handlers
 
         public async Task<Response<HomeResponse>> Handle(HomeUpdateCommand request, CancellationToken cancellationToken)
         {
+            await BeginTransactionAsync(cancellationToken);
+            _executeTransaction = request.ExecuteTransaction;
             try
             {
-                await BeginTransactionAsync(cancellationToken);
-
                 var entity = await _homeRepository.GetByIdAsync(request.Id, cancellationToken);
                 if (entity is null)
                 {

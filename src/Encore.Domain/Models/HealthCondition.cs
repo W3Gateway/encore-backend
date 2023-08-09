@@ -32,5 +32,8 @@ namespace Encore.Domain.Models
         #region Mapping 
         public Person Person { get; set; }
         #endregion
+
+        public void AddPerson(Guid personId) => PersonId = personId;
+
     }
 }

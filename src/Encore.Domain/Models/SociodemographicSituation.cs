@@ -1,4 +1,5 @@
 ﻿using Encore.Domain.Core.Models;
+using FluentValidation;
 
 namespace Encore.Domain.Models
 {
@@ -24,5 +25,15 @@ namespace Encore.Domain.Models
         #region Mapping 
         public Person Person { get; set; }
         #endregion
+
+        public override async Task<bool> IsValidAsync()
+        {
+            RuleFor(c => c.AttendSchool).NotEmpty();
+
+            ValidationResult = await ValidateAsync(this);
+            return ValidationResult.IsValid;
+        }
+
+        public void AddPerson(Guid personId) => PersonId = personId;
     }
 }

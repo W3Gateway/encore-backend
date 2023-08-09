@@ -14,6 +14,7 @@ namespace Encore.Application.Homes
             CreateMap<Person, HomePersonResponse>();
             CreateMap<Microregion, HomeMicroregionResponse>();
             CreateMap<HomeUpdateCommand, Home>();
+            CreateMap<HomeCreateCommand, Home>();
         }
     }
 }

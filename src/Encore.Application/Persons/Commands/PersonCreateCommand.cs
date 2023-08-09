@@ -26,5 +26,7 @@ namespace Encore.Application.Persons.Commands
         public Guid HomeId { get; set; }
         public SociodemographicSituationCommand SociodemographicSituation { get; set; }
         public HealthConditionCommand HealthCondition { get; set; }
+
+        public bool ExecuteTransaction { get; set; } = true;
     }
 }
