@@ -16,6 +16,9 @@ namespace Encore.Application.HealthConditions
         public string HeartDisease { get; set; }
         public bool HasRespiratoryDisease { get; set; }
         public string RespiratoryDisease { get; set; }
+        public bool HasTuberculosis { get; set; }
+        public bool HadKidneyProblem { get; set; }
+        public string KidneyProblem { get; set; }
         public bool HasLeprosy { get; set; }
         public bool HadCancer { get; set; }
         public bool ReacentlyHospitalization { get; set; }

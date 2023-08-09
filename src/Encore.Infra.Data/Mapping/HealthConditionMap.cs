@@ -54,11 +54,19 @@ namespace Encore.Infra.Data.Mapping
             builder.Property(h => h.RespiratoryDisease)
                 .HasColumnType("varchar(100)");
 
+            builder.Property(h => h.HasTuberculosis)
+                .HasColumnType("bit")
+                .IsRequired();
+
+            builder.Property(h => h.HadKidneyProblem)
+                .HasColumnType("bit")
+                .IsRequired();
+
             builder.Property(h => h.HasLeprosy)
                 .HasColumnType("bit")
                 .IsRequired();
 
-            builder.Property(h => h.HadCanser)
+            builder.Property(h => h.HadCancer)
                 .HasColumnType("bit")
                 .IsRequired();
 
