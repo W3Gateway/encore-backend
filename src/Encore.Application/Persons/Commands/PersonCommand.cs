@@ -8,7 +8,6 @@ namespace Encore.Application.Persons.Commands
 {
     public class PersonCommand : Command<Response<PersonResponse>>
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string SocialName { get; set; }
         public DateTime BirthDate { get; set; }
