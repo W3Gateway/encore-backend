@@ -18,6 +18,26 @@ namespace Encore.Infra.Data.Migrations
                 columns: new[] { "Id", "Slug", "Title", "AddedDate", "ModifiedDate", "Ativo" },
                 values: new object[] { formHomeId, "HomeHome", "Moradia", new DateTime(2023, 08, 05), DateTime.MinValue, true });
 
+            migrationBuilder.InsertData(
+                table: "Question",
+                columns: new[] { "Id", "Name", "ResponseType", "Mandatory", "FormId", "AddedDate", "ModifiedDate", "Ativo", "Order" },
+                values: new object[] { Guid.NewGuid(), "Nº do prontuário familiar", (int)EQuestionType.STRING, true, formHomeId, new DateTime(2023, 08, 010), DateTime.MinValue, false, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Question",
+                columns: new[] { "Id", "Name", "ResponseType", "Mandatory", "FormId", "AddedDate", "ModifiedDate", "Ativo", "Order" },
+                values: new object[] { Guid.NewGuid(), "Tipo de Imóvel", (int)EQuestionType.STRING, true, formHomeId, new DateTime(2023, 08, 010), DateTime.MinValue, false, 2 });
+
+            migrationBuilder.InsertData(
+                table: "Question",
+                columns: new[] { "Id", "Name", "ResponseType", "Mandatory", "FormId", "AddedDate", "ModifiedDate", "Ativo", "Order" },
+                values: new object[] { Guid.NewGuid(), "Nº do prontuário familiar", (int)EQuestionType.STRING, true, formHomeId, new DateTime(2023, 08, 010), DateTime.MinValue, false, 3 });
+
+            migrationBuilder.InsertData(
+                table: "Question",
+                columns: new[] { "Id", "Name", "ResponseType", "Mandatory", "FormId", "AddedDate", "ModifiedDate", "Ativo", "Order" },
+                values: new object[] { Guid.NewGuid(), "Nº do prontuário familiar", (int)EQuestionType.STRING, true, formHomeId, new DateTime(2023, 08, 010), DateTime.MinValue, false, 4 });
+
             var localQuestionId = Guid.NewGuid();
 
             migrationBuilder.InsertData(
@@ -381,7 +401,18 @@ namespace Encore.Infra.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Question",
                 columns: new[] { "Id", "Name", "ResponseType", "Mandatory", "FormId", "AddedDate", "ModifiedDate", "Ativo", "Order" },
-                values: new object[] { howManyAnimalsQuestionId, "Quantos animais no domicílio", (int)EQuestionType.NUMERIC, true, formHomeId, new DateTime(2023, 08, 05), DateTime.MinValue, false, 15 });
+                values: new object[] { howManyAnimalsQuestionId, "Quantos animais no domicílio", (int)EQuestionType.NUMERIC, true, formHomeId, new DateTime(2023, 08, 05), DateTime.MinValue, false, 19 });
+
+            migrationBuilder.InsertData(
+                table: "Question",
+                columns: new[] { "Id", "Name", "ResponseType", "Mandatory", "FormId", "AddedDate", "ModifiedDate", "Ativo", "Order" },
+                values: new object[] { Guid.NewGuid(), "Nº do prontuário familiar", (int)EQuestionType.STRING, false, formHomeId, new DateTime(2023, 08, 10), DateTime.MinValue, true, 20 });
+
+            migrationBuilder.InsertData(
+                table: "Question",
+                columns: new[] { "Id", "Name", "ResponseType", "Mandatory", "FormId", "AddedDate", "ModifiedDate", "Ativo", "Order" },
+                values: new object[] { Guid.NewGuid(), "Renda familiar", (int)EQuestionType.DROPLIST, true, formHomeId, new DateTime(2023, 08, 10), DateTime.MinValue, true, 21 });
+
 
             var formPersonInfDemoId = Guid.NewGuid();
 

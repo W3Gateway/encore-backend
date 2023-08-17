@@ -89,6 +89,10 @@ namespace Encore.Infra.Data.Mapping
                .HasColumnType("bit")
                .IsRequired();
 
+            builder.Property(h => h.IntegrativePractices)
+               .HasColumnType("bit")
+               .IsRequired();
+
             builder.Property(h => h.UseMedicinalPlants)
                .HasColumnType("bit")
                .IsRequired();

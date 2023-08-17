@@ -25,6 +25,7 @@ namespace Encore.Domain.Models
         public bool DiagnoseMentalHealthProblem { get; set; }
         public bool IsBedridden { get; set; }
         public bool IsDomiciled { get; set; }
+        public bool IntegrativePractices { get; set; }
         public bool UseMedicinalPlants { get; set; }
         public string MedicinalPlants { get; set; }
         public string OtherHealthConditions { get; set; }
@@ -52,12 +53,14 @@ namespace Encore.Domain.Models
             HasRespiratoryDisease = healthCondition.HasRespiratoryDisease;
             RespiratoryDisease = healthCondition.RespiratoryDisease;
             HasLeprosy = healthCondition.HasLeprosy;
+            HasTuberculosis = healthCondition.HasTuberculosis;
             HadCancer = healthCondition.HadCancer;
             ReacentlyHospitalization = healthCondition.ReacentlyHospitalization;
             CauseHospotalization = healthCondition.CauseHospotalization;
             DiagnoseMentalHealthProblem = healthCondition.DiagnoseMentalHealthProblem;
             IsBedridden = healthCondition.IsBedridden;
             IsDomiciled = healthCondition.IsDomiciled;
+            IntegrativePractices = healthCondition.IntegrativePractices;
             UseMedicinalPlants = healthCondition.UseMedicinalPlants;
             MedicinalPlants = healthCondition.MedicinalPlants;
             OtherHealthConditions = healthCondition.OtherHealthConditions;
