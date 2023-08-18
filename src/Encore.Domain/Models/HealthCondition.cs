@@ -16,13 +16,16 @@ namespace Encore.Domain.Models
         public string HeartDisease { get; set; }
         public bool HasRespiratoryDisease { get; set; }
         public string RespiratoryDisease { get; set; }
+        public bool HasTuberculosis { get; set; }
+        public bool HadKidneyProblem { get; set; }
         public bool HasLeprosy { get; set; }
-        public bool HadCanser { get; set; }
+        public bool HadCancer { get; set; }
         public bool ReacentlyHospitalization { get; set; }
         public string CauseHospotalization { get; set; }
         public bool DiagnoseMentalHealthProblem { get; set; }
         public bool IsBedridden { get; set; }
         public bool IsDomiciled { get; set; }
+        public bool IntegrativePractices { get; set; }
         public bool UseMedicinalPlants { get; set; }
         public string MedicinalPlants { get; set; }
         public string OtherHealthConditions { get; set; }
@@ -32,5 +35,37 @@ namespace Encore.Domain.Models
         #region Mapping 
         public Person Person { get; set; }
         #endregion
+
+        public void AddPerson(Guid personId) => PersonId = personId;
+
+        public void CopyProperties(HealthCondition healthCondition)
+        {
+            WeightCondition = healthCondition.WeightCondition;
+            IsSmoker = healthCondition.IsSmoker;
+            UseAlcohol = healthCondition.UseAlcohol;
+            UsesOtherDrugs = healthCondition.UsesOtherDrugs;
+            HasHypertension = healthCondition.HasHypertension;
+            HasDiabetes = healthCondition.HasDiabetes;
+            HadStroke = healthCondition.HadStroke;
+            HadHeartAttack = healthCondition.HadHeartAttack;
+            HasHeartDisease = healthCondition.HasHeartDisease;
+            HeartDisease = healthCondition.HeartDisease;
+            HasRespiratoryDisease = healthCondition.HasRespiratoryDisease;
+            RespiratoryDisease = healthCondition.RespiratoryDisease;
+            HasLeprosy = healthCondition.HasLeprosy;
+            HasTuberculosis = healthCondition.HasTuberculosis;
+            HadCancer = healthCondition.HadCancer;
+            ReacentlyHospitalization = healthCondition.ReacentlyHospitalization;
+            CauseHospotalization = healthCondition.CauseHospotalization;
+            DiagnoseMentalHealthProblem = healthCondition.DiagnoseMentalHealthProblem;
+            IsBedridden = healthCondition.IsBedridden;
+            IsDomiciled = healthCondition.IsDomiciled;
+            IntegrativePractices = healthCondition.IntegrativePractices;
+            UseMedicinalPlants = healthCondition.UseMedicinalPlants;
+            MedicinalPlants = healthCondition.MedicinalPlants;
+            OtherHealthConditions = healthCondition.OtherHealthConditions;
+            StreetSituation = healthCondition.StreetSituation;
+        }
+
     }
 }

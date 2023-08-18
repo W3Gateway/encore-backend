@@ -8,8 +8,8 @@ namespace Encore.Domain.Models
     {
         public string TypeProperty { get; private set; }
         public string ContactNumber { get; private set; }
-        public string? MedicalRecordNumber { get; private set; }
-        public decimal HouseholdIncome { get; private set; }
+        public string? MedicalRecordNumber { get; set; }
+        public decimal HouseholdIncome { get; set; }
         public int NumberMembers { get; private set; }
         public string LocationType { get; private set; }
         public string? RuralProductionArea { get; set; }
@@ -26,7 +26,7 @@ namespace Encore.Domain.Models
         public string Animals { get; private set; }
         public int AmountAnimals { get; private set; }
         public Guid MicroregionId { get; private set; }
-        public Guid AddressId { get; private set; }
+        public Guid AddressId { get; set; }
 
         #region Mapping
         public Microregion Microregion { get; set; }
@@ -49,12 +49,13 @@ namespace Encore.Domain.Models
 
         public void Update(Home request)
         {
-            MicroregionId = request.MicroregionId;
             ContactNumber = request.ContactNumber;
             MedicalRecordNumber = request.MedicalRecordNumber;
             HouseholdIncome = request.HouseholdIncome;
             NumberMembers = request.NumberMembers;
         }
+
+        public void AddAddress(Guid addressId) => AddressId = addressId;
 
         public override async Task<bool> IsValidAsync()
         {

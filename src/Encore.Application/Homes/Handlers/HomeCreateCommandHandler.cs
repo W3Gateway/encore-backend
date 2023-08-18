@@ -32,10 +32,10 @@ namespace Encore.Application.Homes.Handlers
 
         public async Task<Response<HomeResponse>> Handle(HomeCreateCommand request, CancellationToken cancellationToken)
         {
+            await BeginTransactionAsync(cancellationToken);
+            _executeTransaction = request.ExecuteTransaction;
             try
             {
-                await BeginTransactionAsync(cancellationToken);
-
                 var entity = _mapper.Map<Home>(request);
                 var result = await CreateHome(request, entity, cancellationToken);
                 
@@ -62,14 +62,16 @@ namespace Encore.Application.Homes.Handlers
             }
 
             var address = await CreateAddress(request, cancellationToken);
-            if (!await address.IsValidAsync())
+            if (!await IsValidAsync(address))
                 return address.ValidationResult;
 
-            
             if (!await IsValidAsync(entity))
                 return entity.ValidationResult;
 
             entity = await _homeRepository.CreateAsync(entity, cancellationToken);
+            entity.AddAddress(address.Id);
+
+            await SaveAsync(cancellationToken);
             return await CommitAsync(cancellationToken);
         }
 
@@ -78,7 +80,8 @@ namespace Encore.Application.Homes.Handlers
             var address = _mapper.Map<Address>(request);
             if (!await address.IsValidAsync())
                 AddError(address.ValidationResult.Errors);
-            return await _addressRepository.CreateAsync(address, cancellationToken);
+
+            return await _addressRepository.CreateAsync(address, cancellationToken); ;
         }
     }
 }

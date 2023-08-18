@@ -1,4 +1,5 @@
 ﻿using Encore.Domain.Core.Models;
+using FluentValidation;
 
 namespace Encore.Domain.Models
 {
@@ -24,5 +25,35 @@ namespace Encore.Domain.Models
         #region Mapping 
         public Person Person { get; set; }
         #endregion
+
+
+        public override async Task<bool> IsValidAsync()
+        {
+            RuleFor(c => c.AttendSchool).NotEmpty();
+
+            ValidationResult = await ValidateAsync(this);
+            return ValidationResult.IsValid;
+        }
+
+        public void AddPerson(Guid personId) => PersonId = personId;
+
+        public void CopyProperties(SociodemographicSituation sociodemographic)
+        {
+            AttendSchool = sociodemographic.AttendSchool;
+            LevelEducation = sociodemographic.LevelEducation;
+            LaborMarketSituation = sociodemographic.LaborMarketSituation;
+            Occupation = sociodemographic.Occupation;
+            HasTraditionalCaregiver = sociodemographic.HasTraditionalCaregiver;
+            IsMemberCommunityGroup = sociodemographic.IsMemberCommunityGroup;
+            HasPrivateHealthPlan = sociodemographic.HasPrivateHealthPlan;
+            IsMemberTraditionalCommunity = sociodemographic.IsMemberTraditionalCommunity;
+            TraditionalCommunity = sociodemographic.TraditionalCommunity;
+            HasSexualOrientation = sociodemographic.HasSexualOrientation;
+            SexualOrientation = sociodemographic.SexualOrientation;
+            HasGenderIdentity = sociodemographic.HasGenderIdentity;
+            GenderIdentity = sociodemographic.GenderIdentity;
+            HasDisability = sociodemographic.HasDisability;
+            Disability = sociodemographic.Disability;
+        }
     }
 }
