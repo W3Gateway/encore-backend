@@ -3,10 +3,11 @@ using Encore.Application.Persons.Responses;
 using Encore.Application.SociodemographicSituations;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
+using FluentValidation.Results;
 
 namespace Encore.Application.Persons.Commands
 {
-    public class PersonCommand : Command<Response<PersonResponse>>
+    public class PersonCommand : Command<ValidationResult>
     {
         public string Name { get; set; }
         public string SocialName { get; set; }

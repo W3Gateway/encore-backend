@@ -30,13 +30,10 @@ namespace Encore.Domain.Models
         public string MedicinalPlants { get; set; }
         public string OtherHealthConditions { get; set; }
         public bool StreetSituation { get; set; }
-        public Guid PersonId { get; set; }
 
         #region Mapping 
-        public Person Person { get; set; }
+        public IEnumerable<Person> Persons { get; set; }
         #endregion
-
-        public void AddPerson(Guid personId) => PersonId = personId;
 
         public void CopyProperties(HealthCondition healthCondition)
         {

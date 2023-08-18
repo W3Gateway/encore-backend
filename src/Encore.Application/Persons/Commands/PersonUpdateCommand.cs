@@ -2,5 +2,6 @@
 {
     public class PersonUpdateCommand : PersonCommand
     {
+        public Guid Id { get; set; }
     }
 }

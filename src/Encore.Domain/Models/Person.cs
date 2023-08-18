@@ -20,18 +20,20 @@ namespace Encore.Domain.Models
         public bool IsHeadFamily { get; private set; }
         public Guid MicroregionId { get; private set; }
         public Guid HomeId { get; private set; }
+        public Guid SociodemographicSituationId { get; set; }
+        public Guid HealthConditionId { get; set; }
 
         #region Mapping
         public Microregion Microregion { get; private set; }
         public Home Home { get; private set; }
+        public SociodemographicSituation SociodemographicSituation { get; set; }
+        public HealthCondition HealthCondition { get; set; }
         public IEnumerable<Visit> Visits { get; set; }
-        public IEnumerable<SociodemographicSituation> SociodemographicSituations { get; set; }
-        public IEnumerable<HealthCondition> HealthConditions { get; set; }
         #endregion
 
         public Person() { }
 
-        public Person(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid homeId)
+        public Person(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid sociodemographicSituationId, Guid healthConditionId, Guid homeId)
         {
             Name = name;
             SocialName = socialName;
@@ -48,10 +50,12 @@ namespace Encore.Domain.Models
             MotherName = motherName;
             IsHeadFamily = isHeadFamily;
             MicroregionId = microregionId;
+            SociodemographicSituationId = sociodemographicSituationId;
+            HealthConditionId = healthConditionId;
             HomeId = homeId;
         }
 
-        public void CopyProperties(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid homeId)
+        public void CopyProperties(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid sociodemographicSituationId, Guid healthConditionId, Guid homeId)
         {
             Name = name;
             SocialName = socialName;
@@ -68,6 +72,8 @@ namespace Encore.Domain.Models
             MotherName = motherName;
             IsHeadFamily = isHeadFamily;
             MicroregionId = microregionId;
+            SociodemographicSituationId = sociodemographicSituationId;
+            HealthConditionId = healthConditionId;
             HomeId = homeId;
         }
 
