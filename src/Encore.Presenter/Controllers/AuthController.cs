@@ -18,8 +18,8 @@ namespace Encore.Presenter.Controllers
         public async Task<ActionResult> AuthenticateUser([FromBody] AuthUserCommand command)
         {
             var response = await _mediator.Send(command);
-            if (response is null)
-                return Unauthorized(command);
+            if (!response.IsValid)
+                return Unauthorized(response);
             
             return CustomResponse(response);
         }

@@ -31,7 +31,10 @@ namespace Encore.Application.Users
             {
                 var user = await _userRepository.Include().Where(c => c.Email == request.Email).FirstOrDefaultAsync();
                 if (user is null || !_passwordHashService.VerifyPassword(request.Password, user.PasswordHash))
-                    return null;
+                {
+                    AddError("Login ou senha inválido(s)!");
+                    return Fail<AuthUserResponse>(ValidationResult);
+                }                    
 
                 var token = _tokenService.GenerateJwtToken(user);
 
