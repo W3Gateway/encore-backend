@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Persons.Handlers
 {
-    public class PersonUpdateCommandHandler : CommandHandler, IRequestHandler<PersonUpdateCommand, Response<PersonResponse>?>
+    public class PersonUpdateCommandHandler : CommandHandler, IRequestHandler<PersonUpdateListCommnad, ValidationResult>
     {
         private readonly IPersonRepository _personRepository;
         private readonly IHomeRepository _homeRepository;
@@ -36,19 +36,23 @@ namespace Encore.Application.Persons.Handlers
 
         }
 
-        public async Task<Response<PersonResponse>?> Handle(PersonUpdateCommand request, CancellationToken cancellationToken)
+        public async Task<ValidationResult> Handle(PersonUpdateListCommnad request, CancellationToken cancellationToken)
         {
             try
             {
-                (var result, var entity ) = await UpdatePerson(request, cancellationToken);
-                if (!result.IsValid)
-                    return Fail<PersonResponse>(await RollbackAsync(cancellationToken));
-                return Success(_mapper.Map<PersonResponse>(entity), result);
+                foreach (var item in request.Persons)
+                {
+                    (var result, var entity) = await UpdatePerson(item, cancellationToken);
+                    if (!result.IsValid)
+                        return await RollbackAsync(cancellationToken);
+                }
+                
+                return ValidationResult;
             }
             catch (Exception ex)
             {
                 AddError("Erro ao realizar o cadastro de Indivíduo: " + ex.Message);
-                return Fail<PersonResponse>(ValidationResult);
+                return ValidationResult;
             }
         }
 
@@ -77,36 +81,36 @@ namespace Encore.Application.Persons.Handlers
             if (!await IsValidAsync(entity))
                 return (entity.ValidationResult, entity);
 
-            entity.CopyProperties(request.Name,
-                                  request.SocialName,
-                                  request.BirthDate,
-                                  request.Nationality,
-                                  request.Sex,
-                                  request.SkinColor,
-                                  request.Document,
-                                  request.DocumentType,
-                                  request.Email,
-                                  request.ContactNumber,
-                                  request.SocialIdentification,
-                                  request.FatherName,
-                                  request.MotherName,
-                                  request.IsHeadFamily,
-                                  request.MicroregionId,
-                                  request.HomeId);
+            //entity.CopyProperties(request.Name,
+            //                      request.SocialName,
+            //                      request.BirthDate,
+            //                      request.Nationality,
+            //                      request.Sex,
+            //                      request.SkinColor,
+            //                      request.Document,
+            //                      request.DocumentType,
+            //                      request.Email,
+            //                      request.ContactNumber,
+            //                      request.SocialIdentification,
+            //                      request.FatherName,
+            //                      request.MotherName,
+            //                      request.IsHeadFamily,
+            //                      request.MicroregionId,
+            //                      request.HomeId);
 
-            var sociodemographic = await _sociodemographicSituationRepository.Include().FirstOrDefaultAsync(s => s.PersonId == entity.Id);
-            var healthCondition = await _healthConditionRepository.Include().FirstOrDefaultAsync(s => s.PersonId == entity.Id);
-            sociodemographic.CopyProperties(_mapper.Map<SociodemographicSituation>(request.SociodemographicSituation));
-            healthCondition.CopyProperties(_mapper.Map<HealthCondition>(request.HealthCondition));
+            //var sociodemographic = await _sociodemographicSituationRepository.Include().FirstOrDefaultAsync(s => s.PersonId == entity.Id);
+            //var healthCondition = await _healthConditionRepository.Include().FirstOrDefaultAsync(s => s.PersonId == entity.Id);
+            //sociodemographic.CopyProperties(_mapper.Map<SociodemographicSituation>(request.SociodemographicSituation));
+            //healthCondition.CopyProperties(_mapper.Map<HealthCondition>(request.HealthCondition));
 
-            if (!await IsValidAsync(sociodemographic))
-                return (sociodemographic.ValidationResult, entity);
+            //if (!await IsValidAsync(sociodemographic))
+            //    return (sociodemographic.ValidationResult, entity);
 
-            if (!await IsValidAsync(healthCondition))
-                return (healthCondition.ValidationResult, entity);
+            //if (!await IsValidAsync(healthCondition))
+            //    return (healthCondition.ValidationResult, entity);
 
-            await _sociodemographicSituationRepository.UpdateAsync(sociodemographic, cancellationToken);
-            await _healthConditionRepository.UpdateAsync(healthCondition, cancellationToken);
+            //await _sociodemographicSituationRepository.UpdateAsync(sociodemographic, cancellationToken);
+            //await _healthConditionRepository.UpdateAsync(healthCondition, cancellationToken);
             entity = await _personRepository.UpdateAsync(entity, cancellationToken);
             return (await CommitAsync(cancellationToken), entity);
         }

@@ -106,10 +106,6 @@ namespace Encore.Infra.Data.Mapping
             builder.Property(h => h.StreetSituation)
                .HasColumnType("bit")
                .IsRequired();
-
-            builder.HasOne(a => a.Person)
-                .WithMany(p => p.HealthConditions)
-                .HasForeignKey(a => a.PersonId);
         }
     }
 }

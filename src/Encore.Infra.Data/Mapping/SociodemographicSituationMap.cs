@@ -59,11 +59,6 @@ namespace Encore.Infra.Data.Mapping
             builder.Property(h => h.Disability)
                 .HasColumnType("varchar(100)")
                 .IsRequired();
-
-            builder.HasOne(a => a.Person)
-                .WithMany(p => p.SociodemographicSituations)
-                .HasForeignKey(a => a.PersonId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

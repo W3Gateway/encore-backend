@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Persons.Handlers
 {
-    public class PersonCreateCommandHandler : CommandHandler, IRequestHandler<PersonCreateCommand, Response<PersonResponse>?>
+    public class PersonCreateCommandHandler : CommandHandler, IRequestHandler<PersonCreateListCommand, Response<List<PersonListResponse>>?>
     {
         private readonly IPersonRepository _personRepository;
         private readonly IHomeRepository _homeRepository;
@@ -36,23 +36,28 @@ namespace Encore.Application.Persons.Handlers
 
         }
 
-        public async Task<Response<PersonResponse>?> Handle(PersonCreateCommand request, CancellationToken cancellationToken)
+        public async Task<Response<List<PersonListResponse>>?> Handle(PersonCreateListCommand request, CancellationToken cancellationToken)
         {
             await BeginTransactionAsync(cancellationToken);
             _executeTransaction = request.ExecuteTransaction;
             try
             {
-                (var result, var entity) = await CreatePerson(request, cancellationToken);
-                if (!result.IsValid)
-                    return Fail<PersonResponse>(await RollbackAsync(cancellationToken));
+                var persons = new List<PersonListResponse>();
+                foreach (var item in request.Persons)
+                {
+                    (var result, var entity) = await CreatePerson(item, cancellationToken);
+                    if (!result.IsValid)
+                        return Fail<List<PersonListResponse>>(await RollbackAsync(cancellationToken));
 
-                await CommitTransactionAsync(cancellationToken);
-                return Success(_mapper.Map<PersonResponse>(entity), result);
+                    await CommitTransactionAsync(cancellationToken);
+                    persons.Add(new PersonListResponse(item.AppId, entity.Id));
+                }
+                return Success(persons);
             }
             catch (Exception ex)
             {
                 AddError("Erro ao realizar o cadastro de Indivíduo: " + ex.Message);
-                return Fail<PersonResponse>(ValidationResult);
+                return Fail<List<PersonListResponse>>(ValidationResult);
             }
         }
 
@@ -84,11 +89,11 @@ namespace Encore.Application.Persons.Handlers
             if (!await IsValidAsync(healthCondition))
                 return (healthCondition.ValidationResult, entity);
 
+            sociodemographic = await _sociodemographicSituationRepository.CreateAsync(sociodemographic, cancellationToken);
+            healthCondition = await _healthConditionRepository.CreateAsync(healthCondition, cancellationToken);
+            entity.HealthConditionId = sociodemographic.Id;
+            entity.SociodemographicSituationId = healthCondition.Id;
             entity = await _personRepository.CreateAsync(entity, cancellationToken);
-            sociodemographic.AddPerson(entity.Id);
-            await _sociodemographicSituationRepository.CreateAsync(sociodemographic, cancellationToken);
-            healthCondition.AddPerson(entity.Id);
-            await _healthConditionRepository.CreateAsync(healthCondition, cancellationToken);
 
             return (await CommitAsync(cancellationToken), entity);
         }

@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Homes.Handlers
 {
-    public class HomeCreateCommandHandler : CommandHandler, IRequestHandler<HomeCreateCommand, Response<HomeResponse>>
+    public class HomeCreateListCommandHandler : CommandHandler, IRequestHandler<HomeCreateListCommand, Response<List<HomeListResponse>>>
     {
         private readonly IMicroregionRepository _microregionRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly IHomeRepository _homeRepository;
         private readonly IMapper _mapper;
 
-        public HomeCreateCommandHandler(IMicroregionRepository microregionRepository,
+        public HomeCreateListCommandHandler(IMicroregionRepository microregionRepository,
                                         IAddressRepository addressRepository,
                                         IHomeRepository homeRepository,
                                         IMapper mapper) : base(homeRepository.UnitOfWork)
@@ -30,25 +30,31 @@ namespace Encore.Application.Homes.Handlers
 
         }
 
-        public async Task<Response<HomeResponse>> Handle(HomeCreateCommand request, CancellationToken cancellationToken)
+        public async Task<Response<List<HomeListResponse>>> Handle(HomeCreateListCommand request, CancellationToken cancellationToken)
         {
             await BeginTransactionAsync(cancellationToken);
             _executeTransaction = request.ExecuteTransaction;
             try
             {
-                var entity = _mapper.Map<Home>(request);
-                var result = await CreateHome(request, entity, cancellationToken);
+                var homes = new List<HomeListResponse>();
+                foreach (var item in request.Homes)
+                {
+                    var entity = _mapper.Map<Home>(item);
+                    var result = await CreateHome(item, entity, cancellationToken);
                 
-                if (!result.IsValid)
-                    return Fail<HomeResponse>(await RollbackAsync(cancellationToken));
-                
+                    if (!result.IsValid)
+                        return Fail<List<HomeListResponse>>(await RollbackAsync(cancellationToken));
+                   
+                    await CommitAsync();
+                    homes.Add(new HomeListResponse(item.AppId, entity.Id));
+                }
                 await CommitTransactionAsync(cancellationToken);
-                return Success(_mapper.Map<HomeResponse>(entity));
+                return Success(homes);
             }
             catch (Exception ex)
             {
                 AddError("Erro ao realizar o cadastro de domicílio: " + ex.Message);
-                return Fail<HomeResponse>(ValidationResult);
+                return Fail<List<HomeListResponse>>(ValidationResult);
             }
         }
 
@@ -77,7 +83,7 @@ namespace Encore.Application.Homes.Handlers
 
         private async Task<Address> CreateAddress(HomeCreateCommand request, CancellationToken cancellationToken)
         {
-            var address = _mapper.Map<Address>(request);
+            var address = _mapper.Map<Address>(request.Address);
             if (!await address.IsValidAsync())
                 AddError(address.ValidationResult.Errors);
 

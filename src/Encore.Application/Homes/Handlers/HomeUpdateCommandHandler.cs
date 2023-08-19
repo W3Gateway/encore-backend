@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Encore.Application.Homes.Commands;
-using Encore.Application.Homes.Responses;
 using Encore.Domain.Core.Messaging;
-using Encore.Domain.Core.Responses;
 using Encore.Domain.Interfaces.Data;
 using Encore.Domain.Models;
 using FluentValidation.Results;
@@ -10,7 +8,7 @@ using MediatR;
 
 namespace Encore.Application.Homes.Handlers
 {
-    public class HomeUpdateCommandHandler : CommandHandler, IRequestHandler<HomeUpdateCommand, Response<HomeResponse>>
+    public class HomeUpdateCommandHandler : CommandHandler, IRequestHandler<HomeUpdateListCommand, ValidationResult>
     {
         private readonly IAddressRepository _addressRepository;
         private readonly IHomeRepository _homeRepository;
@@ -26,30 +24,32 @@ namespace Encore.Application.Homes.Handlers
 
         }
 
-        public async Task<Response<HomeResponse>> Handle(HomeUpdateCommand request, CancellationToken cancellationToken)
+        public async Task<ValidationResult> Handle(HomeUpdateListCommand request, CancellationToken cancellationToken)
         {
             await BeginTransactionAsync(cancellationToken);
             _executeTransaction = request.ExecuteTransaction;
             try
             {
-                var entity = await _homeRepository.GetByIdAsync(request.Id, cancellationToken);
-                if (entity is null)
+                foreach (var item in request.Homes)
                 {
-                    AddError("Não foi encontrado o domicílio informado na base de dados");
-                    return Fail<HomeResponse>(ValidationResult);
-                }
+                    var entity = await _homeRepository.GetByIdAsync(item.Id, cancellationToken);
+                    if (entity is null)
+                    {
+                        AddError($"Não foi encontrado o domicílio informado na base de dados para o endereço: {item.Address.Street} - {item.Address.Number}");
+                        return ValidationResult;
+                    }
 
-                var result = await HomeUpdate(entity, request, cancellationToken);
-                if (!result.IsValid)
-                    return Fail<HomeResponse>(await RollbackAsync(cancellationToken));
-                
+                    var result = await HomeUpdate(entity, item, cancellationToken);
+                    if (!result.IsValid)
+                        return await RollbackAsync(cancellationToken);
+                }
                 await CommitTransactionAsync();
-                return Success(_mapper.Map<HomeResponse>(entity));
+                return ValidationResult;
             }
             catch (Exception ex)
             {
                 AddError("Erro ao realizar o cadastro de domicílio: " + ex.Message);
-                return Fail<HomeResponse>(ValidationResult);
+                return ValidationResult;
             }
         }
 

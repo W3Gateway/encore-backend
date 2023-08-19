@@ -13,15 +13,6 @@ namespace Encore.Presenter.Controllers
 
         public PersonController(IMediator mediator) => _mediator = mediator;
 
-        [HttpPost("create")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create([FromBody] PersonCreateCommand command)
-        {
-            var response = await _mediator.Send(command);
-            return CustomResponse(response);
-        }
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -41,14 +32,23 @@ namespace Encore.Presenter.Controllers
             return CustomResponse(response);
         }
 
-        [HttpPatch("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Patch([FromBody] PersonUpdateCommand command)
         {
             var response = await _mediator.Send(command);
             return CustomResponse(response);
         }
+
+        [HttpPost("create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Create([FromBody] PersonCreateCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return CustomResponse(response);
+        }
+
     }
 }

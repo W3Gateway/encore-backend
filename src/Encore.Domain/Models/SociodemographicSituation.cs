@@ -20,10 +20,9 @@ namespace Encore.Domain.Models
         public string GenderIdentity { get; set; }
         public bool HasDisability { get; set; }
         public string? Disability { get; set; }
-        public Guid PersonId { get; set; }
 
         #region Mapping 
-        public Person Person { get; set; }
+        public IEnumerable<Person> Persons { get; set; }
         #endregion
 
 
@@ -34,8 +33,6 @@ namespace Encore.Domain.Models
             ValidationResult = await ValidateAsync(this);
             return ValidationResult.IsValid;
         }
-
-        public void AddPerson(Guid personId) => PersonId = personId;
 
         public void CopyProperties(SociodemographicSituation sociodemographic)
         {

@@ -64,11 +64,25 @@ namespace Encore.Infra.Data.Mapping
 
             builder.HasOne(a => a.Microregion)
                 .WithMany(u => u.Persons)
-                .HasForeignKey(a => a.MicroregionId);
+                .HasForeignKey(a => a.MicroregionId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(p => p.Home)
                 .WithMany(h => h.Persons)
-                .HasForeignKey(p => p.HomeId);
+                .HasForeignKey(p => p.HomeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(p => p.SociodemographicSituation)
+                .WithMany(a => a.Persons)
+                .HasForeignKey(h => h.SociodemographicSituationId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+
+            builder.HasOne(p => p.HealthCondition)
+                .WithMany(a => a.Persons)
+                .HasForeignKey(h => h.HealthConditionId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
         }
     }
 }

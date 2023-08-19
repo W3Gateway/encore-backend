@@ -13,15 +13,6 @@ namespace Encore.Presenter.Controllers
 
         public HomeController(IMediator mediator) => _mediator = mediator;
 
-        [HttpPost("create")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Create([FromBody] HomeCreateCommand command)
-        {
-            var response = await _mediator.Send(command);
-            return CustomResponse(response);
-        }
-
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -41,13 +32,20 @@ namespace Encore.Presenter.Controllers
             return CustomResponse(response);
         }
 
-        [HttpPatch("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Patch(Guid id,[FromBody] HomeUpdateCommand command)
+        public async Task<IActionResult> Patch([FromBody] HomeUpdateListCommand command)
         {
-            command.Id = id;
+            var response = await _mediator.Send(command);
+            return CustomResponse(response);
+        }
+
+        [HttpPost("create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Create([FromBody] HomeCreateListCommand command)
+        {
             var response = await _mediator.Send(command);
             return CustomResponse(response);
         }
