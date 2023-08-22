@@ -20,6 +20,7 @@ namespace Encore.Application.Homes.Commands
         public string Animals { get; set; }
         public int AmountAnimals { get; set; }
         public string ContactNumber { get; set; }
+        public string HomeContact { get; set; }
         public string? MedicalRecordNumber { get; set; }
         public decimal HouseholdIncome { get; set; }
         public int NumberMembers { get; set; }

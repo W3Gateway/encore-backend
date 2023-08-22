@@ -8,6 +8,7 @@ namespace Encore.Domain.Models
     {
         public string TypeProperty { get; private set; }
         public string ContactNumber { get; private set; }
+        public string HomeContact { get; set; }
         public string? MedicalRecordNumber { get; set; }
         public decimal HouseholdIncome { get; set; }
         public int NumberMembers { get; private set; }

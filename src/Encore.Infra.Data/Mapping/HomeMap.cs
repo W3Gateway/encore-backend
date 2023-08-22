@@ -14,6 +14,9 @@ namespace Encore.Infra.Data.Mapping
             builder.Property(h => h.ContactNumber)
                 .HasColumnType("varchar(15)");
 
+            builder.Property(h => h.HomeContact)
+                .HasColumnType("varchar(15)");
+
             builder.Property(h => h.MedicalRecordNumber)
                 .HasColumnType("varchar(50)");
 

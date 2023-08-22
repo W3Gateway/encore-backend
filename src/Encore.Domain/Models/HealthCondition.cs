@@ -18,10 +18,11 @@ namespace Encore.Domain.Models
         public string RespiratoryDisease { get; set; }
         public bool HasTuberculosis { get; set; }
         public bool HadKidneyProblem { get; set; }
+        public string KidneyProblem { get; set; }
         public bool HasLeprosy { get; set; }
         public bool HadCancer { get; set; }
-        public bool ReacentlyHospitalization { get; set; }
-        public string CauseHospotalization { get; set; }
+        public bool RecentlyHospitalization { get; set; }
+        public string CauseHospitalization { get; set; }
         public bool DiagnoseMentalHealthProblem { get; set; }
         public bool IsBedridden { get; set; }
         public bool IsDomiciled { get; set; }
@@ -52,8 +53,8 @@ namespace Encore.Domain.Models
             HasLeprosy = healthCondition.HasLeprosy;
             HasTuberculosis = healthCondition.HasTuberculosis;
             HadCancer = healthCondition.HadCancer;
-            ReacentlyHospitalization = healthCondition.ReacentlyHospitalization;
-            CauseHospotalization = healthCondition.CauseHospotalization;
+            RecentlyHospitalization = healthCondition.RecentlyHospitalization;
+            CauseHospitalization = healthCondition.CauseHospitalization;
             DiagnoseMentalHealthProblem = healthCondition.DiagnoseMentalHealthProblem;
             IsBedridden = healthCondition.IsBedridden;
             IsDomiciled = healthCondition.IsDomiciled;

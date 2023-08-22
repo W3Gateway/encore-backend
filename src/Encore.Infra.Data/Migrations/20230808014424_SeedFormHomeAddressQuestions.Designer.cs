@@ -4,6 +4,7 @@ using Encore.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Encore.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230808014424_SeedFormHomeAddressQuestions")]
+    partial class SeedFormHomeAddressQuestions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,20 +204,17 @@ namespace Encore.Infra.Data.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
 
-                    b.Property<string>("CauseHospitalization")
+                    b.Property<string>("CauseHospotalization")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
                     b.Property<bool>("DiagnoseMentalHealthProblem")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HadCancer")
+                    b.Property<bool>("HadCanser")
                         .HasColumnType("bit");
 
                     b.Property<bool>("HadHeartAttack")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HadKidneyProblem")
                         .HasColumnType("bit");
 
                     b.Property<bool>("HadStroke")
@@ -235,15 +235,9 @@ namespace Encore.Infra.Data.Migrations
                     b.Property<bool>("HasRespiratoryDisease")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasTuberculosis")
-                        .HasColumnType("bit");
-
                     b.Property<string>("HeartDisease")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
-
-                    b.Property<bool>("IntegrativePractices")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsBedridden")
                         .HasColumnType("bit");
@@ -253,10 +247,6 @@ namespace Encore.Infra.Data.Migrations
 
                     b.Property<bool>("IsSmoker")
                         .HasColumnType("bit");
-
-                    b.Property<string>("KidneyProblem")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("MedicinalPlants")
                         .IsRequired()
@@ -269,7 +259,10 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(250)");
 
-                    b.Property<bool>("RecentlyHospitalization")
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("ReacentlyHospitalization")
                         .HasColumnType("bit");
 
                     b.Property<string>("RespiratoryDisease")
@@ -293,6 +286,8 @@ namespace Encore.Infra.Data.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("HealthCondition", (string)null);
                 });
@@ -329,10 +324,6 @@ namespace Encore.Infra.Data.Migrations
                     b.Property<string>("GarbageDestination")
                         .IsRequired()
                         .HasColumnType("varchar(60)");
-
-                    b.Property<string>("HomeContact")
-                        .IsRequired()
-                        .HasColumnType("varchar(15)");
 
                     b.Property<decimal>("HouseholdIncome")
                         .HasColumnType("decimal(10,2)");
@@ -522,9 +513,6 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<Guid>("HealthConditionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("HomeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -565,21 +553,14 @@ namespace Encore.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<Guid>("SociodemographicSituationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Document")
                         .IsUnique();
 
-                    b.HasIndex("HealthConditionId");
-
                     b.HasIndex("HomeId");
 
                     b.HasIndex("MicroregionId");
-
-                    b.HasIndex("SociodemographicSituationId");
 
                     b.ToTable("Person", (string)null);
                 });
@@ -717,6 +698,9 @@ namespace Encore.Infra.Data.Migrations
                     b.Property<string>("Occupation")
                         .HasColumnType("varchar(100)");
 
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("SexualOrientation")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
@@ -725,6 +709,8 @@ namespace Encore.Infra.Data.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("SociodemographicSituation", (string)null);
                 });
@@ -883,6 +869,17 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("Address");
                 });
 
+            modelBuilder.Entity("Encore.Domain.Models.HealthCondition", b =>
+                {
+                    b.HasOne("Encore.Domain.Models.Person", "Person")
+                        .WithMany("HealthConditions")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("Encore.Domain.Models.Home", b =>
                 {
                     b.HasOne("Encore.Domain.Models.Address", "Address")
@@ -931,37 +928,21 @@ namespace Encore.Infra.Data.Migrations
 
             modelBuilder.Entity("Encore.Domain.Models.Person", b =>
                 {
-                    b.HasOne("Encore.Domain.Models.HealthCondition", "HealthCondition")
-                        .WithMany("Persons")
-                        .HasForeignKey("HealthConditionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Encore.Domain.Models.Home", "Home")
                         .WithMany("Persons")
                         .HasForeignKey("HomeId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Encore.Domain.Models.Microregion", "Microregion")
                         .WithMany("Persons")
                         .HasForeignKey("MicroregionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Encore.Domain.Models.SociodemographicSituation", "SociodemographicSituation")
-                        .WithMany("Persons")
-                        .HasForeignKey("SociodemographicSituationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("HealthCondition");
 
                     b.Navigation("Home");
 
                     b.Navigation("Microregion");
-
-                    b.Navigation("SociodemographicSituation");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.Question", b =>
@@ -991,6 +972,17 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("Question");
 
                     b.Navigation("Visit");
+                });
+
+            modelBuilder.Entity("Encore.Domain.Models.SociodemographicSituation", b =>
+                {
+                    b.HasOne("Encore.Domain.Models.Person", "Person")
+                        .WithMany("SociodemographicSituations")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.UserPermission", b =>
@@ -1071,11 +1063,6 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("Microregions");
                 });
 
-            modelBuilder.Entity("Encore.Domain.Models.HealthCondition", b =>
-                {
-                    b.Navigation("Persons");
-                });
-
             modelBuilder.Entity("Encore.Domain.Models.Home", b =>
                 {
                     b.Navigation("Persons");
@@ -1101,6 +1088,10 @@ namespace Encore.Infra.Data.Migrations
 
             modelBuilder.Entity("Encore.Domain.Models.Person", b =>
                 {
+                    b.Navigation("HealthConditions");
+
+                    b.Navigation("SociodemographicSituations");
+
                     b.Navigation("Visits");
                 });
 
@@ -1111,11 +1102,6 @@ namespace Encore.Infra.Data.Migrations
                     b.Navigation("OtherQuestions");
 
                     b.Navigation("OtherSubQuestions");
-                });
-
-            modelBuilder.Entity("Encore.Domain.Models.SociodemographicSituation", b =>
-                {
-                    b.Navigation("Persons");
                 });
 
             modelBuilder.Entity("Encore.Domain.Models.User", b =>

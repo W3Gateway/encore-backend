@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Visits.Handlers
 {
-    public class VisitCreateCommandHandler : CommandHandler, IRequestHandler<VisitCreateCommand, Response<VisitResponse>>
+    public class VisitCreateCommandHandler : CommandHandler, IRequestHandler<VisitCreateListCommand, Response<List<VisitListResponse>>>
     {
         private readonly IAgentRepository _agentRepository;
         private readonly IMicroregionRepository _microregionRepository;
@@ -38,54 +38,59 @@ namespace Encore.Application.Visits.Handlers
 
         }
 
-        public async Task<Response<VisitResponse>> Handle(VisitCreateCommand request, CancellationToken cancellationToken)
+        public async Task<Response<List<VisitListResponse>>> Handle(VisitCreateListCommand request, CancellationToken cancellationToken)
         {
+            await BeginTransactionAsync(cancellationToken);
+            _executeTransaction = request.ExecuteTransaction;
+
             try
             {
-                var beginTransaction = BeginTransactionAsync(cancellationToken);
-
-                var microregion = await _microregionRepository.Include().FirstOrDefaultAsync(c => c.Id == request.MicroregionId);
-                if (microregion is null)
+                var visits = new List<VisitListResponse>();
+                foreach (var visit in request.Visits)
                 {
-                    AddError("Não foi encontrada a microárea informado na base de dados");
-                    return Fail<VisitResponse>(ValidationResult);
-                }
+                    var microregion = await _microregionRepository.Include().FirstOrDefaultAsync(c => c.Id == visit.MicroregionId);
+                    if (microregion is null)
+                    {
+                        AddError("Não foi encontrada a microárea informado na base de dados");
+                        return Fail<List<VisitListResponse>>(ValidationResult);
+                    }
 
-                var person = await _personRepository.Include().FirstOrDefaultAsync(c => c.Id == request.PersonId);
-                if (person is null)
-                {
-                    AddError("Não foi encontrada o indivíduo informado na base de dados");
-                    return Fail<VisitResponse>(ValidationResult);
-                }
-                
-                var agent = await _agentRepository.Include().FirstOrDefaultAsync(c => c.Id == request.AgentId);
-                if (agent is null)
-                {
-                    AddError("Não foi encontrada o agente informado na base de dados");
-                    return Fail<VisitResponse>(ValidationResult);
-                }
+                    var person = await _personRepository.Include().FirstOrDefaultAsync(c => c.Id == visit.PersonId);
+                    if (person is null)
+                    {
+                        AddError("Não foi encontrada o indivíduo informado na base de dados");
+                        return Fail<List<VisitListResponse>>(ValidationResult);
+                    }
 
-                var home = await _homeRepository.Include().FirstOrDefaultAsync(c => c.Id == request.HomeId);
-                if (home is null)
-                {
-                    AddError("Não foi encontrada a microárea informado na base de dados");
-                    return Fail<VisitResponse>(ValidationResult);
+                    var agent = await _agentRepository.Include().FirstOrDefaultAsync(c => c.Id == visit.AgentId);
+                    if (agent is null)
+                    {
+                        AddError("Não foi encontrada o agente informado na base de dados");
+                        return Fail<List<VisitListResponse>>(ValidationResult);
+                    }
+
+                    var home = await _homeRepository.Include().FirstOrDefaultAsync(c => c.Id == visit.HomeId);
+                    if (home is null)
+                    {
+                        AddError("Não foi encontrada a microárea informado na base de dados");
+                        return Fail<List<VisitListResponse>>(ValidationResult);
+                    }
+
+                    var answers = _mapper.Map<IEnumerable<QuestionAnswer>>(visit.Answers);
+                    var entity = new Visit(agent.Id, person.Id, home.Id, microregion.Id, answers);
+                    if (!await IsValidAsync(entity))
+                        return Fail<List<VisitListResponse>>(ValidationResult);
+
+                    entity = await _visitRepository.CreateAsync(entity, cancellationToken);
+                    answers.Select(async a => await _questionAnswerRepository.CreateAsync(a, cancellationToken));
                 }
-
-                var answers = _mapper.Map<IEnumerable<QuestionAnswer>>(request.Answers);
-                var entity = new Visit(agent.Id, person.Id, home.Id, microregion.Id, answers);
-                if (!await IsValidAsync(entity))
-                    return Fail<VisitResponse>(ValidationResult);
-
-                entity = await _visitRepository.CreateAsync(entity, cancellationToken);
-                answers.Select(async a => await _questionAnswerRepository.CreateAsync(a, cancellationToken));
                 await CommitTransactionAsync(cancellationToken);
-                return Success(_mapper.Map<VisitResponse>(entity));
+                return Success(visits);
             }
             catch (Exception ex)
             {
                 AddError("Erro ao realizar o cadastro de domicílio: " + ex.Message);
-                return Fail<VisitResponse>(ValidationResult);
+                return Fail<List<VisitListResponse>>(ValidationResult);
             }
         }
     }
