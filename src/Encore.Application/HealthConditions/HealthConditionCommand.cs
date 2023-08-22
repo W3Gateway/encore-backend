@@ -4,6 +4,7 @@ namespace Encore.Application.HealthConditions
 {
     public class HealthConditionCommand : Command
     {
+        public Guid Id { get; set; }
         public string WeightCondition { get; set; }
         public bool IsSmoker { get; set; }
         public bool UseAlcohol { get; set; }

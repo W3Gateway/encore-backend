@@ -1,8 +1,6 @@
 ﻿using Encore.Application.HealthConditions;
-using Encore.Application.Persons.Responses;
 using Encore.Application.SociodemographicSituations;
 using Encore.Domain.Core.Messaging;
-using Encore.Domain.Core.Responses;
 using FluentValidation.Results;
 
 namespace Encore.Application.Persons.Commands

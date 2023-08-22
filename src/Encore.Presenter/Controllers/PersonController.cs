@@ -32,6 +32,7 @@ namespace Encore.Presenter.Controllers
             return CustomResponse(response);
         }
 
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesDefaultResponseType]

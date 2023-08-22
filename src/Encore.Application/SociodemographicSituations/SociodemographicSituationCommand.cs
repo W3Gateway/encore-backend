@@ -4,6 +4,7 @@ namespace Encore.Application.SociodemographicSituations
 {
     public class SociodemographicSituationCommand : Command
     {
+        public Guid Id { get; set; }
         public bool AttendSchool { get; set; }
         public string LevelEducation { get; set; }
         public string? LaborMarketSituation { get; set; }

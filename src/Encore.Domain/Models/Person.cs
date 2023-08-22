@@ -55,7 +55,7 @@ namespace Encore.Domain.Models
             HomeId = homeId;
         }
 
-        public void CopyProperties(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid sociodemographicSituationId, Guid healthConditionId, Guid homeId)
+        public void CopyProperties(string name, string socialName, DateTime birthDate, string nationality, string sex, string skinColor, string document, string documentType, string email, string? contactNumber, string socialIdentification, string fatherName, string motherName, bool isHeadFamily, Guid microregionId, Guid homeId)
         {
             Name = name;
             SocialName = socialName;
@@ -72,8 +72,6 @@ namespace Encore.Domain.Models
             MotherName = motherName;
             IsHeadFamily = isHeadFamily;
             MicroregionId = microregionId;
-            SociodemographicSituationId = sociodemographicSituationId;
-            HealthConditionId = healthConditionId;
             HomeId = homeId;
         }
 

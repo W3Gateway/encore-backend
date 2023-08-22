@@ -5,7 +5,6 @@ var MyAllowSpecificOrigins = "CorsPolicy";
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddWebApi(builder.Configuration);
 builder.Services.AddDatabase();
-builder.Services.AddSwaggerGen();
 builder.Services.AddDIConfiguration();
 builder.Services.AddMediatRApi();
 
