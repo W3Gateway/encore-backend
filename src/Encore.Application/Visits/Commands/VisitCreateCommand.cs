@@ -1,4 +1,5 @@
-﻿using Encore.Application.Visits.Responses;
+﻿using Encore.Application.Homes.Commands;
+using Encore.Application.Visits.Responses;
 using Encore.Domain.Core.Messaging;
 using Encore.Domain.Core.Responses;
 

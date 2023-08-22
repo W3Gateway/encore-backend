@@ -21,8 +21,8 @@ namespace Encore.Application.HealthConditions
         public string KidneyProblem { get; set; }
         public bool HasLeprosy { get; set; }
         public bool HadCancer { get; set; }
-        public bool ReacentlyHospitalization { get; set; }
-        public string CauseHospotalization { get; set; }
+        public bool RecentlyHospitalization { get; set; }
+        public string CauseHospitalization { get; set; }
         public bool DiagnoseMentalHealthProblem { get; set; }
         public bool IsBedridden { get; set; }
         public bool IsDomiciled { get; set; }

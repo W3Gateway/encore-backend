@@ -44,7 +44,7 @@ namespace Encore.Presenter.Controllers
         [HttpPost("create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create([FromBody] PersonCreateCommand command)
+        public async Task<IActionResult> Create([FromBody] PersonCreateListCommand command)
         {
             var response = await _mediator.Send(command);
             return CustomResponse(response);
