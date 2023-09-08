@@ -1,0 +1,25 @@
+Nome,Codigo
+Acamado,1
+Domiciliado,2
+Úlceras / Feridas (grau III ou IV),3
+Acompanhamento nutricional,4
+Uso de sonda naso-gástrica - SNG,5
+Uso de sonda naso-enteral - SNE,6
+Uso de gastrostomia,7
+Uso de colostomia,8
+Uso de cistostomia,9
+Uso de sonda vesical de demora - SVD,10
+Acompanhamento pré-operatório,11
+Acompanhamento pós-operatório,12
+Adaptação ao uso de órtese / prótese,13
+Reabilitação domiciliar,14
+Cuidados paliativos oncológico,15
+Cuidados paliativos não-oncológico,16
+Oxigenoterapia domiciliar,17
+Uso de traqueostomia,18
+Uso de aspirador de vias aéreas para higiene brônquica,19
+Suporte ventilatório não invasivo - CPAP,20
+Suporte ventilatório não invasivo - BiPAP,21
+Diálise peritonial,22
+Paracentese,23
+Medicação parenteral,24

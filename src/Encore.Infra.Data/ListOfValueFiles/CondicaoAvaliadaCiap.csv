@@ -1,0 +1,23 @@
+CIAP2relacionada,DescricaoAB,CodigoAB,Sexo
+R96,Asma,ABP009,Ambos
+A77,Dengue,ABP019,Ambos
+T91,Desnutrição,ABP008,Ambos
+T90,Diabetes,ABP006,Ambos
+R95,DPOC,ABP010,Ambos
+A78,DST,ABP020,Ambos
+A78,Hanseníase,ABP018,Ambos
+K86,Hipertensão Arterial,ABP005,Ambos
+T82,Obesidade,ABP007,Ambos
+W78,Pré-natal,ABP001,Feminino
+A98,Puericultura,ABP004,Ambos
+W18,Puerpério (até 42 dias),ABP002,Feminino
+Não possui,Rastreamento de Câncer de mama,ABP023,Ambos
+Não possui,Rastreamento de Câncer do colo do útero,ABP022,Feminino
+K22,Rastreamento de Risco cardiovascular,ABP024,Ambos
+57,Reabilitação,ABP015,Ambos
+Não possui,Saúde Mental,ABP014,Ambos
+Não possui,Saúde Sexual e Reprodutiva,ABP003,Ambos
+P17,Tabagismo,ABP011,Ambos
+A70,Tuberculose,ABP017,Ambos
+P16,Usuário de álcool,ABP012,Ambos
+P19,Usuário de outras drogas,ABP013,Ambos
