@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual
 {
-    internal class ResultadosExames
+    public class ResultadosExames
     {
         [Required(ErrorMessage = "Campo Exame é obrigatório")]
         public string Exame { get; set; }

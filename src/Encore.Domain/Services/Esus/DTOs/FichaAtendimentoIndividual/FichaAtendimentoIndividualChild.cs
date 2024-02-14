@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual
 {
-    internal class FichaAtendimentoIndividualChild
+    public class FichaAtendimentoIndividualChild
     {
         [StringLength(30, ErrorMessage = "Fora do limite de caracteres de 0 a 30", MinimumLength = 0)]
         public string NumeroProntuario { get; set; }

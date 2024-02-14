@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.Cabecalho
 {
-    internal class UnicaLotacaoHeader
+    public class UnicaLotacaoHeader
     {
         [Required]
         [StringLength(15, ErrorMessage = "Tamanho de campo é de 15 caracteres", MinimumLength = 15)]

@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.CamadaTransportesDados
 {
-    internal class DadoInstalacao
+    public class DadoInstalacao
     {
         /// <summary>
         /// Identifica o software que gerou o dado (pec/cds, cdsOff ou software de terceiros)

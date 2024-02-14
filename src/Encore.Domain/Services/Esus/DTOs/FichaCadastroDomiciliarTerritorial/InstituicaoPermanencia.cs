@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaCadastroDomiciliarTerritorial
 {
-    internal class InstituicaoPermanencia
+    public class InstituicaoPermanencia
     {
         [StringLength(100, ErrorMessage = "Fora do limite de caracteres de 0 a 100", MinimumLength = 0)]
         public string NomeInstituicaoPermanencia { get; set; }

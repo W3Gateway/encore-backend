@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoDomiciliar
 {
-    internal class FichaAtendimentoDomiciliarChild
+    public class FichaAtendimentoDomiciliarChild
     {
         [Required(ErrorMessage = "Campo Turno é obrigatório")]
         public long Turno { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaCadastroDomiciliarTerritorial
 {
-    internal class EnderecoLocalPermanencia
+    public class EnderecoLocalPermanencia
     {
         [Required]
         [StringLength(72, ErrorMessage = "Fora do limite de caracteres de 0 a 72", MinimumLength = 0)]

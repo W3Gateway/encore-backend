@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaCadastroDomiciliarTerritorial
 {
-    internal class CadastroDomiciliar
+    public class CadastroDomiciliar
     {
         [MaxItems(4, ErrorMessage = "Excedeu limite da lista")]
         public List<long> AnimaisNoDomicilio { get; set; }
