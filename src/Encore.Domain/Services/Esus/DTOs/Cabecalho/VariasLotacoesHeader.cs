@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.Cabecalho
 {
-    internal class VariasLotacoesHeader
+    public class VariasLotacoesHeader
     {
         [Required]
         public LotacaoHeader LotacaoFormPrincipal { get; set; }

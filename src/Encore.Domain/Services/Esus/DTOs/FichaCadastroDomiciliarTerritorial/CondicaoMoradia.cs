@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaCadastroDomiciliarTerritorial
 {
-    internal class CondicaoMoradia
+    public class CondicaoMoradia
     {
         public long AbastecimentoAgua { get; set; }
 

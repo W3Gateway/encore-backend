@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.CamadaTransportesDados
 {
-    internal class DadoTransporte
+    public class DadoTransporte
     {
         [Required]
         [StringLength(44, ErrorMessage = "Fora do limite de caracteres de 36 a 44", MinimumLength = 36)]

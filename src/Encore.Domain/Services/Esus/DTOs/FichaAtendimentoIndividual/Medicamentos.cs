@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual
 {
-    internal class Medicamentos
+    public class Medicamentos
     {
         [StringLength(20, ErrorMessage = "Excedeu limite de caracteres")]
         public string CodigoCatmat { get; set; }

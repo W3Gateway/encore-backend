@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaCadastroDomiciliarTerritorial
 {
-    internal class FamiliaRow
+    public class FamiliaRow
     {
         public long DataNascimentoResponsavel { get; set; }
 

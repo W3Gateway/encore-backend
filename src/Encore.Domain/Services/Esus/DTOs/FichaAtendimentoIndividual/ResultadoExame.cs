@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual
 {
-    internal class ResultadoExame
+    public class ResultadoExame
     {
         [Required(ErrorMessage = "Campo TipoResultado é obrigatório")]
         public int TipoResultado { get; set; }

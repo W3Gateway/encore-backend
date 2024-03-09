@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual
 {
-    internal class ProblemaCondicaoAvaliacaoAI
+    public class ProblemaCondicaoAvaliacaoAI
     {
         [MaxItems(22, ErrorMessage = "Excedeu limite da lista")]
         public List<string> Ciaps { get; set; }

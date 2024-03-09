@@ -2,7 +2,7 @@
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual
 {
-    internal class Encaminhamentos
+    public class Encaminhamentos
     {
         [Required(ErrorMessage = "Campo Especialidade é obrigatório")]
         public int Especialidade { get; set; }

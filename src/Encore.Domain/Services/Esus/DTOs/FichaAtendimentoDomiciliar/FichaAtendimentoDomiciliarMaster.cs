@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoDomiciliar
 {
-    internal class FichaAtendimentoDomiciliarMaster
+    public class FichaAtendimentoDomiciliarMaster
     {
         [Required(ErrorMessage = "O campo UuidFicha é obrigatório")]
         [StringLength(44, ErrorMessage = "Fora do limite de caracteres de 36 a 44", MinimumLength = 36)]

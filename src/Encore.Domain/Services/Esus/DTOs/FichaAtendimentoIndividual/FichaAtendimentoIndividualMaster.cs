@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual
 {
-    internal class FichaAtendimentoIndividualMaster
+    public class FichaAtendimentoIndividualMaster
     {
         [Required(ErrorMessage = "Campo HeaderTransport é obrigatório")]
         public VariasLotacoesHeader HeaderTransport { get; set; }
