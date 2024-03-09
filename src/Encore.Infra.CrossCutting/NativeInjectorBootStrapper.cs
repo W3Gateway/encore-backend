@@ -1,5 +1,4 @@
-﻿using Encore.Domain.Core.Data;
-using Encore.Domain.Interfaces.CrossCutting;
+﻿using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
 using Encore.Infra.CrossCutting.Mapper;
 using Encore.Infra.CrossCutting.Services;
@@ -46,7 +45,7 @@ namespace Encore.Infra.CrossCutting
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<ISociodemographicSituationRepository, SociodemographicSituationRepository>();
             services.AddScoped<IHealthConditionRepository, HealthConditionRepository>();
-            services.AddScoped<IUnitOfWork, ApplicationContext>();
+            services.AddScoped<ApplicationContext>();
         }
     }
 }
