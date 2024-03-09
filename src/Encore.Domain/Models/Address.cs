@@ -37,7 +37,7 @@ namespace Encore.Domain.Models
         {
             PostalCode = address.PostalCode;
             State = address.State;
-            City =  address.City;
+            City = address.City;
             Neighborhood = address.Neighborhood;
             Street = address.Street;
             StreetType = address.StreetType;
