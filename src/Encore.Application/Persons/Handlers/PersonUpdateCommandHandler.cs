@@ -54,7 +54,7 @@ namespace Encore.Application.Persons.Handlers
             }
         }
 
-        private async Task<ValidationResult > UpdatePerson(PersonUpdateCommand request, CancellationToken cancellationToken)
+        private async Task<ValidationResult> UpdatePerson(PersonUpdateCommand request, CancellationToken cancellationToken)
         {
             var entity = await _personRepository.GetByIdAsync(request.Id);
             if (entity is null)
