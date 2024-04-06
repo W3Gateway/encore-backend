@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Encore.Infra.Data\Encore.Infra.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Zip\Commands\" />
+  </ItemGroup>
+
 </Project>

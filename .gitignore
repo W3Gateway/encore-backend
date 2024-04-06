@@ -344,3 +344,7 @@ coverage.opencover.xml
 /PVDigitalAPITests/Properties/launchSettings.json
 /PVDigitalAPI/upload/planilha
 /PVDigitalAPI/upload/recomendacao
+
+#Arquivos criados
+*/XmlFiles/*
+*/xmlzip/*

@@ -1,6 +1,8 @@
-﻿using Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual;
+﻿using Encore.Domain.Core.Extensions;
+using Encore.Domain.Interfaces.Data;
+using Encore.Domain.Models;
+using Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual;
 using System.IO.Compression;
-using System.Text;
 using System.Xml.Serialization;
 using Thrift.Protocols;
 using Thrift.Transports.Client;
@@ -9,14 +11,20 @@ namespace Encore.Domain.Services.ESUS
 {
     public class EsusService
     {
+        private IHomeRepository _homeRepository;
+
+        public EsusService(IHomeRepository homeRepository) {
+            _homeRepository = homeRepository;
+        }
+
         public void gerarXMl()
         {
             var fichaAtendimentoIndividual = new FichaAtendimentoIndividualChild();
             fichaAtendimentoIndividual.AtencaoDomiciliarModalidade = 123;
             fichaAtendimentoIndividual.LocalDeAtendimento = 123;
             fichaAtendimentoIndividual.TipoAtendimento = 123;
-            fichaAtendimentoIndividual.CpfCidadao = "12345678901";
-            fichaAtendimentoIndividual.DataNascimento = DateTime.Now.AddYears(-10).Ticks;
+            fichaAtendimentoIndividual.CpfCidadao = "75581398901";
+            fichaAtendimentoIndividual.DataNascimento = DateTime.Now.AddYears(-10).ToEpoch();
             fichaAtendimentoIndividual.Sexo = 1;
             fichaAtendimentoIndividual.Turno = 1;
             fichaAtendimentoIndividual.ProblemaCondicaoAvaliada = new ProblemaCondicaoAvaliacaoAI()
@@ -25,7 +33,7 @@ namespace Encore.Domain.Services.ESUS
                 OutroCiap1 = "teste4"
             };
             fichaAtendimentoIndividual.Condutas = new List<long>() { 1, 2, 3 };
-            fichaAtendimentoIndividual.DataHoraInicialAtendimento = DateTime.Now.Ticks;
+            fichaAtendimentoIndividual.DataHoraInicialAtendimento = DateTime.Now.ToEpoch();
 
             var serializer = new XmlSerializer(typeof(FichaAtendimentoIndividualChild));
 
@@ -33,57 +41,53 @@ namespace Encore.Domain.Services.ESUS
             serializer.Serialize(writer, fichaAtendimentoIndividual);
         }
 
-
         public void GerarXMLXSD()
         {
             var teste = new CadastroDomiciliarThrift();
 
+            teste.StAnimaisNoDomicilio = true;
             teste.AnimaisNoDomicilio = new List<long>
             {
-                123, 1235, 1234
+                128, 129, 130
             };
 
             teste.CondicaoMoradia = condicaoMoradia();
+
             teste.EnderecoLocalPermanencia = MenderecoLocalPermanencia();
-            
+
+            teste.Familias = MFamiliasRow();
+
+            teste.InstituicaoPermanencia = MInstituicaoPermanencia();
+
             teste.Latitude = 123;
 
             teste.Longitude = 123;
 
-            teste.Familias = MFamiliasRow();
-
-            teste.FichaAtualizada = true;
+            teste.FichaAtualizada = false;
 
             teste.QuantosAnimaisNoDomicilio = "";
-            teste.StAnimaisNoDomicilio = true;
 
-            teste.StatusTermoRecusa = true;
+            teste.StatusTermoRecusa = false;
 
-            teste.TpCdsOrigem = 1;
+            teste.TpCdsOrigem = 3;
 
-            teste.Uuid = Guid.NewGuid().ToString();
-            teste.UuidFichaOriginadora = "";
+            teste.Uuid = "7558139-" + Guid.NewGuid().ToString();
+            teste.UuidFichaOriginadora = teste.Uuid;
             teste.TipoDeImovel = 1;
 
-
-            teste.InstituicaoPermanencia = MInstituicaoPermanencia();
-
             teste.HeaderTransport = new UnicaLotacaoHeaderThrift();
-                teste.HeaderTransport.DataAtendimento = DateTime.Now.Ticks;
-                teste.HeaderTransport.ProfissionalCNS = "profissionalCNS";
-                teste.HeaderTransport.Cnes = "cnes";
-                teste.HeaderTransport.CboCodigo_2002 = "testecbo";
-                teste.HeaderTransport.CodigoIbgeMunicipio = "123456";
-                teste.HeaderTransport.Ine = "TesteINE";
-
-
-            teste.EnderecoLocalPermanencia = new EnderecoLocalPermanenciaThrift();
+            teste.HeaderTransport.DataAtendimento = DateTime.Now.ToEpoch();
+            teste.HeaderTransport.ProfissionalCNS = "728019458970002";
+            teste.HeaderTransport.Cnes = "7558139";
+            //teste.HeaderTransport.Ine = "TesteINE"; não obrigatório
+            teste.HeaderTransport.CboCodigo_2002 = "515105";
+            teste.HeaderTransport.CodigoIbgeMunicipio = "3132701";
 
             try
             {
                 var teste2 = MontarProtocolo(teste);
 
-                SalvarObjetoComoXml(teste2.Result, "XmlFiles/teste.xml");
+                SalvarObjetoComoBinario(teste2.Result, "XmlFiles/teste.esus");
                 ZiparPasta("XmlFiles", "xmlzip");
             }
             catch (Exception ex)
@@ -92,7 +96,8 @@ namespace Encore.Domain.Services.ESUS
             }
         }
 
-        private async Task<DadoTransporteThrift> MontarProtocolo(CadastroDomiciliarThrift teste)
+       // private async Task<byte[]> MontarProtocolo(CadastroIndividualThrift teste)
+        private async Task<byte[]> MontarProtocolo(CadastroDomiciliarThrift teste)
         {
             TMemoryBufferClientTransport transport = new TMemoryBufferClientTransport();
             TBinaryProtocol protocol = new TBinaryProtocol(transport);
@@ -107,7 +112,7 @@ namespace Encore.Domain.Services.ESUS
                 ContraChave = "testeContraChave",
                 CpfOuCnpj = "14082572708",
                 Email = "teste@teste.com",
-                Fone = "123456789",
+                Fone = "755813989",
                 NomeBancoDados = "DBENCORE",
                 NomeOuRazaoSocial = "Paulo Cedro",
                 UuidInstalacao = Guid.NewGuid().ToString(),
@@ -116,54 +121,91 @@ namespace Encore.Domain.Services.ESUS
 
             DadoTransporteThrift dadoTransporteThrift = new DadoTransporteThrift()
             {
-                CnesDadoSerializado = "1234567",
-                CodIbge = "3138203",
+                CnesDadoSerializado = "7558139",
+                CodIbge = "3132701",
                 DadoSerializado = bytes,
                 Originadora = dado,
                 Remetente = dado,
                 TipoDadoSerializado = 3,
-                UuidDadoSerializado = Guid.NewGuid().ToString(),
+                UuidDadoSerializado = "7558139-" + Guid.NewGuid().ToString(),
                 Versao = new VersaoThrift()
                 {
-                    Major = 5,
-                    Revision = 3,
-                    Minor = 0
+                    Major = 3,
+                    Minor = 2,
+                    Revision = 3
                 }
             };
 
-            UnicaLotacaoHeaderThrift unicaLotacaoHeaderThrift = new UnicaLotacaoHeaderThrift()
-            {
-                CboCodigo_2002 = "",
-                Cnes = "",
-                CodigoIbgeMunicipio = "",
-                DataAtendimento = DateTime.Now.Ticks,
-                Ine = "",
-                ProfissionalCNS = ""
-            };
+            TMemoryBufferClientTransport transport2 = new TMemoryBufferClientTransport();
+            TBinaryProtocol protocol2 = new TBinaryProtocol(transport2);
+
+            await dadoTransporteThrift.WriteAsync(protocol2, CancellationToken.None);            
 
             //await dado.WriteAsync(protocol, CancellationToken.None);
             //await lotacao.WriteAsync(protocol, CancellationToken.None);
 
-            return dadoTransporteThrift;
+            return transport2.GetBuffer();
         }
 
-        public static void SalvarObjetoComoXml<T>(T objeto, string caminhoArquivo)
+        //public void LerBinario()
+        //{
+        //    string inputFilePath = "path/to/your/input/file.bin";
+
+        //    // Caminho do arquivo de texto de saída
+        //    string outputFilePath = "path/to/your/output/file.txt";
+
+        //    // Deserializar do formato TBinaryProtocol
+        //    MyDataStructure myData;
+        //    using (var fileStream = new FileStream(inputFilePath, FileMode.Open))
+        //    {
+        //        var transport = new TBufferedTransport(new TStreamTransport(fileStream, fileStream));
+        //        var protocol = new TBinaryProtocol(transport.);
+
+        //        myData = new MyDataStructure();
+        //        myData.Read(protocol);
+        //    }
+
+        //    // Converter a estrutura de dados para texto
+        //    string textRepresentation = myData.ToString();
+
+        //    // Salvar o texto no arquivo de saída
+        //    File.WriteAllText(outputFilePath, textRepresentation);
+
+        //    Console.WriteLine("Conversão concluída. Texto salvo em: " + outputFilePath);
+        //}
+
+        public static void SalvarObjetoComoBinario(byte[] objeto, string caminhoArquivo)
         {
-            string caminhoPasta = Path.GetDirectoryName(caminhoArquivo);
-
-            if (!Directory.Exists(caminhoPasta))
+            try
             {
-                Directory.CreateDirectory(caminhoPasta);
-            }
-
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (FileStream stream = new FileStream(caminhoArquivo, FileMode.Create))
-            {
-                using (StreamWriter writer = new StreamWriter(stream, new UTF8Encoding(false))) // false para não emitir o BOM (Byte Order Mark)
+                using (FileStream fileStream = new FileStream(caminhoArquivo, FileMode.Create, FileAccess.Write))
                 {
-                    serializer.Serialize(writer, objeto);
+                    fileStream.Write(objeto, 0, objeto.Length);
                 }
+
+                Console.WriteLine("Arquivo salvo com sucesso.");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao salvar o arquivo: " + ex.Message);
+            }
+
+
+            //string caminhoPasta = Path.GetDirectoryName(caminhoArquivo);
+
+            //if (!Directory.Exists(caminhoPasta))
+            //{
+            //    Directory.CreateDirectory(caminhoPasta);
+            //}
+
+            //XmlSerializer serializer = new XmlSerializer(typeof(T));
+            //using (FileStream stream = new FileStream(caminhoArquivo, FileMode.Create))
+            //{
+            //    using (StreamWriter writer = new StreamWriter(stream, new UTF8Encoding(false))) // false para não emitir o BOM (Byte Order Mark)
+            //    {
+            //        serializer.Serialize(writer, objeto);
+            //    }
+            //}
         }
 
         //public static void SalvarObjetoComoXml<T>(T objeto, string caminhoArquivo)
@@ -205,12 +247,10 @@ namespace Encore.Domain.Services.ESUS
         {
             var instituicaoPermanencia = new InstituicaoPermanenciaThrift();
 
-            instituicaoPermanencia.NomeInstituicaoPermanencia= "";
-            instituicaoPermanencia.StOutrosProfissionaisVinculados = true;          
-            instituicaoPermanencia.NomeResponsavelTecnico = "NomeResponsavel";
-            instituicaoPermanencia.CnsResponsavelTecnico = "";
-            instituicaoPermanencia.CargoInstituicao = "Fodão";
-            instituicaoPermanencia.TelefoneResponsavelTecnico = "";
+            //instituicaoPermanencia.StOutrosProfissionaisVinculados = true;
+            //instituicaoPermanencia.NomeResponsavelTecnico = "Nome Responsavel";
+            //instituicaoPermanencia.CnsResponsavelTecnico = "244026015070018";
+            //instituicaoPermanencia.CargoInstituicao = "Fodão";
 
             return instituicaoPermanencia;
         }
@@ -221,14 +261,14 @@ namespace Encore.Domain.Services.ESUS
 
             var familiaRowTrans = new FamiliaRowThrift();
 
-            familiaRowTrans.DataNascimentoResponsavel = 1;           
-            familiaRowTrans.NumeroCnsResponsavel = "";
-            familiaRowTrans.CpfResponsavel = "";
-            familiaRowTrans.NumeroMembrosFamilia = 3;
-            familiaRowTrans.NumeroProntuario = "";
-            familiaRowTrans.RendaFamiliar = 1234;
-            familiaRowTrans.ResideDesde = 123;
-            familiaRowTrans.StMudanca = true;
+            familiaRowTrans.DataNascimentoResponsavel = DateTime.Now.AddYears(-25).ToEpoch();
+            familiaRowTrans.NumeroCnsResponsavel = "947323539470000";
+            familiaRowTrans.CpfResponsavel = "14082572708";
+            familiaRowTrans.NumeroMembrosFamilia = 7;
+            familiaRowTrans.NumeroProntuario = "755813989";
+            familiaRowTrans.RendaFamiliar = 5;
+            familiaRowTrans.ResideDesde = DateTime.Now.AddYears(-5).ToEpoch();
+            familiaRowTrans.StMudanca = false;
 
             familiaRowTransports.Add(familiaRowTrans);
 
@@ -239,30 +279,31 @@ namespace Encore.Domain.Services.ESUS
         {
             var condicaoMoradiaTransport = new CondicaoMoradiaThrift();
 
-            condicaoMoradiaTransport.AbastecimentoAgua = 123;
+            condicaoMoradiaTransport.AbastecimentoAgua = 117;
 
-            condicaoMoradiaTransport.AreaProducaoRural = 1;
+            //não preenchido por ser urbana
+            //condicaoMoradiaTransport.AreaProducaoRural = 1;
     
-            condicaoMoradiaTransport.DestinoLixo = 2;   
+            condicaoMoradiaTransport.DestinoLixo = 93;   
     
-            condicaoMoradiaTransport.FormaEscoamentoBanheiro = 3;
+            condicaoMoradiaTransport.FormaEscoamentoBanheiro = 122;
 
-            condicaoMoradiaTransport.Localizacao = 4;
+            condicaoMoradiaTransport.Localizacao = 83;
 
-            condicaoMoradiaTransport.MaterialPredominanteParedesExtDomicilio = 5;
+            condicaoMoradiaTransport.MaterialPredominanteParedesExtDomicilio = 109;
             
-            condicaoMoradiaTransport.NuComodos = "6";
-            condicaoMoradiaTransport.NuMoradores = "7";
+            condicaoMoradiaTransport.NuComodos = "06";
+            condicaoMoradiaTransport.NuMoradores = "07";
 
-            condicaoMoradiaTransport.SituacaoMoradiaPosseTerra = 8;
+            condicaoMoradiaTransport.SituacaoMoradiaPosseTerra = 75;
 
             condicaoMoradiaTransport.StDisponibilidadeEnergiaEletrica = true;
 
-            condicaoMoradiaTransport.TipoAcessoDomicilio = 9;
+            condicaoMoradiaTransport.TipoAcessoDomicilio = 89;
 
-            condicaoMoradiaTransport.TipoDomicilio = 10;
+            condicaoMoradiaTransport.TipoDomicilio = 85;
 
-            condicaoMoradiaTransport.AguaConsumoDomicilio = 10;
+            condicaoMoradiaTransport.AguaConsumoDomicilio = 97;
             
             return condicaoMoradiaTransport;
         }
@@ -271,22 +312,99 @@ namespace Encore.Domain.Services.ESUS
         {
             var enderecoLocalPermanencia = new EnderecoLocalPermanenciaThrift();
 
-            enderecoLocalPermanencia.Bairro = "Jardim Glória";
-            enderecoLocalPermanencia.Cep = "37209272";
-            enderecoLocalPermanencia.CodigoIbgeMunicipio = "3138203";
+            enderecoLocalPermanencia.Bairro = "Centro";
+            enderecoLocalPermanencia.Cep = "39830970";
+            enderecoLocalPermanencia.CodigoIbgeMunicipio = "3132701";
             enderecoLocalPermanencia.Complemento = "";
-            enderecoLocalPermanencia.NomeLogradouro = "Rua";
+            enderecoLocalPermanencia.NomeLogradouro = "Rua Epaminondas Neves Oliveira";
             enderecoLocalPermanencia.Numero = "177";
-            enderecoLocalPermanencia.NumeroDneUf = "";
-            enderecoLocalPermanencia.TelefoneContato = "123456789";
-            enderecoLocalPermanencia.TelefoneResidencia = "123456789";
-            enderecoLocalPermanencia.TipoLogradouroNumeroDne = "";
-            enderecoLocalPermanencia.StSemNumero = true;
+            enderecoLocalPermanencia.NumeroDneUf = "14";
+            enderecoLocalPermanencia.TelefoneContato = "7558139891";
+            enderecoLocalPermanencia.TelefoneResidencia = "7558139289";
+            enderecoLocalPermanencia.TipoLogradouroNumeroDne = "081";
+            enderecoLocalPermanencia.StSemNumero = false;
             enderecoLocalPermanencia.PontoReferencia = "Perto aqui";
             enderecoLocalPermanencia.MicroArea = "";
             enderecoLocalPermanencia.StForaArea = true;
 
             return enderecoLocalPermanencia;
         }
-    }
+
+        public CadastroIndividualThrift MontarFicharCadastroIndividual()
+        {
+            var fichaCadastroIndividual = new CadastroIndividualThrift()
+            {
+                FichaAtualizada = false,
+                HeaderTransport = new UnicaLotacaoHeaderThrift() { },
+                IdentificacaoUsuarioCidadao = new IdentificacaoUsuarioCidadaoThrift
+                {
+                    NomeSocial = "Cidadao Um",
+                    CodigoIbgeMunicipioNascimento = "3132701",
+                    DataNascimentoCidadao = DateTime.Now.AddYears(-20).ToEpoch(),
+                    DesconheceNomeMae = true,
+                    EmailCidadao = "cidadao@email.com",
+                    NacionalidadeCidadao = 1,
+                    NomeCidadao = "Cidadao Um",
+                    CpfCidadao = "455.596.470-55",
+                    StatusEhResponsavel = true,
+                    TelefoneCelular = "75581398914",
+                    NumeroNisPisPasep = "75581398912",
+                    PaisNascimento = 31,
+                    RacaCorCidadao = 1,
+                    SexoCidadao = 0,
+                    DesconheceNomePai = true,
+                    StForaArea = true,
+                },
+                InformacoesSocioDemograficas = new InformacoesSocioDemograficasThrift
+                {
+                    StatusTemAlgumaDeficiencia = false,
+                    GrauInstrucaoCidadao = 60,
+                    OcupacaoCodigoCbo2002 = "516505",
+                    StatusDesejaInformarOrientacaoSexual = false,
+                    SituacaoMercadoTrabalhoCidadao = 69,
+                    StatusDesejaInformarIdentidadeGenero =  false,
+                    StatusFrequentaBenzedeira = false,
+                    StatusFrequentaEscola = false,
+                    StatusMembroPovoComunidadeTradicional = false,
+                    StatusParticipaGrupoComunitario = false,
+                    StatusPossuiPlanoSaudePrivado = false
+                },                              
+                InformacoesSocioEconomicas = new InformacoesSocioEconomicasThrift
+                {
+                    AlimentosAcabaramAntesTerDinheiroComprarMais = false,
+                    ComeuAlgunsAlimentosQueTinhaDinheiroAcabou = false,
+                },
+                StatusCadastroIndividualInativo = false,
+                StatusGeradoAutomaticamente = false,
+                StatusTermoRecusaCadastroIndividualAtencaoBasica = true,
+                TpCdsOrigem = 3,
+                Uuid = "7558139-" + Guid.NewGuid().ToString()
+            };
+
+            return fichaCadastroIndividual;
+        }
+
+        //public async Task<FileStream> GerarFichasZip()
+        //{
+        //    var homes = _homeRepository.GetAsync().Result;
+
+        //    List<CadastroDomiciliarThrift> homeList = new List<CadastroDomiciliarThrift>();
+
+        //    foreach (var home in homes)
+        //    {
+        //        homeList.Add(BuildHome(home));
+        //    }
+        //}
+
+        //private CadastroDomiciliarThrift BuildHome(Home home)
+        //{
+        //    var familiaRow = new FamiliaRowThrift();
+        //    familiaRow.CpfResponsavel = home.Persons.Where(p => p.)
+
+        //    var cadastroDomiciliar = new CadastroDomiciliarThrift();
+
+        //    cadastroDomiciliar.Familias = home.
+
+        //}
+    }    
 }

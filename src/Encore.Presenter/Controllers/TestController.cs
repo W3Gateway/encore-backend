@@ -17,7 +17,7 @@ namespace Encore.Presenter.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Get()
         {
-            new EsusService().GerarXMLXSD();
+            //new EsusService().GerarXMLXSD();
             return CustomResponse("Sucesso");
         }
 
@@ -35,5 +35,20 @@ namespace Encore.Presenter.Controllers
             var fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
             return File(fileStream, mimeType, Path.GetFileName(pathToFile));
         }
+
+
+        [HttpGet("zip")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> GetDownloadZip()
+        {
+            FileStream file = null;// await new EsusService().GerarFichasZip();
+
+            var pathToFile = @"/app/xmlzip"; // Caminho do arquivo que você deseja fornecer para download
+            var mimeType = "application/zip"; // Mimetype apropriado para o arquivo .xml
+
+            return File(file, mimeType, Path.GetFileName(pathToFile));
+        }
+
     }
 }
