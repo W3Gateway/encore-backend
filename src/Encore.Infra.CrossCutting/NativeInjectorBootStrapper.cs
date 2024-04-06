@@ -1,6 +1,7 @@
 ﻿using Encore.Domain.Core.Data;
 using Encore.Domain.Interfaces.CrossCutting;
 using Encore.Domain.Interfaces.Data;
+using Encore.Domain.Services.Esus;
 using Encore.Infra.CrossCutting.Mapper;
 using Encore.Infra.CrossCutting.Services;
 using Encore.Infra.Data.Context;
@@ -22,6 +23,7 @@ namespace Encore.Infra.CrossCutting
         {
             services.AddScoped<IPasswordHashService, PasswordHashService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<CadastroDomiciliarService, CadastroDomiciliarService>();
             var mappers = AutoMapperConfig.Setup();
             var temp = new List<Type>(mappers);
             services.AddAutoMapper(temp.ToArray());

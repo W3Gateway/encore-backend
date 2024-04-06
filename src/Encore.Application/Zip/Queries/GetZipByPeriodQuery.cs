@@ -8,6 +8,8 @@ namespace Encore.Application.Zip.Queries
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public GetZipByPeriodQuery() { }
+
         public GetZipByPeriodQuery(DateTime begin, DateTime end)
         {
             BeginDate = begin;

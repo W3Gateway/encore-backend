@@ -2,6 +2,6 @@
 {
     public class ZipResponse
     {
-        public FileStream File { get; set; }
+        public byte[] File { get; set; }
     }
 }

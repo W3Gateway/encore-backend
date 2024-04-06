@@ -4,9 +4,12 @@ using Encore.Application.Zip.Responses;
 using Encore.Domain.Core.Extensions;
 using Encore.Domain.Interfaces.Data;
 using Encore.Domain.Models;
+using Encore.Domain.Services.Esus;
 using Encore.Domain.ValueObjects;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 using System.IO.Compression;
 using Thrift.Protocols;
 using Thrift.Transports.Client;
@@ -18,19 +21,28 @@ namespace Encore.Application.Zip.Handlers
         private readonly IHomeRepository _homeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly CadastroDomiciliarService _cadastroDomiciliarService;
 
         public GetZipTokenHandler(IHomeRepository homeRepository,
             IUserRepository userRepository,
-            IMapper mapper)
+            IMapper mapper,
+            CadastroDomiciliarService cadastroDomiciliarService)
         {
             _homeRepository = homeRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _cadastroDomiciliarService = cadastroDomiciliarService;
         }
         
         public async Task<ZipResponse> Handle(GetZipByPeriodQuery request, CancellationToken cancellationToken)
         {
-            var homes = _homeRepository.Include().Where(x => request.BeginDate < x.AddedDate && x.AddedDate < request.EndDate).ToList();
+            var homesQuery = _homeRepository.Include();
+            var homes = homesQuery.Where(x => request.BeginDate < x.AddedDate && x.AddedDate < request.EndDate)
+                                .Include(x => x.Persons)
+                                .Include(x => x.Microregion)
+                                .Include(x => x.Microregion.HealthCenter)
+                                .Include(x => x.Microregion.HealthCenter.Accountable)
+                                .ToList();
 
             var cadastroDomiciliarList = new List<CadastroDomiciliarThrift>();
 
@@ -69,7 +81,11 @@ namespace Encore.Application.Zip.Handlers
                         }
                     }
 
-                    return _mapper.Map<ZipResponse>(zipStream.ToArray());
+                    var teste = new ZipResponse() {
+                        File = zipStream.ToArray()
+                    };          
+
+                    return _mapper.Map<ZipResponse>(teste);
                 }
             }catch (Exception ex)
             {
@@ -81,40 +97,126 @@ namespace Encore.Application.Zip.Handlers
 
         private CadastroDomiciliarThrift CreateHomeReport(Home home)
         {
-            var responsavel = home.Persons.First(x => x.IsHeadFamily);
-            var cnes = responsavel.Microregion.HealthCenter.Cnes;
+            var responsavel = home.Persons.FirstOrDefault(x => x.IsHeadFamily);
 
-            var animals = home.Animals.Split(',').ToList().Select(x => Convert.ToInt64(x)).ToList();
+            var cadastroDomiciliarThrift = new CadastroDomiciliarThrift();
 
             var update = !home.AddedDate.Equals(home.ModifiedDate);
 
-            var cadastroDomiciliarThrift = new CadastroDomiciliarThrift()
+            var cnes = home.Microregion.HealthCenter.Cnes;                
+
+            if (responsavel != null)
             {
-                AnimaisNoDomicilio = animals,
-                CondicaoMoradia = CreateConditionReport(home),
-                EnderecoLocalPermanencia = CreateAddressLocation(home),
-                Familias = CreateFamilyReport(home, responsavel),
-                FichaAtualizada = update, //verificar como fazer
-                HeaderTransport = CreateHeaderTransport(),
-                InstituicaoPermanencia = MInstituicaoPermanencia(home),
-                //Latitude = 0, //não encontrei
-                //Longitude = 0, //não encontrei
-                QuantosAnimaisNoDomicilio = home.AmountAnimals.ToString(),
-                StAnimaisNoDomicilio = home.AmountAnimals > 0,
-                StatusGeradoAutomaticamente = false, //validar
-                StatusTermoRecusa = false, //validar
-                TipoDeImovel = TypeHouse.Get(Convert.ToInt64(home.LocationType)).Code,
-                TpCdsOrigem = 3,
-                Uuid = update ? cnes + "-" + Guid.NewGuid() : cnes + "-" + home.Id, //necessário controlar fichas
-                UuidFichaOriginadora = cnes + "-" + home.Id,
-            };          
+                var animals = home.Animals.Split(',').ToList().Select(x => Convert.ToInt64(x)).ToList();
+
+                cadastroDomiciliarThrift = new CadastroDomiciliarThrift()
+                {
+                    AnimaisNoDomicilio = animals,
+                    CondicaoMoradia = CreateConditionReport(home),
+                    EnderecoLocalPermanencia = CreateAddressLocation(home),
+                    Familias = CreateFamilyReport(home, responsavel),
+                    FichaAtualizada = update, //verificar como fazer
+                    HeaderTransport = CreateHeaderTransport(),
+                    InstituicaoPermanencia = MInstituicaoPermanencia(home),
+                    //Latitude = 0, //não encontrei
+                    //Longitude = 0, //não encontrei
+                    QuantosAnimaisNoDomicilio = home.AmountAnimals.ToString(),
+                    StAnimaisNoDomicilio = home.AmountAnimals > 0,
+                    StatusGeradoAutomaticamente = false, //validar
+                    StatusTermoRecusa = false, //validar
+                    TipoDeImovel = TypeHouse.Get(Convert.ToInt64(home.LocationType)).Code,
+                    TpCdsOrigem = 3,
+                    Uuid = update ? cnes + "-" + Guid.NewGuid() : cnes + "-" + home.Id, //necessário controlar fichas
+                    UuidFichaOriginadora = cnes + "-" + home.Id,
+                };
+            }
+            else
+            {
+                cadastroDomiciliarThrift = new CadastroDomiciliarThrift()
+                {
+                    CondicaoMoradia = CreateConditionReport(home),
+                    EnderecoLocalPermanencia = CreateAddressLocation(home),
+                    FichaAtualizada = update, //verificar como fazer
+                    HeaderTransport = CreateHeaderTransport(),
+                    InstituicaoPermanencia = MInstituicaoPermanencia(home),
+                    //Latitude = 0, //não encontrei
+                    //Longitude = 0, //não encontrei
+                    StatusGeradoAutomaticamente = false, //validar
+                    StatusTermoRecusa = false, //validar
+                    TipoDeImovel = TypeHouse.Get(Convert.ToInt64(home.LocationType)).Code,
+                    TpCdsOrigem = 3,
+                    Uuid = update ? cnes + "-" + Guid.NewGuid() : cnes + "-" + home.Id, //necessário controlar fichas
+                    UuidFichaOriginadora = cnes + "-" + home.Id,
+                };
+            }             
 
             return cadastroDomiciliarThrift;
         }
 
         private UnicaLotacaoHeaderThrift CreateHeaderTransport()
         {
-            throw new NotImplementedException();
+            return new UnicaLotacaoHeaderThrift() {
+                CboCodigo_2002 = "515105",
+                Cnes = "7558139",
+                CodigoIbgeMunicipio = "3132701",
+                DataAtendimento = DateTime.Now.ToEpoch(),
+                //Ine = ,
+                ProfissionalCNS = "160210074410006"
+            };
+        }
+
+        public CadastroIndividualThrift MontarFicharCadastroIndividual()
+        {
+            var fichaCadastroIndividual = new CadastroIndividualThrift()
+            {
+                FichaAtualizada = false,
+                HeaderTransport = new UnicaLotacaoHeaderThrift() { },
+                IdentificacaoUsuarioCidadao = new IdentificacaoUsuarioCidadaoThrift
+                {
+                    NomeSocial = "Cidadao Um",
+                    CodigoIbgeMunicipioNascimento = "3132701",
+                    DataNascimentoCidadao = DateTime.Now.AddYears(-20).ToEpoch(),
+                    DesconheceNomeMae = true,
+                    EmailCidadao = "cidadao@email.com",
+                    NacionalidadeCidadao = 1,
+                    NomeCidadao = "Cidadao Um",
+                    CpfCidadao = "455.596.470-55",
+                    StatusEhResponsavel = true,
+                    TelefoneCelular = "75581398914",
+                    NumeroNisPisPasep = "75581398912",
+                    PaisNascimento = 31,
+                    RacaCorCidadao = 1,
+                    SexoCidadao = 0,
+                    DesconheceNomePai = true,
+                    StForaArea = true,
+                },
+                InformacoesSocioDemograficas = new InformacoesSocioDemograficasThrift
+                {
+                    StatusTemAlgumaDeficiencia = false,
+                    GrauInstrucaoCidadao = 60,
+                    OcupacaoCodigoCbo2002 = "516505",
+                    StatusDesejaInformarOrientacaoSexual = false,
+                    SituacaoMercadoTrabalhoCidadao = 69,
+                    StatusDesejaInformarIdentidadeGenero = false,
+                    StatusFrequentaBenzedeira = false,
+                    StatusFrequentaEscola = false,
+                    StatusMembroPovoComunidadeTradicional = false,
+                    StatusParticipaGrupoComunitario = false,
+                    StatusPossuiPlanoSaudePrivado = false
+                },
+                InformacoesSocioEconomicas = new InformacoesSocioEconomicasThrift
+                {
+                    AlimentosAcabaramAntesTerDinheiroComprarMais = false,
+                    ComeuAlgunsAlimentosQueTinhaDinheiroAcabou = false,
+                },
+                StatusCadastroIndividualInativo = false,
+                StatusGeradoAutomaticamente = false,
+                StatusTermoRecusaCadastroIndividualAtencaoBasica = true,
+                TpCdsOrigem = 3,
+                Uuid = "7558139-" + Guid.NewGuid().ToString()
+            };
+
+            return fichaCadastroIndividual;
         }
 
         private EnderecoLocalPermanenciaThrift CreateAddressLocation(Home home)
@@ -149,7 +251,7 @@ namespace Encore.Application.Zip.Handlers
                 AreaProducaoRural = CondicaoDePosseEUsoDaTerra.Get(Convert.ToInt64(home.RuralProductionArea)).Code,
                 DestinoLixo = GarbageDestination.Get(Convert.ToInt64(home.GarbageDestination)).Code,
                 FormaEscoamentoBanheiro = FormaDeEscoamentoDoBanheiroOuSanitario.Get(Convert.ToInt64(home.SanitaryDrainage)).Code,
-                Localizacao = LocalizacaoDaMoradia.Get(Convert.ToInt64(home.LocationType)).Code,
+                Localizacao = LocalizacaoDaMoradia.Get(Convert.ToInt64(home.TypeProperty)).Code,
                 MaterialPredominanteParedesExtDomicilio = MaterialPredominanteNaConstrucao.Get(Convert.ToInt64(home.PredominantMaterial)).Code,
                 NuComodos = home.NumberRooms.ToString(),
                 NuMoradores = home.NumberMembers.ToString(),
@@ -246,5 +348,112 @@ namespace Encore.Application.Zip.Handlers
 
             return transport2.GetBuffer();
         }
+
+
+        //Validações
+        public bool validaCns12(string cns)
+        {
+            if (cns.Trim().Count() != 15)
+            {
+                return (false);
+            }
+
+            float soma;
+            float resto, dv;
+            string pis = "";
+            string resultado = "";
+            pis = cns.Substring(0, 11);
+
+            soma = (int.Parse(pis.Substring(0, 1)) * 15) +
+            (int.Parse(pis.Substring(1, 2)) * 14) +
+            (int.Parse(pis.Substring(2, 3)) * 13) +
+            (int.Parse(pis.Substring(3, 4)) * 12) +
+            (int.Parse(pis.Substring(4, 5)) * 11) +
+            (int.Parse(pis.Substring(5, 6)) * 10) +
+            (int.Parse(pis.Substring(6, 7)) * 9) +
+            (int.Parse(pis.Substring(7, 8)) * 8) +
+            (int.Parse(pis.Substring(8, 9)) * 7) +
+            (int.Parse(pis.Substring(9, 10)) * 6) +
+            (int.Parse(pis.Substring(10, 11)) * 5);
+
+            resto = soma % 11;
+            dv = 11 - resto;
+
+            if (dv == 11)
+            {
+                dv = 0;
+            }
+
+            if (dv == 10)
+            {
+                soma = (int.Parse(pis.Substring(0, 1)) * 15) +
+                (int.Parse(pis.Substring(1, 2)) * 14) +
+                (int.Parse(pis.Substring(2, 3)) * 13) +
+                (int.Parse(pis.Substring(3, 4)) * 12) +
+                (int.Parse(pis.Substring(4, 5)) * 11) +
+                (int.Parse(pis.Substring(5, 6)) * 10) +
+                (int.Parse(pis.Substring(6, 7)) * 9) +
+                (int.Parse(pis.Substring(7, 8)) * 8) +
+                (int.Parse(pis.Substring(8, 9)) * 7) +
+                (int.Parse(pis.Substring(9, 10)) * 6) +
+                (int.Parse(pis.Substring(10, 11)) * 5) + 2;
+
+                resto = soma % 11;
+                dv = 11 - resto;
+                resultado = pis + "001" + (int)dv;
+            }
+            else
+            {
+                resultado = pis + "000" + (int)dv;
+            }
+
+            if (!cns.Equals(resultado))
+            {
+                return (false);
+            }
+            else
+            {
+                return (true);
+            }
+        }
+
+        public bool validaCnsProv789(String cns)
+        {
+            if (cns.Trim().Count() != 15)
+            {
+                return (false);
+            }
+
+            float dv;
+            float resto, soma;
+
+            soma = (int.Parse(cns.Substring(0, 1)) * 15) +
+            (int.Parse(cns.Substring(1, 2)) * 14) +
+            (int.Parse(cns.Substring(2, 3)) * 13) +
+            (int.Parse(cns.Substring(3, 4)) * 12) +
+            (int.Parse(cns.Substring(4, 5)) * 11) +
+            (int.Parse(cns.Substring(5, 6)) * 10) +
+            (int.Parse(cns.Substring(6, 7)) * 9) +
+            (int.Parse(cns.Substring(7, 8)) * 8) +
+            (int.Parse(cns.Substring(8, 9)) * 7) +
+            (int.Parse(cns.Substring(9, 10)) * 6) +
+            (int.Parse(cns.Substring(10, 11)) * 5) +
+            (int.Parse(cns.Substring(11, 12)) * 4) +
+            (int.Parse(cns.Substring(12, 13)) * 3) +
+            (int.Parse(cns.Substring(13, 14)) * 2) +
+            (int.Parse(cns.Substring(14, 15)) * 1);
+
+            resto = soma % 11;
+
+            if (resto != 0)
+            {
+                return (false);
+            }
+            else
+            {
+                return (true);
+            }
+        }
     }
 }
+
