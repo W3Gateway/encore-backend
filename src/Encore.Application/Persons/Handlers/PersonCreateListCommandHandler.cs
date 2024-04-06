@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Encore.Application.Persons.Handlers
 {
-    public class PersonCreateCommandHandler : CommandHandler, IRequestHandler<PersonCreateListCommand, Response<List<PersonListResponse>>?>
+    public class PersonCreateListCommandHandler : CommandHandler, IRequestHandler<PersonCreateListCommand, Response<List<PersonListResponse>>?>
     {
         private readonly IPersonRepository _personRepository;
         private readonly IHomeRepository _homeRepository;
@@ -20,7 +20,7 @@ namespace Encore.Application.Persons.Handlers
         private readonly IHealthConditionRepository _healthConditionRepository;
         private readonly IMapper _mapper;
 
-        public PersonCreateCommandHandler(IPersonRepository personRepository,
+        public PersonCreateListCommandHandler(IPersonRepository personRepository,
                                         IHomeRepository homeRepository,
                                         IMicroregionRepository microregionRepository,
                                         ISociodemographicSituationRepository sociodemographicSituationRepository,

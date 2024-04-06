@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Encore.Domain.Core\Encore.Domain.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ValueObjects\Address\" />
+  </ItemGroup>
+
 </Project>

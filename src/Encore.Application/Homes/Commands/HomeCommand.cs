@@ -16,7 +16,7 @@ namespace Encore.Application.Homes.Commands
         public string WaterConsumption { get; set; }
         public string SanitaryDrainage { get; set; }
         public string GarbageDestination { get; set; }
-        public bool Electricity { get; set; }
+        public bool HasElectricity { get; set; }
         public string Animals { get; set; }
         public int AmountAnimals { get; set; }
         public string ContactNumber { get; set; }
