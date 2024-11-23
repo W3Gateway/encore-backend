@@ -1,5 +1,6 @@
 ﻿using Encore.Application.Persons.Commands;
 using Encore.Application.Persons.Queries;
+using Encore.Application.Zip.Queries;
 using Encore.Domain.Services.ESUS;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,9 @@ namespace Encore.Presenter.Controllers
     [ApiController]
     public class TestController : ApiController
     {
-        public TestController() { }
+        private readonly IMediator _mediator;
+
+        public TestController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,14 +43,18 @@ namespace Encore.Presenter.Controllers
         [HttpGet("zip")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetDownloadZip()
+        public async Task<IActionResult> GetDownloadZip([FromQuery] GetZipByPeriodQuery query)
         {
-            FileStream file = null;// await new EsusService().GerarFichasZip();
+            var response = await _mediator.Send(query);
 
             var pathToFile = @"/app/xmlzip"; // Caminho do arquivo que você deseja fornecer para download
             var mimeType = "application/zip"; // Mimetype apropriado para o arquivo .xml
 
-            return File(file, mimeType, Path.GetFileName(pathToFile));
+            return File(response.File, mimeType, "teste.zip");
+
+            //FileStream file = null;// await new EsusService().GerarFichasZip();            
+
+            //return File(file, mimeType, Path.GetFileName(pathToFile));
         }
 
     }
