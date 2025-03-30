@@ -166,11 +166,9 @@ namespace Encore.Application.Zip.Handlers
                 foreach (Home home in homes)
                 {
                     cadastroDomiciliarList.Add(CreateHomeReport(home));
-                    cadastroDomiciliarList.Add(new CadastroDomiciliarMock().createCadastradoDomiciliarMock(home);
+                    cadastroDomiciliarList.Add(new CadastroDomiciliarMock().createCadastradoDomiciliarMock(home));
                 }
             }
-
-            cadastroDomiciliarList.Add(new CadastroDomiciliarMock().createCadastradoDomiciliarMock());
 
             var listaEsusCadastroDomiciliar = new List<byte[]>();
 
