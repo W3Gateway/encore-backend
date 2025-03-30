@@ -1,7 +1,6 @@
 ﻿using Encore.Domain.Core.Extensions;
+using Encore.Domain.Dtos.FichaAtendimentoIndividual;
 using Encore.Domain.Interfaces.Data;
-using Encore.Domain.Models;
-using Encore.Domain.Services.Esus.DTOs.FichaAtendimentoIndividual;
 using System.IO.Compression;
 using System.Xml.Serialization;
 using Thrift.Protocols;
