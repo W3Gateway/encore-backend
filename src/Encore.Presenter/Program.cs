@@ -26,7 +26,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(MyAllowSpecificOrigins,
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins("https://instantly-flexible-kingfish.ngrok-free.app")
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
         });
@@ -43,13 +44,13 @@ app.UseSwaggerUI(c =>
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
-    app.UseHttpsRedirection();
+  //  app.UseHttpsRedirection();
 }
 
 app.UseRouting();
 app.UseCors(MyAllowSpecificOrigins);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

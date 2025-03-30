@@ -6,6 +6,7 @@ using Encore.Domain.Interfaces.Data;
 using Encore.Domain.Models;
 using Encore.Domain.Services.Esus;
 using Encore.Domain.ValueObjects;
+using Encore.Infra.Data.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,11 +21,13 @@ namespace Encore.Application.Zip.Handlers
     {        
         private readonly IHomeRepository _homeRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IVisitRepository _visitRepository;
         private readonly IMapper _mapper;
-        private readonly CadastroDomiciliarService _cadastroDomiciliarService;
+        private readonly CadastroDomiciliarService _cadastroDomiciliarService;      
 
         public GetZipTokenHandler(IHomeRepository homeRepository,
             IUserRepository userRepository,
+            IVisitRepository visitRepository,
             IMapper mapper,
             CadastroDomiciliarService cadastroDomiciliarService)
         {
@@ -32,34 +35,14 @@ namespace Encore.Application.Zip.Handlers
             _userRepository = userRepository;
             _mapper = mapper;
             _cadastroDomiciliarService = cadastroDomiciliarService;
+            _visitRepository = visitRepository;
         }
         
         public async Task<ZipResponse> Handle(GetZipByPeriodQuery request, CancellationToken cancellationToken)
         {
-            var homesQuery = _homeRepository.Include();
-            var homes = homesQuery.Where(x => request.BeginDate < x.AddedDate && x.AddedDate < request.EndDate)
-                                .Include(x => x.Persons)
-                                .Include(x => x.Microregion)
-                                .Include(x => x.Microregion.HealthCenter)
-                                .Include(x => x.Microregion.HealthCenter.Accountable)
-                                .ToList();
+            List<byte[]> listaEsusCadastroDomiciliar = CadastrosDomiciliares(request);
 
-            var cadastroDomiciliarList = new List<CadastroDomiciliarThrift>();
-
-            if (!homes.IsNullOrEmpty())
-            {
-                foreach (Home home in homes)
-                {
-                   cadastroDomiciliarList.Add(CreateHomeReport(home));
-                }
-            }
-
-            var listaEsusCadastroDomiciliar = new List<byte[]>();
-
-            cadastroDomiciliarList.ForEach(async x => 
-            {
-                listaEsusCadastroDomiciliar.Add(await MontarProtocolo(x));                
-            });
+            //List<byte[]> listaEsusVisitasDomiciliares = CadastrosVisitas(request);
 
             var nomeArquivo = "ZipFinal.zip";
 
@@ -81,19 +64,122 @@ namespace Encore.Application.Zip.Handlers
                         }
                     }
 
-                    var teste = new ZipResponse() {
+                    var teste = new ZipResponse()
+                    {
                         File = zipStream.ToArray()
-                    };          
+                    };
 
                     return _mapper.Map<ZipResponse>(teste);
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
             return _mapper.Map<ZipResponse>(null);
         }
 
+        private List<byte[]> CadastrosVisitas(GetZipByPeriodQuery request)
+        {
+            var visitasQuery = _visitRepository.Include();
+            var visitas = visitasQuery.Where(x => request.BeginDate < x.AddedDate && x.AddedDate < request.EndDate)
+                                        .Include(x => x.Home)
+                                        .Include(x => x.Agent)
+                                        .Include(x => x.Answers)
+                                        .Include(x => x.Microregion)
+                                        .Include(x => x.Person).ToList();
+
+            var visitasDomiciliarList = new List<FichaVisitaDomiciliarChildThrift>();
+
+            if (!visitas.IsNullOrEmpty())
+            {
+                foreach (var visita in visitas)
+                {
+                    visitasDomiciliarList.Add(CreateVisitReport(visita));
+                }
+            }
+
+            return new List<byte[]>();
+
+        }
+
+        private FichaVisitaDomiciliarChildThrift CreateVisitReport(Visit visita)
+        {
+            var visit = new FichaVisitaDomiciliarChildThrift()
+            {
+                AlturaAcompanhamentoNutricional = visita.Answers.FirstOrDefault(x => x.Question.Name.Equals("Altura(cm)")).IsNullOrEmpty() ?
+                                                    0 : double.Parse(visita.Answers.FirstOrDefault(x => x.Question.Name.Equals("Altura(cm)")).Response),
+                CnsCidadao = visita.Person.DocumentType.Equals("1") ? visita.Person.Document : string.Empty,
+                CpfCidadao = visita.Person.DocumentType.Equals("2") ? visita.Person.Document : string.Empty,
+                Desfecho = long.Parse(visita.Answers.First(x => x.Question.Name.Equals("Desfecho")).Response),
+                DtNascimento = visita.Person.BirthDate.Millisecond,
+                //Glicemia = int.Parse(visita.Answers.Where(x => x.Question.Name("")), // Não obrigatório, entender regra
+                Latitude = 0,
+                Longitude = 0,
+                MicroArea = visita.Microregion.Name,
+                MotivosVisita = MotivosVisita(visita),
+                NumProntuario = "visita.",
+                PesoAcompanhamentoNutricional = 1,
+                PressaoDiastolica = 1,
+                PressaoSistolica = 1,
+                Sexo = 1,
+                StatusVisitaCompartilhadaOutroProfissional = true,
+                StForaArea = true,
+                Temperatura = 1,
+                TipoDeImovel = 1,
+                TipoGlicemia = 1,
+                Turno = 0,
+                UuidOrigemCadastroDomiciliar = "",
+            };
+
+            return visit;
+        }
+
+        private List<long> MotivosVisita(Visit visita)
+        {
+            var motivos = new List<long>();
+
+            var mot = visita.Answers.FirstOrDefault(x => x.Question.Name.Equals("Motivo da visita")).Response.Split(',');
+
+            foreach(var motivo in mot)
+            {
+                motivos.Add(long.Parse(motivo));
+            }
+
+            return motivos;
+        }
+
+        private List<byte[]> CadastrosDomiciliares(GetZipByPeriodQuery request)
+        {
+            var homesQuery = _homeRepository.Include();
+            var homes = homesQuery.Where(x => request.BeginDate < x.AddedDate && x.AddedDate < request.EndDate)
+                                .Include(x => x.Persons)
+                                .Include(x => x.Microregion)
+                                .Include(x => x.Microregion.HealthCenter)
+                                .Include(x => x.Microregion.HealthCenter.Accountable)
+                                .ToList();
+
+            var cadastroDomiciliarList = new List<CadastroDomiciliarThrift>();
+
+            if (!homes.IsNullOrEmpty())
+            {
+                foreach (Home home in homes)
+                {
+                    cadastroDomiciliarList.Add(CreateHomeReport(home));
+                    cadastroDomiciliarList.Add(new CadastroDomiciliarMock().createCadastradoDomiciliarMock(home);
+                }
+            }
+
+            cadastroDomiciliarList.Add(new CadastroDomiciliarMock().createCadastradoDomiciliarMock());
+
+            var listaEsusCadastroDomiciliar = new List<byte[]>();
+
+            cadastroDomiciliarList.ForEach(async x =>
+            {
+                listaEsusCadastroDomiciliar.Add(await MontarProtocolo(x));
+            });
+            return listaEsusCadastroDomiciliar;
+        }
 
         private CadastroDomiciliarThrift CreateHomeReport(Home home)
         {
@@ -124,7 +210,7 @@ namespace Encore.Application.Zip.Handlers
                     StAnimaisNoDomicilio = home.AmountAnimals > 0,
                     StatusGeradoAutomaticamente = false, //validar
                     StatusTermoRecusa = false, //validar
-                    TipoDeImovel = TypeHouse.Get(Convert.ToInt64(home.LocationType)).Code,
+                    TipoDeImovel = TipoDeImovel.Get(Convert.ToInt64(home.LocationType)).Code,
                     TpCdsOrigem = 3,
                     Uuid = update ? cnes + "-" + Guid.NewGuid() : cnes + "-" + home.Id, //necessário controlar fichas
                     UuidFichaOriginadora = cnes + "-" + home.Id,
@@ -143,7 +229,7 @@ namespace Encore.Application.Zip.Handlers
                     //Longitude = 0, //não encontrei
                     StatusGeradoAutomaticamente = false, //validar
                     StatusTermoRecusa = false, //validar
-                    TipoDeImovel = TypeHouse.Get(Convert.ToInt64(home.LocationType)).Code,
+                    TipoDeImovel = TipoDeImovel.Get(Convert.ToInt64(home.LocationType)).Code,
                     TpCdsOrigem = 3,
                     Uuid = update ? cnes + "-" + Guid.NewGuid() : cnes + "-" + home.Id, //necessário controlar fichas
                     UuidFichaOriginadora = cnes + "-" + home.Id,
@@ -156,12 +242,12 @@ namespace Encore.Application.Zip.Handlers
         private UnicaLotacaoHeaderThrift CreateHeaderTransport()
         {
             return new UnicaLotacaoHeaderThrift() {
-                CboCodigo_2002 = "515105",
-                Cnes = "7558139",
-                CodigoIbgeMunicipio = "3132701",
+                CboCodigo_2002 = "225285",
+                Cnes = "2209748",
+                CodigoIbgeMunicipio = "3139201",
                 DataAtendimento = DateTime.Now.ToEpoch(),
                 //Ine = ,
-                ProfissionalCNS = "160210074410006"
+                ProfissionalCNS = "700000063961002"
             };
         }
 
@@ -174,7 +260,7 @@ namespace Encore.Application.Zip.Handlers
                 IdentificacaoUsuarioCidadao = new IdentificacaoUsuarioCidadaoThrift
                 {
                     NomeSocial = "Cidadao Um",
-                    CodigoIbgeMunicipioNascimento = "3132701",
+                    CodigoIbgeMunicipioNascimento = "3138203",
                     DataNascimentoCidadao = DateTime.Now.AddYears(-20).ToEpoch(),
                     DesconheceNomeMae = true,
                     EmailCidadao = "cidadao@email.com",
@@ -213,7 +299,7 @@ namespace Encore.Application.Zip.Handlers
                 StatusGeradoAutomaticamente = false,
                 StatusTermoRecusaCadastroIndividualAtencaoBasica = true,
                 TpCdsOrigem = 3,
-                Uuid = "7558139-" + Guid.NewGuid().ToString()
+                Uuid = "2112418-" + Guid.NewGuid().ToString()
             };
 
             return fichaCadastroIndividual;
@@ -255,7 +341,7 @@ namespace Encore.Application.Zip.Handlers
                 MaterialPredominanteParedesExtDomicilio = MaterialPredominanteNaConstrucao.Get(Convert.ToInt64(home.PredominantMaterial)).Code,
                 NuComodos = home.NumberRooms.ToString(),
                 NuMoradores = home.NumberMembers.ToString(),
-                //SituacaoMoradiaPosseTerra = home., não achei
+                SituacaoMoradiaPosseTerra = SituacaoMoradia.Financiado.Code,
                 StDisponibilidadeEnergiaEletrica = home.Electricity,
                 TipoAcessoDomicilio = TipoDeAcessoAoDomicilio.Get(Convert.ToInt64(home.TypeAccess)).Code,
                 TipoDomicilio = TipoDeDomicilio.Get(Convert.ToInt64(home.TypeDomicile)).Code
@@ -295,7 +381,7 @@ namespace Encore.Application.Zip.Handlers
             instituicaoPermanencia.StOutrosProfissionaisVinculados = true;
             instituicaoPermanencia.NomeResponsavelTecnico = accountable.Name;
             instituicaoPermanencia.CnsResponsavelTecnico = accountable.Cns;
-            instituicaoPermanencia.CargoInstituicao = ""; //descobrir onde tem o cargo 
+            instituicaoPermanencia.CargoInstituicao = "";
 
             return instituicaoPermanencia;
         }
@@ -323,13 +409,14 @@ namespace Encore.Application.Zip.Handlers
 
             DadoTransporteThrift dadoTransporteThrift = new DadoTransporteThrift()
             {
-                CnesDadoSerializado = "7558139",
-                CodIbge = "3132701",
+                CnesDadoSerializado = "2209748",
+                CodIbge = "3139201",
                 DadoSerializado = bytes,
+
                 Originadora = dado,
                 Remetente = dado,
                 TipoDadoSerializado = 3,
-                UuidDadoSerializado = "7558139-" + Guid.NewGuid().ToString(),
+                UuidDadoSerializado = "2209748-" + Guid.NewGuid().ToString(),
                 Versao = new VersaoThrift()
                 {
                     Major = 3,

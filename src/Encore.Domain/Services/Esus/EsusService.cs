@@ -71,17 +71,17 @@ namespace Encore.Domain.Services.ESUS
 
             teste.TpCdsOrigem = 3;
 
-            teste.Uuid = "7558139-" + Guid.NewGuid().ToString();
+            teste.Uuid = "2112418-" + Guid.NewGuid().ToString();
             teste.UuidFichaOriginadora = teste.Uuid;
             teste.TipoDeImovel = 1;
 
             teste.HeaderTransport = new UnicaLotacaoHeaderThrift();
             teste.HeaderTransport.DataAtendimento = DateTime.Now.ToEpoch();
             teste.HeaderTransport.ProfissionalCNS = "728019458970002";
-            teste.HeaderTransport.Cnes = "7558139";
+            teste.HeaderTransport.Cnes = "2112418";
             //teste.HeaderTransport.Ine = "TesteINE"; não obrigatório
             teste.HeaderTransport.CboCodigo_2002 = "515105";
-            teste.HeaderTransport.CodigoIbgeMunicipio = "3132701";
+            teste.HeaderTransport.CodigoIbgeMunicipio = "3138203";
 
             try
             {
@@ -121,13 +121,13 @@ namespace Encore.Domain.Services.ESUS
 
             DadoTransporteThrift dadoTransporteThrift = new DadoTransporteThrift()
             {
-                CnesDadoSerializado = "7558139",
-                CodIbge = "3132701",
+                CnesDadoSerializado = "2112418",
+                CodIbge = "3138203",
                 DadoSerializado = bytes,
                 Originadora = dado,
                 Remetente = dado,
                 TipoDadoSerializado = 3,
-                UuidDadoSerializado = "7558139-" + Guid.NewGuid().ToString(),
+                UuidDadoSerializado = "2112418-" + Guid.NewGuid().ToString(),
                 Versao = new VersaoThrift()
                 {
                     Major = 3,
@@ -314,7 +314,7 @@ namespace Encore.Domain.Services.ESUS
 
             enderecoLocalPermanencia.Bairro = "Centro";
             enderecoLocalPermanencia.Cep = "39830970";
-            enderecoLocalPermanencia.CodigoIbgeMunicipio = "3132701";
+            enderecoLocalPermanencia.CodigoIbgeMunicipio = "3138203";
             enderecoLocalPermanencia.Complemento = "";
             enderecoLocalPermanencia.NomeLogradouro = "Rua Epaminondas Neves Oliveira";
             enderecoLocalPermanencia.Numero = "177";
@@ -339,7 +339,7 @@ namespace Encore.Domain.Services.ESUS
                 IdentificacaoUsuarioCidadao = new IdentificacaoUsuarioCidadaoThrift
                 {
                     NomeSocial = "Cidadao Um",
-                    CodigoIbgeMunicipioNascimento = "3132701",
+                    CodigoIbgeMunicipioNascimento = "3138203",
                     DataNascimentoCidadao = DateTime.Now.AddYears(-20).ToEpoch(),
                     DesconheceNomeMae = true,
                     EmailCidadao = "cidadao@email.com",
@@ -378,7 +378,7 @@ namespace Encore.Domain.Services.ESUS
                 StatusGeradoAutomaticamente = false,
                 StatusTermoRecusaCadastroIndividualAtencaoBasica = true,
                 TpCdsOrigem = 3,
-                Uuid = "7558139-" + Guid.NewGuid().ToString()
+                Uuid = "2112418-" + Guid.NewGuid().ToString()
             };
 
             return fichaCadastroIndividual;

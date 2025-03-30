@@ -2,9 +2,10 @@
 {
     public class GarbageDestination : EsusIntegrationBase<GarbageDestination>
     {
-        public static GarbageDestination Collected => new GarbageDestination { Code = 93, Description = "Coletado" };
-        public static GarbageDestination Burned => new GarbageDestination { Code = 94, Description = "Queimado/Enterrado" };
-        public static GarbageDestination ClearSky => new GarbageDestination { Code = 95, Description = "Céu aberto" };       
-        public static GarbageDestination Other => new GarbageDestination { Code = 96, Description = "Outro" };
+        public static GarbageDestination Coletado => new GarbageDestination { Code = 93, Description = "Coletado" };
+        public static GarbageDestination Queimado => new GarbageDestination { Code = 221, Description = "Queimado" };
+        public static GarbageDestination Enterrado => new GarbageDestination { Code = 222, Description = "Enterrado" };
+        public static GarbageDestination CeuAberto => new GarbageDestination { Code = 95, Description = "Céu aberto" };       
+        public static GarbageDestination SemTratamento => new GarbageDestination { Code = 96, Description = "Sem Tratamento" };
     }
 }
